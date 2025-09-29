@@ -7,7 +7,8 @@ int main() {
 
 public static void HelloWorld(string string)
 {
-  Console.Write(string)
+  Console.Writeline(string);
 }
+
 
 
