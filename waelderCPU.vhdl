@@ -1,12 +1,12 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+-- Company: HTBLUVA Rankweil (school)
+-- Engineer: Raphael SCHÖFFMANN |
+-- Engineer: Kilian SIMMA       |
 -- Create Date: 24.11.2025 14:28:40
--- Design Name: 
+-- Design Name: waelderCPU
 -- Module Name: waelderMain - Behavioral
--- Project Name: 
--- Target Devices: 
+-- Project Name: waelderCPU
+-- Target Devices: Spartan 7
 -- Tool Versions: 
 -- Description: 
 -- 
@@ -14,22 +14,16 @@
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Revision 0.1 - Declared Bus
+-- Additional Comments: 
+-- This is part of the Diploma Thesis "WälderCPU" by SCHÖFFMANN Raphael and SIMMA Kilian - designing an 8-Bit CPU in VHDL
 ----------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity waelderMain is
     Port (
@@ -41,6 +35,8 @@ entity waelderMain is
 end waelderMain;
 
 architecture Behavioral of waelderMain is
+
+    --bus
     signal bus : std_logic_vector (7 downto 0);
     bus <= pc when ctrl_pc_out = '1' else
         ir when ctrl_ir_out = '1' else
@@ -56,6 +52,21 @@ architecture Behavioral of waelderMain is
         mem(mar) when ctrl_ram_out = '1' else
         (others => '0');
     
+
+
+        --program counter
+
+
+
+        --instruction register
+
+
+
+        --arithmetic logical unit
+
+
+
+        --control unit
 begin
 
 
