@@ -1,23 +1,21 @@
-----------------------------------------------------------------------------------
--- Company: HTBLUVA Rankweil (school)
--- Engineer: Raphael SCHÖFFMANN |
--- Engineer: Kilian SIMMA       |
--- Create Date: 24.11.2025 14:28:40
--- Design Name: waelderCPU
--- Module Name: waelderMain - Behavioral
--- Project Name: waelderCPU
--- Target Devices: Spartan 7
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Revision 0.1 - Declared Bus
--- Additional Comments: 
--- This is part of the Diploma Thesis "WälderCPU" by SCHÖFFMANN Raphael and SIMMA Kilian - designing an 8-Bit CPU in VHDL
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------|
+-- Company: HTBLUVA Rankweil (school)                                                                                       |
+-- Engineers: Raphael SCHÖFFMANN & Kilian SIMMA                                                                             |
+-- Create Date: 24.11.2025 14:28:40                                                                                         |
+-- Design Name: waelderCPU                                                                                                  |
+-- Module Name: waelderMain - Behavioral                                                                                    |
+-- Project Name: waelderCPU                                                                                                 |
+-- Target Devices: Spartan 7                                                                                                |
+-- Tool Versions: Vivado 2025.1, Visual Studio Code                                                                         |
+-- Description:                                                                                                             |
+-- This is part of the Diploma-Thesis "WälderCPU" by SCHÖFFMANN Raphael and SIMMA Kilian - designing an 8-Bit CPU in VHDL   |
+-- Revision:                                                                                                                |
+-- Revision 0.01 - File Created                                                                                             |
+-- Revision 0.1 - Declared Bus                                                                                              |
+--Revision 0.11 - Added flags and registers                                                                                 |
+-- Additional Comments:                                                                                                     |
+-- none so far                                                                                                              |
+----------------------------------------------------------------------------------------------------------------------------|
 
 
 library IEEE;
