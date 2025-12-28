@@ -16,6 +16,7 @@
 -- Additional Comments:                                                                                                     |
 -- none so far                                                                                                              |
 ----------------------------------------------------------------------------------------------------------------------------|
+----------------------------------|-----------------------------------|
 
 
 library IEEE;
@@ -72,15 +73,15 @@ architecture Behavioral of waelderMain is
     m_reg(15 downto 8) <= h_reg;    --set highest 8bits of reg m with h reg
     m_reg(7 downto 0) <= l_reg;     --set lowest 8bits of reg m with l reg
 
-
-process (clk, reset)
-    begin
-        if reset = '1' then
-            -- asynchronous reset - set all flags, registers, etc. to default value (commonly all 0)
-        end if;
+    -----------------------------async reset-----------------------------|
+    process (clk, reset)
+        begin
+            if reset = '1' then
+                -- asynchronous reset - set all flags, registers, etc. to default value (commonly all 0)
+            end if;
     end process;
 
-    --bus
+    ------------------------------data bus-------------------------------|
     signal bus : std_logic_vector (7 downto 0);
     bus <= pc when ctrl_pc_out = '1' else
         ir when ctrl_ir_out = '1' else
@@ -96,12 +97,103 @@ process (clk, reset)
         mem(mar) when ctrl_ram_out = '1' else
         (others => '0');
     
+    
+    
+
+
+    ---------------------------------ALU----------------------------------|
+    --alu in- and outputs
+    signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
+    signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
+    alu_in_a <= signed(alu_reg_a);
+    alu_in_b <= signed(alu_reg_b);
+
+    signal alu_result : std_logic_vector (8 downto 0);  --alu output - dependant what operation is being made
+
+    --alu flags (f_ for flag)
+    signal f_overflow : std_logic;    --overflow - if number is bigger than 127
+    signal f_zero : std_logic;    --zero flag - if alu is 0
+    signal f_parity : std_logic;  --parity flag - if alu has even parity
+    signal f_sign : std_logic;  --sign flag - if value is negative
+    signal f_comp : std_logic; --compare flag for ifs
+
+
+
+    --alu ctrl bits
+    signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
+
+    process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
+    begin
+    variable tmp_result : signed (8 downto 0); --temporary variable neccessary for flags because variables get processed before signals (sopurce: https://coolt.ch/notizen/variable-signale-in-vhdl/#:~:text=–%20Sie%20müssen%20im%20Prozess%2C%20vor%20dem,token_note:%20std_logic_vector(7%20downto%200)%20:=(OTHERS%20=>%20%270%27);)
+
+    case alu_ctrl is
+        when "000" =>   --ADD
+        tmp_result := resize(alu_in_a, 9) + resize(alu_in_b, 9);
+        
+        when "001" =>   --SUBTRACT
+        tmp_result := resize(alu_in_a, 9) - resize(alu_in_b, 9);
+        
+        when "010" => --AND
+        tmp_result := signed('0' & (alu_reg_a and alu_reg_b));
+
+        when "011" => --OR
+        tmp_result := signed('0' & (alu_reg_a or alu_reg_b));
+        
+        when "100" => --NOT (just reg a)
+        tmp_result := signed('0' & (not alu_reg_a));
+
+        when "101" => --XOR
+        tmp_result := signed('0' & (alu_reg_a xor alu_reg_b));
+
+        when "110" => --COMPARE
+        if (alu_reg_a = alu_reg_b) then
+            f_comp <= '1';
+        else
+            f_comp <= '0';
+        end if;
+        tmp_result := "000000000";
+
+        when "111" =>
+        --undefined - set everything 0
+        tmp_result := "000000000";
+            
+        end case;
+
+        alu_result <= std_logic_vector(tmp_result);
+
+    --flag logic
+    if tmp_result = 0 then
+        f_zero <= '1';  --zero flag if result is equal to 0
+    else
+        f_zero <= '0';
+    end if;
+
+     -- Overflow - only needed for ADD and SUBTRACT
+     f_overflow <= '0'; --reset overflow
+    if (alu_ctrl = "000" or alu_ctrl = "001") then  --overflow condition = if a and b have the same signage but the output has another then it is overflow
+        if (alu_in_a(7) = alu_in_b(7)) and (tmp_result(7) /= alu_in_a(7)) then
+            f_overflow <= '1';
+        end if;
+    end if;
+
+    f_sign <= tmp_result(7);    --MSB says if value is negative - sign flag has to be MSB
+
+    f_parity <= tmp_result(0);  --parity is odd if LSB equals '1'
+
+    end process;
+
+    
+
 
 
         --program counter
     
 
+
         --arithmetic logical unit
+
 
 
 
