@@ -197,8 +197,21 @@ architecture Behavioral of waelderMain is
 
 
 
-
+    ---------------------------------ALU----------------------------------|
         --control unit
+    -----------------------instruction decoding---------------------------|
+    -- Type definition for all supported instructions
+    type instr_t is (
+        NOP, RST, INR, DCR, CAL, RET, CCC, RCC, JMP, JCC, 
+        PUSH, LOAD, ALU, RLC, RRC, LDR, INP, OUT, MOV
+    );
+    
+    signal current_instr : instr_t; -- Holds the currently decoded instruction
+
+    -- Opcode field aliases for readability
+    signal op_type      : std_logic_vector(1 downto 0); -- x: type indicator
+    signal op_var       : std_logic_vector(2 downto 0); -- y: variable / register
+    signal op_sec       : std_logic_vector(2 downto 0); -- z: secondary indicator
 begin
 
 
