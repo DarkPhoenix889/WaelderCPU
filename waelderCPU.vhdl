@@ -50,6 +50,7 @@ architecture Behavioral of waelderMain is
     signal ctrl_hr_out : in std_logic;      --reg h out
     signal ctrl_mr_out : in std_logic;      --reg m out (16bit)
 
+    
     -------------------input control flags-------------------------------|
     signal ctrl _ram_in : in std_logic;     --ram in
 
