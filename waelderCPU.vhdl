@@ -29,7 +29,7 @@ entity waelderMain is
         clk : in std_logic;
         reset : in std_logic;
         data_in : in std_logic_vector(7 downto 0);
-        data_out . out std_logic_vector (7 downto 0);
+        data_out : out std_logic_vector (7 downto 0)
      );
 end waelderMain;
 
@@ -37,30 +37,26 @@ architecture Behavioral of waelderMain is
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
-    signal ctrl_pc_out : in std_logic;      --program counter out
-    signal ctrl_ir_out : in std_logic;      --instruction register out
-    signal ctrl_alu_out : in std_logic;     --arithmetic logical unit out
-    signal ctrl_ram_out : in std_logic;     --random access memory out
-    signal ctrl_ar_out : in std_logic;      --register a out
-    signal ctrl_br_out : in std_logic;      --reg b out
-    signal ctrl_cr_out : in std_logic;      --reg c out
-    signal ctrl_dr_out : in std_logic;      --reg d out
-    signal ctrl_er_out : in std_logic;      --reg e out
-    signal ctrl_lr_out : in std_logic;      --reg l out
-    signal ctrl_hr_out : in std_logic;      --reg h out
-    signal ctrl_mr_out : in std_logic;      --reg m out (16bit)
+    signal ctrl_pc_out : std_logic;      --program counter out
+    signal ctrl_ir_out : std_logic;      --instruction register out
+    signal ctrl_alu_out : std_logic;     --arithmetic logical unit out
+    signal ctrl_ram_out : std_logic;     --random access memory out
+    signal ctrl_ar_out : std_logic;      --register a out
+    signal ctrl_br_out : std_logic;      --reg b out
+    signal ctrl_cr_out : std_logic;      --reg c out
+    signal ctrl_dr_out : std_logic;      --reg d out
+    signal ctrl_er_out : std_logic;      --reg e out
+    signal ctrl_lr_out : std_logic;      --reg l out
+    signal ctrl_hr_out : std_logic;      --reg h out
+    signal ctrl_mr_out : std_logic;      --reg m out (16bit)
 
-    
     -------------------input control flags-------------------------------|
-    signal ctrl _ram_in : in std_logic;     --ram in
-
-
+    signal ctrl_ram_in : std_logic;     --ram in
 
 
     -- register deeclaration --
     ------------------instruction register-------------------------------|
-    signal i_reg : std_logic_vector (7 downto 0);
-    
+    signal i_reg : std_logic_vector (7 downto 0); 
     
     ----------------------general purpose register-----------------------|
     signal a_reg : std_logic_vector (7 downto 0);      --reg a
@@ -71,19 +67,48 @@ architecture Behavioral of waelderMain is
     signal l_reg : std_logic_vector (7 downto 0);      --reg l
     signal h_reg : std_logic_vector (7 downto 0);      --reg h
     signal m_reg : std_logic_vector (15 downto 0);      --reg m (16bit reg - consists out of reg h(-igh) + l(-ow))
-    m_reg(15 downto 8) <= h_reg;    --set highest 8bits of reg m with h reg
-    m_reg(7 downto 0) <= l_reg;     --set lowest 8bits of reg m with l reg
+    
+
+    --------------------------bus declaration----------------------------|
+    signal bus : std_logic_vector (7 downto 0);
+
+
+    -- alu declaration --
+    -----------------------alu in- and outputs---------------------------|
+    signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
+    signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
+    alu_in_a <= signed(alu_reg_a);
+    alu_in_b <= signed(alu_reg_b);
+    signal alu_result : std_logic_vector (8 downto 0);  --alu output - dependant what operation is being made
+
+    --alu flags (f_ for flag)
+    signal f_overflow : std_logic;    --overflow - if number is bigger than 127
+    signal f_zero : std_logic;    --zero flag - if alu is 0
+    signal f_parity : std_logic;  --parity flag - if alu has even parity
+    signal f_sign : std_logic;  --sign flag - if value is negative
+    signal f_comp : std_logic; --compare flag for ifs
+
+    --alu ctrl bits
+    signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
+
+
+
+    begin
+    -- m-register --
+    m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
 
     -----------------------------async reset-----------------------------|
-    process (clk, reset)
+    process (reset)
         begin
             if reset = '1' then
                 -- asynchronous reset - set all flags, registers, etc. to default value (commonly all 0)
             end if;
     end process;
 
+
     ------------------------------data bus-------------------------------|
-    signal bus : std_logic_vector (7 downto 0);
     bus <= pc when ctrl_pc_out = '1' else
         ir when ctrl_ir_out = '1' else
         a_reg when ctrl_ar_out = '1' else
@@ -98,36 +123,11 @@ architecture Behavioral of waelderMain is
         mem(mar) when ctrl_ram_out = '1' else
         (others => '0');
     
-    
-    
-
 
     ---------------------------------ALU----------------------------------|
-    --alu in- and outputs
-    signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
-    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 1
-    signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
-    signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
-    alu_in_a <= signed(alu_reg_a);
-    alu_in_b <= signed(alu_reg_b);
-
-    signal alu_result : std_logic_vector (8 downto 0);  --alu output - dependant what operation is being made
-
-    --alu flags (f_ for flag)
-    signal f_overflow : std_logic;    --overflow - if number is bigger than 127
-    signal f_zero : std_logic;    --zero flag - if alu is 0
-    signal f_parity : std_logic;  --parity flag - if alu has even parity
-    signal f_sign : std_logic;  --sign flag - if value is negative
-    signal f_comp : std_logic; --compare flag for ifs
-
-
-
-    --alu ctrl bits
-    signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
-
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
     begin
-    variable tmp_result : signed (8 downto 0); --temporary variable neccessary for flags because variables get processed before signals (sopurce: https://coolt.ch/notizen/variable-signale-in-vhdl/#:~:text=–%20Sie%20müssen%20im%20Prozess%2C%20vor%20dem,token_note:%20std_logic_vector(7%20downto%200)%20:=(OTHERS%20=>%20%270%27);)
+    variable tmp_result : signed (8 downto 0); --temporary variable neccessary for flags because variables get processed before signals (sopurce: https://coolt.ch/notizen/variable-signale-in-vhdl/#:~:text=-%20Sie%20müssen%20im%20Prozess%2C%20vor%20dem,token_note:%20std_logic_vector(7%20downto%200)%20:=(OTHERS%20=>%20%270%27);)
 
     case alu_ctrl is
         when "000" =>   --ADD
@@ -199,7 +199,7 @@ architecture Behavioral of waelderMain is
 
 
         --control unit
-begin
+
 
 
 end Behavioral;
