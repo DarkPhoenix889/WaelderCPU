@@ -92,7 +92,8 @@ architecture Behavioral of waelderMain is
     --alu ctrl bits
     signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
 
-
+    --temporary declarations that will be modified in the future
+    signal pc : std_logic_vector (7 downto 0);
 
     begin
     -- m-register --
