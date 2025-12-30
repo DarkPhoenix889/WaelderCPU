@@ -48,7 +48,7 @@ architecture Behavioral of waelderMain is
     signal ctrl_er_out : std_logic;      --reg e out
     signal ctrl_lr_out : std_logic;      --reg l out
     signal ctrl_hr_out : std_logic;      --reg h out
-    signal ctrl_mr_out : std_logic;      --reg m out (16bit)
+    --signal ctrl_mr_out : std_logic;      --reg m out (16bit) not needed because m-reg is not a real register, just register l+h
 
     -------------------input control flags-------------------------------|
     signal ctrl_ram_in : std_logic;     --ram in
@@ -70,7 +70,7 @@ architecture Behavioral of waelderMain is
     
 
     --------------------------bus declaration----------------------------|
-    signal bus : std_logic_vector (7 downto 0);
+    signal data_bus : std_logic_vector (7 downto 0);
 
 
     -- alu declaration --
@@ -79,10 +79,9 @@ architecture Behavioral of waelderMain is
     signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 1
     signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
     signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
-    alu_in_a <= signed(alu_reg_a);
-    alu_in_b <= signed(alu_reg_b);
+    
     signal alu_result : std_logic_vector (8 downto 0);  --alu output - dependant what operation is being made
-
+    
     --alu flags (f_ for flag)
     signal f_overflow : std_logic;    --overflow - if number is bigger than 127
     signal f_zero : std_logic;    --zero flag - if alu is 0
@@ -93,11 +92,16 @@ architecture Behavioral of waelderMain is
     --alu ctrl bits
     signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
 
-
+    --temporary declarations that will be modified in the future
+    signal pc, ir : std_logic_vector (7 downto 0);
 
     begin
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
+    
+    
+    alu_in_a <= signed(alu_reg_a);
+    alu_in_b <= signed(alu_reg_b);
 
     -----------------------------async reset-----------------------------|
     process (reset)
@@ -109,44 +113,57 @@ architecture Behavioral of waelderMain is
 
 
     ------------------------------data bus-------------------------------|
-    bus <= pc when ctrl_pc_out = '1' else
-        ir when ctrl_ir_out = '1' else
-        a_reg when ctrl_ar_out = '1' else
-        b_reg when ctrl_br_out = '1' else
-        c_reg when ctrl_cr_out = '1' else
-        d_reg when ctrl_dr_out = '1' else
-        e_reg when ctrl_er_out = '1' else
-        h_reg when ctrl_hr_out = '1' else
-        l_reg when ctrl_lr_out = '1' else
-        m_reg when ctrl_mr_out = '1' else
-        alu when ctrl_alu_out = '1' else
-        mem(mar) when ctrl_ram_out = '1' else
-        (others => '0');
-    
+    process (ctrl_pc_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out, 
+             ctrl_lr_out, ctrl_hr_out, ctrl_alu_out)
+    begin
+        if ctrl_pc_out = '1' then
+            data_bus <= pc;
+        elsif ctrl_ir_out = '1' then
+            data_bus <= ir;
+        elsif ctrl_ar_out = '1' then
+            data_bus <= a_reg;
+        elsif ctrl_br_out = '1' then
+            data_bus <= b_reg;
+        elsif ctrl_cr_out = '1' then
+            data_bus <= c_reg;
+        elsif ctrl_dr_out = '1' then
+            data_bus <= d_reg;
+        elsif ctrl_er_out = '1' then
+            data_bus <= e_reg;
+        elsif ctrl_hr_out = '1' then
+            data_bus <= h_reg;
+        elsif ctrl_lr_out = '1' then
+            data_bus <= l_reg;
+        elsif ctrl_alu_out = '1' then
+            data_bus <= alu_result;
+        else
+        --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
+        data_bus <= (others => '0');
+        end if;
+    end process;    
 
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
+        variable tmp_res : signed (8 downto 0);
     begin
-    variable tmp_result : signed (8 downto 0); --temporary variable neccessary for flags because variables get processed before signals (sopurce: https://coolt.ch/notizen/variable-signale-in-vhdl/#:~:text=-%20Sie%20müssen%20im%20Prozess%2C%20vor%20dem,token_note:%20std_logic_vector(7%20downto%200)%20:=(OTHERS%20=>%20%270%27);)
-
-    case alu_ctrl is
+    case ctrl_alu is
         when "000" =>   --ADD
-        tmp_result := resize(alu_in_a, 9) + resize(alu_in_b, 9);
+        tmp_res := resize(alu_in_a, 9) + resize(alu_in_b, 9);
         
         when "001" =>   --SUBTRACT
-        tmp_result := resize(alu_in_a, 9) - resize(alu_in_b, 9);
+        tmp_res := resize(alu_in_a, 9) - resize(alu_in_b, 9);
         
         when "010" => --AND
-        tmp_result := signed('0' & (alu_reg_a and alu_reg_b));
+        tmp_res := signed('0' & (alu_reg_a and alu_reg_b));
 
         when "011" => --OR
-        tmp_result := signed('0' & (alu_reg_a or alu_reg_b));
+        tmp_res := signed('0' & (alu_reg_a or alu_reg_b));
         
         when "100" => --NOT (just reg a)
-        tmp_result := signed('0' & (not alu_reg_a));
+        tmp_res := signed('0' & (not alu_reg_a));
 
         when "101" => --XOR
-        tmp_result := signed('0' & (alu_reg_a xor alu_reg_b));
+        tmp_res := signed('0' & (alu_reg_a xor alu_reg_b));
 
         when "110" => --COMPARE
         if (alu_reg_a = alu_reg_b) then
@@ -154,34 +171,34 @@ architecture Behavioral of waelderMain is
         else
             f_comp <= '0';
         end if;
-        tmp_result := "000000000";
+        tmp_res := "000000000";
 
         when "111" =>
         --undefined - set everything 0
-        tmp_result := "000000000";
+        tmp_res := "000000000";
             
         end case;
 
-        alu_result <= std_logic_vector(tmp_result);
+        alu_result <= std_logic_vector(tmp_res);
 
     --flag logic
-    if tmp_result = 0 then
+    if tmp_res = 0 then
         f_zero <= '1';  --zero flag if result is equal to 0
     else
         f_zero <= '0';
     end if;
 
-     -- Overflow - only needed for ADD and SUBTRACT
+     -- Overflow - only needed for ADD and SUBTRACT --needs rework
      f_overflow <= '0'; --reset overflow
-    if (alu_ctrl = "000" or alu_ctrl = "001") then  --overflow condition = if a and b have the same signage but the output has another then it is overflow
-        if (alu_in_a(7) = alu_in_b(7)) and (tmp_result(7) /= alu_in_a(7)) then
+    if (ctrl_alu = "000" or ctrl_alu = "001") then  --overflow condition = if a and b have the same signage but the output has another then it is overflow
+        if (alu_in_a(7) = alu_in_b(7)) and (tmp_res(7) /= alu_in_a(7)) then
             f_overflow <= '1';
         end if;
     end if;
 
-    f_sign <= tmp_result(7);    --MSB says if value is negative - sign flag has to be MSB
+    f_sign <= tmp_res(8);    --MSB says if value is negative - sign flag has to be MSB
 
-    f_parity <= tmp_result(0);  --parity is odd if LSB equals '1'
+    f_parity <= tmp_res(0);  --parity is odd if LSB equals '1'
 
     end process;
 
