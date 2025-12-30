@@ -48,7 +48,7 @@ architecture Behavioral of waelderMain is
     signal ctrl_er_out : std_logic;      --reg e out
     signal ctrl_lr_out : std_logic;      --reg l out
     signal ctrl_hr_out : std_logic;      --reg h out
-    signal ctrl_mr_out : std_logic;      --reg m out (16bit)
+    --signal ctrl_mr_out : std_logic;      --reg m out (16bit) not needed because m-reg is not a real register, just register l+h
 
     -------------------input control flags-------------------------------|
     signal ctrl_ram_in : std_logic;     --ram in
@@ -93,7 +93,7 @@ architecture Behavioral of waelderMain is
     signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
 
     --temporary declarations that will be modified in the future
-    signal pc : std_logic_vector (7 downto 0);
+    signal pc, ir : std_logic_vector (7 downto 0);
 
     begin
     -- m-register --
@@ -113,25 +113,33 @@ architecture Behavioral of waelderMain is
 
 
     ------------------------------data bus-------------------------------|
-    process (clk)
+    process (ctrl_pc_out)
     begin
-        if rising_edge (clk) then
-            data_bus <= pc when ctrl_pc_out = '1' else
-            ir when ctrl_ir_out = '1' else
-            a_reg when ctrl_ar_out = '1' else
-            b_reg when ctrl_br_out = '1' else
-            c_reg when ctrl_cr_out = '1' else
-            d_reg when ctrl_dr_out = '1' else
-            e_reg when ctrl_er_out = '1' else
-            h_reg when ctrl_hr_out = '1' else
-            l_reg when ctrl_lr_out = '1' else
-            m_reg when ctrl_mr_out = '1' else
-            alu when ctrl_alu_out = '1' else
-            mem(mar) when ctrl_ram_out = '1' else
-            (others => '0');
+        if ctrl_pc_out = '1' then
+            data_bus <= pc;
+        elsif ctrl_ir_out = '1' then
+            data_bus <= ir;
+        elsif ctrl_ar_out = '1' then
+            data_bus <= a_reg;
+        elsif ctrl_br_out = '1' then
+            data_bus <= b_reg;
+        elsif ctrl_cr_out = '1' then
+            data_bus <= c_reg;
+        elsif ctrl_dr_out = '1' then
+            data_bus <= d_reg;
+        elsif ctrl_er_out = '1' then
+            data_bus <= e_reg;
+        elsif ctrl_hr_out = '1' then
+            data_bus <= h_reg;
+        elsif ctrl_lr_out = '1' then
+            data_bus <= l_reg;
+        elsif ctrl_alu_out = '1' then
+            data_bus <= alu_result;
+        else
+        --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
+        data_bus <= (others => '0');
         end if;
-    end process;
-    
+    end process;    
 
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
