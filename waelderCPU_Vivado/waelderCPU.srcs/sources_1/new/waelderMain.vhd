@@ -80,7 +80,7 @@ architecture Behavioral of waelderMain is
     signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
     signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
     
-    signal alu_result : std_logic_vector (8 downto 0);  --alu output - dependant what operation is being made
+    signal alu_result : std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
     
     --alu flags (f_ for flag)
     signal f_overflow : std_logic;    --overflow - if number is bigger than 127
@@ -179,7 +179,7 @@ architecture Behavioral of waelderMain is
             
         end case;
 
-        alu_result <= std_logic_vector(tmp_res);
+        alu_result <= std_logic_vector(tmp_res(7 downto 0));
 
     --flag logic
     if tmp_res = 0 then
@@ -188,15 +188,10 @@ architecture Behavioral of waelderMain is
         f_zero <= '0';
     end if;
 
-     -- Overflow - only needed for ADD and SUBTRACT --needs rework
-     f_overflow <= '0'; --reset overflow
-    if (ctrl_alu = "000" or ctrl_alu = "001") then  --overflow condition = if a and b have the same signage but the output has another then it is overflow
-        if (alu_in_a(7) = alu_in_b(7)) and (tmp_res(7) /= alu_in_a(7)) then
-            f_overflow <= '1';
-        end if;
-    end if;
-
-    f_sign <= tmp_res(8);    --MSB says if value is negative - sign flag has to be MSB
+    -- Overflow - only needed for ADD and SUBTRACT
+    f_overflow <= tmp_res(8);
+    
+    f_sign <= tmp_res(7);
 
     f_parity <= tmp_res(0);  --parity is odd if LSB equals '1'
 
