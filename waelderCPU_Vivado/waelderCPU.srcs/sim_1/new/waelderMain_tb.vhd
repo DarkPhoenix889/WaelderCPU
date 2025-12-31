@@ -1,3 +1,6 @@
+--Testbench for ALU testing purposes
+--In order to test the ALU and only the ALU, the alu_reg_a and b, alu_result and ctrl_alu have to be declared as ports
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
@@ -28,7 +31,7 @@ architecture Behavioral of waelderMain_tb is
     signal clk : std_logic := '0';
     signal reset : std_logic := '0';
     signal data_in : std_logic_vector(7 downto 0) := (others => '0');
-    signal data_out : std_logic_vector (7 downto 0);
+    signal data_out : std_logic_vector (7 downto 0) := (others => '0');
     
     signal alu_reg_a : std_logic_vector(7 downto 0) := "00000000";
     signal alu_reg_b : std_logic_vector(7 downto 0) := "00000000";

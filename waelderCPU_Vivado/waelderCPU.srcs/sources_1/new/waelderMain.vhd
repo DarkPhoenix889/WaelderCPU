@@ -32,10 +32,10 @@ entity waelderMain is
         data_out : out std_logic_vector (7 downto 0);
         
         --for testing purposes only--
-        alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
-        alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
-        alu_result : out std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
-        ctrl_alu : in std_logic_vector (2 downto 0)    --alu control register - gets filled by CU with OP-Code
+        --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
+        --alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
+        --alu_result : out std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
+        --ctrl_alu : in std_logic_vector (2 downto 0)    --alu control register - gets filled by CU with OP-Code
      );
 end waelderMain;
 
@@ -81,12 +81,12 @@ architecture Behavioral of waelderMain is
 
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
-    --signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
-    --signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 2
+    signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 2
     signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
     signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
     
-    --signal alu_result : std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
+    signal alu_result : std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
     
     --alu flags (f_ for flag)
     signal f_overflow : std_logic;    --overflow - if number is bigger than 127
@@ -96,7 +96,7 @@ architecture Behavioral of waelderMain is
     signal f_comp : std_logic; --compare flag for ifs
 
     --alu ctrl bits
-    --signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
+    signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
 
     --temporary declarations that will be modified in the future
     signal pc, ir : std_logic_vector (7 downto 0);
@@ -141,7 +141,7 @@ architecture Behavioral of waelderMain is
         elsif ctrl_lr_out = '1' then
             data_bus <= l_reg;
         elsif ctrl_alu_out = '1' then
-            --data_bus <= alu_result;
+            data_bus <= alu_result;
         else
         --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
         data_bus <= (others => '0');
