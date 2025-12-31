@@ -89,6 +89,7 @@ begin
         alu_reg_b <= "01111111";
         wait for 20 ns;
         --SUB test overflow
+        alu_reg_a <= "10000101";
         ctrl_alu <= "001";
 
         wait;

@@ -3,8 +3,8 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Wed Dec 31 10:40:05 2025
-# Process ID         : 26300
+# Start of session at: Wed Dec 31 12:13:28 2025
+# Process ID         : 29840
 # Current directory  : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1
 # Command line       : vivado.exe -log waelderMain.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source waelderMain.tcl
 # Log file           : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/waelderMain.vds
@@ -17,8 +17,8 @@
 # CPU Physical cores : 14
 # CPU Logical cores  : 20
 # Host memory        : 16780 MB
-# Swap memory        : 9126 MB
-# Total Virtual      : 25907 MB
-# Available Virtual  : 3690 MB
+# Swap memory        : 10207 MB
+# Total Virtual      : 26988 MB
+# Available Virtual  : 2941 MB
 #-----------------------------------------------------------
 source waelderMain.tcl -notrace

@@ -4,8 +4,16 @@ Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot waelderMain_tb_behav xil_defaultlib.waelderMain_tb -log elaborate.log 
 Using 2 slave threads.
 Starting static elaboration
-ERROR: [VRFC 10-718] formal port <alu_reg_a> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:20]
-ERROR: [VRFC 10-718] formal port <alu_reg_b> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:21]
-ERROR: [VRFC 10-718] formal port <alu_result> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:22]
-ERROR: [VRFC 10-718] formal port <ctrl_alu> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:23]
-ERROR: [XSIM 43-3321] Static elaboration of top level VHDL design unit waeldermain_tb in library work failed.
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling package ieee.numeric_std
+Compiling architecture behavioral of entity xil_defaultlib.waelderMain [waeldermain_default]
+Compiling architecture behavioral of entity xil_defaultlib.waeldermain_tb
+Built simulation snapshot waelderMain_tb_behav
