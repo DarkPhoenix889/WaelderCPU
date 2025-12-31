@@ -76,7 +76,7 @@ architecture Behavioral of waelderMain is
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
-    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 1
+    signal alu_reg_b :std_logic_vector (7 downto 0);    --alu reg 2
     signal alu_in_a : signed (7 downto 0);  --alu input reg 1 signed value
     signal alu_in_b : signed (7 downto 0);  --alu input reg 2 signed value
     
@@ -189,9 +189,9 @@ architecture Behavioral of waelderMain is
     end if;
 
     -- Overflow - only needed for ADD and SUBTRACT
-    f_overflow <= tmp_res(8);
+    f_overflow <= tmp_res(7);
     
-    f_sign <= tmp_res(7);
+    f_sign <= tmp_res(8);
 
     f_parity <= tmp_res(0);  --parity is odd if LSB equals '1'
 
