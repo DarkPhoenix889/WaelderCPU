@@ -29,9 +29,9 @@ entity waelderMain is
         clk : in std_logic;
         reset : in std_logic;
         data_in : in std_logic_vector(7 downto 0);
-        data_out : out std_logic_vector (7 downto 0);
+        data_out : out std_logic_vector (7 downto 0)
         
-        --for testing purposes only--
+        --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
         --alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
         --alu_result : out std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made

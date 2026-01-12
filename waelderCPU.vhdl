@@ -30,6 +30,12 @@ entity waelderMain is
         reset : in std_logic;
         data_in : in std_logic_vector(7 downto 0);
         data_out : out std_logic_vector (7 downto 0)
+        
+        --for alu testing purposes only--
+        --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
+        --alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
+        --alu_result : out std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
+        --ctrl_alu : in std_logic_vector (2 downto 0)    --alu control register - gets filled by CU with OP-Code
      );
 end waelderMain;
 
@@ -176,6 +182,9 @@ architecture Behavioral of waelderMain is
         when "111" =>
         --undefined - set everything 0
         tmp_res := "000000000";
+        
+        when others =>
+        tmp_res := "000000000";
             
         end case;
 
@@ -189,7 +198,9 @@ architecture Behavioral of waelderMain is
     end if;
 
     -- Overflow - only needed for ADD and SUBTRACT
-    f_overflow <= tmp_res(7);
+    if ctrl_alu = "000" or ctrl_alu = "001" then
+        f_overflow <= tmp_res(8) xor tmp_res(7);
+    end if;
     
     f_sign <= tmp_res(8);
 
@@ -198,7 +209,7 @@ architecture Behavioral of waelderMain is
     end process;
 
     
-        --penis
+
 
 
         --program counter

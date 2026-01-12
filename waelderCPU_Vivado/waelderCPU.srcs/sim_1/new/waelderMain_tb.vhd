@@ -1,5 +1,12 @@
---Testbench for ALU testing purposes
---In order to test the ALU and only the ALU, the alu_reg_a and b, alu_result and ctrl_alu have to be declared as ports
+--for ALU testing purposes only
+--In order to test the ALU and only the ALU, the alu_reg_a and b, alu_result and 
+--ctrl_alu have to be declared as ports as followed and the signals have to be removed (commented):
+--for alu testing purposes only--
+--alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
+--alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
+--alu_result : out std_logic_vector (7 downto 0);  --alu output - dependant what operation is being made
+--ctrl_alu : in std_logic_vector (2 downto 0)    --alu control register - gets filled by CU with OP-Code
+--
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
