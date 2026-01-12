@@ -219,10 +219,88 @@ architecture Behavioral of waelderMain is
         --arithmetic logical unit
 
 
-
-
         --control unit
+    -----------------------instruction decoding---------------------------|
+    -- Type definition for all supported instructions
+    type instr_t is (
+        NOP, RST, INR, DCR, CAL, RET, CCC, RCC, JMP, JCC, 
+        PUSH, LOAD, ALU, RLC, RRC, LDR, INP, OUT, MOV
+    );
+    
+    signal current_instr : instr_t; -- Holds the currently decoded instruction
 
+    -- Opcode field aliases for readability
+    signal x : std_logic_vector(1 downto 0); -- type indicator
+    signal y : std_logic_vector(2 downto 0); -- variable / register
+    signal z : std_logic_vector(2 downto 0); -- secondary indicator
+
+    ---------------------------------------------------------------------|
+    -- Instruction Decoder
+    ---------------------------------------------------------------------|
+    process(x, y, z)
+    begin
+        -- Default value to ensure clean synthesis
+        instr <= NOP;
+
+        case x is
+            --------------------------------------------------------------
+            -- Type 00: No Variables
+            --------------------------------------------------------------
+            when "00" =>
+                case z is
+                    when "000" =>
+                        if y = "000" then instr <= NOP;
+                        elsif y = "001" then instr <= INP;
+                        end if;
+                    when "001" =>
+                        if y = "001" then instr <= OUT;
+                        else instr <= RST;
+                        end if;
+                    when "010"  => instr <= JMP;
+                    when "100"  => instr <= CAL;
+                    when "101"  => instr <= RET;
+                    when others => instr <= NOP;
+                end case;
+
+            --------------------------------------------------------------
+            -- Type 01: Ops with Vars
+            --------------------------------------------------------------
+            when "01" =>
+                case z is
+                    when "000"  => instr <= INR;
+                    when "001"  => instr <= DCR;
+                    when "010"  => instr <= RLC;
+                    when "011"  => instr <= RRC;
+                    when "100"  => instr <= LDR;
+                    when "101"  => instr <= PUSH;
+                    when "110"  => instr <= LOAD;
+                    when others => instr <= NOP;
+                end case;
+
+            --------------------------------------------------------------
+            -- Type 10: Move OP 
+            --------------------------------------------------------------
+            when "10" =>
+                instr <= MOV;
+
+            --------------------------------------------------------------
+            -- Type 11: Conditionals + ALU 
+            --------------------------------------------------------------
+            when "11" =>
+                case z is
+                    when "000" | "001" => instr <= ALU;
+                    when "100"         => instr <= CCC;
+                    when "101"         => instr <= RCC;
+                    when "110"         => instr <= JCC;
+                    when others        => instr <= ALU;
+                end case;
+
+            when others =>
+                instr <= NOP;
+        end case;
+    end process;
+
+begin
 
 
 end Behavioral;
