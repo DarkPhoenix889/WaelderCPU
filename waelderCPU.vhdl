@@ -37,22 +37,35 @@ architecture Behavioral of waelderMain is
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
-    signal ctrl_pc_out : in std_logic;      --program counter out
-    signal ctrl_ir_out : in std_logic;      --instruction register out
-    signal ctrl_alu_out : in std_logic;     --arithmetic logical unit out
-    signal ctrl_ram_out : in std_logic;     --random access memory out
-    signal ctrl_ar_out : in std_logic;      --register a out
-    signal ctrl_br_out : in std_logic;      --reg b out
-    signal ctrl_cr_out : in std_logic;      --reg c out
-    signal ctrl_dr_out : in std_logic;      --reg d out
-    signal ctrl_er_out : in std_logic;      --reg e out
-    signal ctrl_lr_out : in std_logic;      --reg l out
-    signal ctrl_hr_out : in std_logic;      --reg h out
-    signal ctrl_mr_out : in std_logic;      --reg m out (16bit)
+    signal ctrl_pc_out : std_logic;      --program counter out
+    signal ctrl_ir_out : std_logic;      --instruction register out
+    signal ctrl_alu_out : std_logic;     --arithmetic logical unit out
+    signal ctrl_ram_out : std_logic;     --random access memory out
+    signal ctrl_ar_out : std_logic;      --register a out
+    signal ctrl_br_out : std_logic;      --reg b out
+    signal ctrl_cr_out : std_logic;      --reg c out
+    signal ctrl_dr_out : std_logic;      --reg d out
+    signal ctrl_er_out : std_logic;      --reg e out
+    signal ctrl_lr_out : std_logic;      --reg l out
+    signal ctrl_hr_out : std_logic;      --reg h out
+    signal ctrl_mr_out : std_logic;      --reg m out (16bit)
 
-    
-    -------------------input control flags-------------------------------|
-    signal ctrl _ram_in : in std_logic;     --ram in
+    ------------------input control flags--------------------------------|
+    signal ctrl_pc_in : std_logic;      --program counter in
+    signal ctrl_ir_in : std_logic;      --instruction register in
+    signal ctrl_mar_h_in : std_logic;    --memory address register high byte in
+    signal ctrl_mar_l_in : std_logic;    --memory address register low byte in
+    signal ctrl_ar_in : std_logic;      --register a in
+    signal ctrl_br_in : std_logic;      --reg b in
+    signal ctrl_cr_in : std_logic;      --reg c in
+    signal ctrl_dr_in : std_logic;      --reg d in
+    signal ctrl_er_in : std_logic;      --reg e in
+    signal ctrl_lr_in : std_logic;      --reg l in
+    signal ctrl_hr_in : std_logic;      --reg h in
+    signal ctrl_mr_in : std_logic;      --reg m in (16bit)
+    signal ctrl_ram_in : std_logic;     --ram in
+
+
 
 
 
@@ -236,7 +249,6 @@ architecture Behavioral of waelderMain is
                     when "010"  => instr <= JMP;
                     when "100"  => instr <= CAL;
                     when "101"  => instr <= RET;
-                    when others => instr <= NOP;
                 end case;
 
             --------------------------------------------------------------
@@ -251,7 +263,6 @@ architecture Behavioral of waelderMain is
                     when "100"  => instr <= LDR;
                     when "101"  => instr <= PUSH;
                     when "110"  => instr <= LOAD;
-                    when others => instr <= NOP;
                 end case;
 
             --------------------------------------------------------------
