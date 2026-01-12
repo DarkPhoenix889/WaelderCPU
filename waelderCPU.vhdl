@@ -92,6 +92,20 @@ architecture Behavioral of waelderMain is
     signal data_bus : std_logic_vector (7 downto 0);
 
 
+
+    --------------------------program counter----------------------------|
+    signal pc : std_logic_vector (15 downto 0);
+    signal pc_next   : std_logic_vector(15 downto 0);
+    signal ctrl_pc_inc : std_logic;
+    -- ctrl_pc_in & ctrl_pc_out bereits definiert
+
+    -- pc high and low byte
+    signal pc_h : std_logic_vector (7 downto 0);
+    signal pc_l : std_logic_vector (7 downto 0);
+    signal pc_load_h : std_logic;
+    signal pc_load_l : std_logic;
+
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
@@ -159,7 +173,25 @@ architecture Behavioral of waelderMain is
         --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
         data_bus <= (others => '0');
         end if;
-    end process;    
+
+        if ctrl_ir_in = '1' then
+            ir <= data_bus;
+        elsif ctrl_ar_in = '1' then
+            a_reg <= data_bus;
+        elsif ctrl_br_in = '1' then
+            b_reg <= data_bus;
+        elsif ctrl_cr_in = '1' then
+            c_reg <= data_bus;
+        elsif ctrl_dr_in = '1' then
+            d_reg <= data_bus;
+        elsif ctrl_er_in = '1' then
+            e_reg <= data_bus;
+        elsif ctrl_hr_in = '1' then
+            h_reg <= data_bus;
+        elsif ctrl_lr_in = '1' then
+            l_reg <= data_bus;
+        end if;
+    end process;
 
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
@@ -225,12 +257,30 @@ architecture Behavioral of waelderMain is
 
 
 
-        --program counter
+        
+--------------------------program counter----------------------------|
+process(clk, reset)
+begin
+    if reset = '1' then
+        pc <= (others => '0'); -- set pc to 0 on reset
+    elsif rising_edge(clk) then
+        if ctrl_pc_in = '1' then
+            if ctrl_pc_l_in = '1' then
+                pc(7 downto 0) <= data_bus;
+            elsif ctrl_pc_h_in = '1' then
+                pc(15 downto 8) <= data_bus;
+            end if;
+        elsif ctrl_pc_inc = '1' then
+            pc <= std_logic_vector(unsigned(pc) + 1);
+        end if;
+    end if;
+end process;
+
     
 
 
         --control unit
-    -----------------------instruction decoding---------------------------|
+    -----------------------instruction decoding--------------------------|
     -- Type definition for all supported instructions
     type instr_t is (
         NOP, RST, INR, DCR, CAL, RET, CCC, RCC, JMP, JCC, 
