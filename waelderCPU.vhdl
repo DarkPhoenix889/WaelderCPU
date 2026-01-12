@@ -229,9 +229,6 @@ architecture Behavioral of waelderMain is
     
 
 
-        --arithmetic logical unit
-
-
         --control unit
     -----------------------instruction decoding---------------------------|
     -- Type definition for all supported instructions
