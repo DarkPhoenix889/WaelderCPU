@@ -292,7 +292,7 @@ architecture Behavioral of waelderMain is
         end if;
     end process;
 
-    
+
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         variable tmp_res : signed (8 downto 0);
@@ -356,7 +356,7 @@ architecture Behavioral of waelderMain is
     
 
 
-
+--▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
     process(clk, reset)
