@@ -46,7 +46,6 @@ architecture Behavioral of waelderMain is
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
-    signal ctrl_pc_out : std_logic;     --program counter out flag
     signal ctrl_pc_l_out : std_logic;   --pc l(ower) 8 bits out
     signal ctrl_pc_h_out : std_logic;   --pc h(igher) 8 bits out    
     signal ctrl_ir_out : std_logic;     --instruction register out
@@ -62,7 +61,6 @@ architecture Behavioral of waelderMain is
     signal ctrl_mr_out : std_logic;     --reg m out (16bit)
 
     ------------------input control flags--------------------------------|
-    signal ctrl_pc_in : std_logic;      --program counter in flag
     signal ctrl_pc_l_in : std_logic;    --pc l(ower) 8bits in
     signal ctrl_pc_h_in : std_logic;    --pc h(igher) 8 bits in    
     signal ctrl_ir_in : std_logic;      --instruction register in
@@ -165,15 +163,13 @@ architecture Behavioral of waelderMain is
 
 
     ------------------------------data bus-------------------------------|
-    process (ctrl_pc_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out, 
+    process (ctrl_pc_l_out,ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out, 
              ctrl_lr_out, ctrl_hr_out, ctrl_alu_out)
     begin
-        if ctrl_pc_out = '1' then
-            if ctrl_pc_l_out = '1' then
-                data_bus <= pc_l;
-            elsif ctrl_pc_h_out = '1' then
-                data_bus <= pc_h;
-            end if;
+        if ctrl_pc_l_out = '1' then
+            data_bus <= pc_l;
+        elsif ctrl_pc_h_out = '1' then
+            data_bus <= pc_h;            
         elsif ctrl_ir_out = '1' then
             data_bus <= i_reg;
         elsif ctrl_ar_out = '1' then
@@ -281,28 +277,25 @@ architecture Behavioral of waelderMain is
 
 
         
---------------------------program counter----------------------------|
-process(clk, reset)
-begin
-    if reset = '1' then
-        pc <= (others => '0'); -- set pc to 0 on reset
-    elsif rising_edge(clk) then
-        if ctrl_pc_in = '1' then    --discuss if even neccessary
+    --------------------------program counter----------------------------|
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            pc <= (others => '0'); -- set pc to 0 on reset
+        elsif rising_edge(clk) then
             if ctrl_pc_l_in = '1' then
                 pc(7 downto 0) <= data_bus;
             elsif ctrl_pc_h_in = '1' then
                 pc(15 downto 8) <= data_bus;
+            elsif ctrl_pc_inc = '1' then
+                pc <= std_logic_vector(unsigned(pc) + 1);
             end if;
-        elsif ctrl_pc_inc = '1' then
-            pc <= std_logic_vector(unsigned(pc) + 1);
         end if;
-    end if;
-end process;
+    end process;
 
     
 
-
-        --control unit
+    --control unit
     
     ---------------------------------------------------------------------|
     -- Instruction Decoder

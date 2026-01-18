@@ -1,1 +1,53 @@
-waelderCPU_Vivado/vivado_pid39228.str
+# ==========================
+# Vivado generated files
+# ==========================
+
+# Journals & logs
+*.jou
+*.log
+*.str
+
+# Backups
+*_backup.*
+*.backup.*
+
+# Simulation output
+*.wdb
+*.wcfg
+*.vcd
+xsim.dir/
+
+# Build / runs
+.runs/
+*.runs/
+
+# Cache & temp
+.cache/
+.hw/
+.ip_user_files/
+.Xil/
+.webtalk/
+*.wdf
+
+# Vitis / SDK
+.sdk/
+.vitis/
+*.hdf
+*.xsa
+
+# IP generation
+*.dcp
+*.xml
+*.xci.autogen
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+*.bak
+*.~lock*
+
+# Python / scripts
+__pycache__/
+*.pyc
