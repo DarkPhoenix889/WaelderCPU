@@ -356,7 +356,7 @@ architecture Behavioral of waelderMain is
     
 
 
---▇▅▆▇▆▅▅█
+    --▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
     process(clk, reset)
