@@ -12,7 +12,10 @@
 -- Revision:                                                                                                                |
 -- Revision 0.01 - File Created                                                                                             |
 -- Revision 0.1 - Declared Bus                                                                                              |
---Revision 0.11 - Added flags and registers                                                                                 |
+-- Revision 0.11 - Added flags and registers  
+-- Revision 0.2 - Added Alu
+-- Revision 0.3 - Added CU (almost finished)
+-- Revision 0.31 - PC and reg_in                                                                            |
 -- Additional Comments:                                                                                                     |
 -- none so far                                                                                                              |
 ----------------------------------------------------------------------------------------------------------------------------|
@@ -43,21 +46,38 @@ architecture Behavioral of waelderMain is
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
-    signal ctrl_pc_out : std_logic;      --program counter out
-    signal ctrl_ir_out : std_logic;      --instruction register out
-    signal ctrl_alu_out : std_logic;     --arithmetic logical unit out
-    signal ctrl_ram_out : std_logic;     --random access memory out
-    signal ctrl_ar_out : std_logic;      --register a out
-    signal ctrl_br_out : std_logic;      --reg b out
-    signal ctrl_cr_out : std_logic;      --reg c out
-    signal ctrl_dr_out : std_logic;      --reg d out
-    signal ctrl_er_out : std_logic;      --reg e out
-    signal ctrl_lr_out : std_logic;      --reg l out
-    signal ctrl_hr_out : std_logic;      --reg h out
-    --signal ctrl_mr_out : std_logic;      --reg m out (16bit) not needed because m-reg is not a real register, just register l+h
+    signal ctrl_pc_out : std_logic;     --program counter out flag
+    signal ctrl_pc_l_out : std_logic;   --pc l(ower) 8 bits out
+    signal ctrl_pc_h_out : std_logic;   --pc h(igher) 8 bits out    
+    signal ctrl_ir_out : std_logic;     --instruction register out
+    signal ctrl_alu_out : std_logic;    --arithmetic logical unit out
+    signal ctrl_ram_out : std_logic;    --random access memory out
+    signal ctrl_ar_out : std_logic;     --register a out
+    signal ctrl_br_out : std_logic;     --reg b out
+    signal ctrl_cr_out : std_logic;     --reg c out
+    signal ctrl_dr_out : std_logic;     --reg d out
+    signal ctrl_er_out : std_logic;     --reg e out
+    signal ctrl_lr_out : std_logic;     --reg l out
+    signal ctrl_hr_out : std_logic;     --reg h out
+    signal ctrl_mr_out : std_logic;     --reg m out (16bit)
 
-    -------------------input control flags-------------------------------|
+    ------------------input control flags--------------------------------|
+    signal ctrl_pc_in : std_logic;      --program counter in flag
+    signal ctrl_pc_l_in : std_logic;    --pc l(ower) 8bits in
+    signal ctrl_pc_h_in : std_logic;    --pc h(igher) 8 bits in    
+    signal ctrl_ir_in : std_logic;      --instruction register in
+    signal ctrl_mar_h_in : std_logic;   --memory address register high byte in
+    signal ctrl_mar_l_in : std_logic;   --mar low byte in
+    signal ctrl_ar_in : std_logic;      --register a in
+    signal ctrl_br_in : std_logic;      --reg b in
+    signal ctrl_cr_in : std_logic;      --reg c in
+    signal ctrl_dr_in : std_logic;      --reg d in
+    signal ctrl_er_in : std_logic;      --reg e in
+    signal ctrl_lr_in : std_logic;      --reg l in
+    signal ctrl_hr_in : std_logic;      --reg h in
+    signal ctrl_mr_in : std_logic;      --reg m in (16bit)
     signal ctrl_ram_in : std_logic;     --ram in
+
 
 
     -- register deeclaration --
@@ -79,6 +99,20 @@ architecture Behavioral of waelderMain is
     signal data_bus : std_logic_vector (7 downto 0);
 
 
+
+    --------------------------program counter----------------------------|
+    signal pc : std_logic_vector (15 downto 0);
+    signal pc_next   : std_logic_vector(15 downto 0);
+    signal ctrl_pc_inc : std_logic;
+    -- ctrl_pc_in & ctrl_pc_out bereits definiert
+
+    -- pc high and low byte
+    signal pc_h : std_logic_vector (7 downto 0);
+    signal pc_l : std_logic_vector (7 downto 0);
+    signal pc_load_h : std_logic;
+    signal pc_load_l : std_logic;
+
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     signal alu_reg_a :std_logic_vector (7 downto 0);    --alu reg 1
@@ -97,10 +131,22 @@ architecture Behavioral of waelderMain is
 
     --alu ctrl bits
     signal ctrl_alu : std_logic_vector (2 downto 0);    --alu control register - gets filled by CU with OP-Code
+    
+    
+    --instruction decoding-----------------------------------------------|
+    -- Type definition for all supported instructions
+    type instr_t is (
+        NOP, RST, INR, DCR, CAL, RET, CCC, RCC, JMP, JCC, 
+        PUSH, LOAD, ALU, RLC, RRC, LDR, INP, instr_OUT, MOV
+    );
+    
+    signal current_instr : instr_t; -- Holds the currently decoded instruction
 
-    --temporary declarations that will be modified in the future
-    signal pc, ir : std_logic_vector (7 downto 0);
-
+    -- Opcode field aliases for readability
+    signal x : std_logic_vector(1 downto 0); -- type indicator
+    signal y : std_logic_vector(2 downto 0); -- variable / register
+    signal z : std_logic_vector(2 downto 0); -- secondary indicator
+    
     begin
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -123,9 +169,13 @@ architecture Behavioral of waelderMain is
              ctrl_lr_out, ctrl_hr_out, ctrl_alu_out)
     begin
         if ctrl_pc_out = '1' then
-            data_bus <= pc;
+            if ctrl_pc_l_out = '1' then
+                data_bus <= pc_l;
+            elsif ctrl_pc_h_out = '1' then
+                data_bus <= pc_h;
+            end if;
         elsif ctrl_ir_out = '1' then
-            data_bus <= ir;
+            data_bus <= i_reg;
         elsif ctrl_ar_out = '1' then
             data_bus <= a_reg;
         elsif ctrl_br_out = '1' then
@@ -146,7 +196,25 @@ architecture Behavioral of waelderMain is
         --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
         data_bus <= (others => '0');
         end if;
-    end process;    
+
+        if ctrl_ir_in = '1' then
+            i_reg <= data_bus;
+        elsif ctrl_ar_in = '1' then
+            a_reg <= data_bus;
+        elsif ctrl_br_in = '1' then
+            b_reg <= data_bus;
+        elsif ctrl_cr_in = '1' then
+            c_reg <= data_bus;
+        elsif ctrl_dr_in = '1' then
+            d_reg <= data_bus;
+        elsif ctrl_er_in = '1' then
+            e_reg <= data_bus;
+        elsif ctrl_hr_in = '1' then
+            h_reg <= data_bus;
+        elsif ctrl_lr_in = '1' then
+            l_reg <= data_bus;
+        end if;
+    end process;
 
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
@@ -212,16 +280,95 @@ architecture Behavioral of waelderMain is
 
 
 
-        --program counter
+        
+--------------------------program counter----------------------------|
+process(clk, reset)
+begin
+    if reset = '1' then
+        pc <= (others => '0'); -- set pc to 0 on reset
+    elsif rising_edge(clk) then
+        if ctrl_pc_in = '1' then    --discuss if even neccessary
+            if ctrl_pc_l_in = '1' then
+                pc(7 downto 0) <= data_bus;
+            elsif ctrl_pc_h_in = '1' then
+                pc(15 downto 8) <= data_bus;
+            end if;
+        elsif ctrl_pc_inc = '1' then
+            pc <= std_logic_vector(unsigned(pc) + 1);
+        end if;
+    end if;
+end process;
+
     
 
 
-        --arithmetic logical unit
-
-
-
-
         --control unit
+    
+    ---------------------------------------------------------------------|
+    -- Instruction Decoder
+    ---------------------------------------------------------------------|
+    process(x, y, z)
+    begin
+        -- Default value to ensure clean synthesis
+        current_instr <= NOP;
+
+        case x is
+            --------------------------------------------------------------
+            -- Type 00: No Variables
+            --------------------------------------------------------------
+            when "00" =>
+                case z is
+                    when "000" =>
+                        if y = "000" then current_instr <= NOP;
+                        elsif y = "001" then current_instr <= INP;
+                        end if;
+                    when "001" =>
+                        if y = "001" then current_instr <= instr_OUT;
+                        else current_instr <= RST;
+                        end if;
+                    when "010"  => current_instr <= JMP;
+                    when "100"  => current_instr <= CAL;
+                    when "101"  => current_instr <= RET;
+                    when others => --current_instr stays the same
+                end case;
+
+            --------------------------------------------------------------
+            -- Type 01: Ops with Vars
+            --------------------------------------------------------------
+            when "01" =>
+                case z is
+                    when "000"  => current_instr <= INR;
+                    when "001"  => current_instr <= DCR;
+                    when "010"  => current_instr <= RLC;
+                    when "011"  => current_instr <= RRC;
+                    when "100"  => current_instr <= LDR;
+                    when "101"  => current_instr <= PUSH;
+                    when "110"  => current_instr <= LOAD;
+                    when others => --current_instr stays the same
+                end case;
+
+            --------------------------------------------------------------
+            -- Type 10: Move OP 
+            --------------------------------------------------------------
+            when "10" =>
+                current_instr <= MOV;
+
+            --------------------------------------------------------------
+            -- Type 11: Conditionals + ALU 
+            --------------------------------------------------------------
+            when "11" =>
+                case z is
+                    when "000" | "001" => current_instr <= ALU;
+                    when "100"         => current_instr <= CCC;
+                    when "101"         => current_instr <= RCC;
+                    when "110"         => current_instr <= JCC;
+                    when others        => current_instr <= ALU;
+                end case;
+
+            when others =>
+                current_instr <= NOP;
+        end case;
+    end process;
 
 
 

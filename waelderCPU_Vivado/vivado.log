@@ -3,23 +3,23 @@
 # SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
 # IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-# Start of session at: Mon Jan 12 14:07:42 2026
-# Process ID         : 3260
+# Start of session at: Sun Jan 18 12:33:55 2026
+# Process ID         : 39228
 # Current directory  : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado
-# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent11192 C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.xpr
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent26352 C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.xpr
 # Log file           : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/vivado.log
 # Journal file       : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado\vivado.jou
 # Running On         : Raphael-mobile
 # Platform           : Windows Server 2016 or Windows 10
-# Operating System   : 26100
+# Operating System   : 26200
 # Processor Detail   : 13th Gen Intel(R) Core(TM) i9-13900H
 # CPU Frequency      : 2995 MHz
 # CPU Physical cores : 14
 # CPU Logical cores  : 20
 # Host memory        : 16780 MB
-# Swap memory        : 10200 MB
-# Total Virtual      : 26981 MB
-# Available Virtual  : 14728 MB
+# Swap memory        : 10737 MB
+# Total Virtual      : 27517 MB
+# Available Virtual  : 12875 MB
 #-----------------------------------------------------------
 start_gui
 open_project C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.xpr
@@ -133,279 +133,486 @@ WARNING: [Project 1-5713] Board part '' set for the project  is not found. Board
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/2025.1/Vivado/data/ip'.
-open_project: Time (s): cpu = 00:00:19 ; elapsed = 00:00:13 . Memory (MB): peak = 1647.727 ; gain = 269.512
+open_project: Time (s): cpu = 00:00:20 ; elapsed = 00:00:11 . Memory (MB): peak = 1639.410 ; gain = 263.074
 update_compile_order -fileset sources_1
-launch_simulation
-Command: launch_simulation 
-INFO: [Vivado 12-12493] Simulation top is 'waelderMain_tb'
-INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-INFO: [SIM-utils-51] Simulation object is 'sim_1'
-INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
-INFO: [SIM-utils-54] Inspecting design source files for 'waelderMain_tb' in fileset 'sim_1'...
-INFO: [USF-XSim-97] Finding global include files...
-INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
-INFO: [USF-XSim-2] XSim::Compile design
-INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-"xvhdl --incr --relax -prj waelderMain_tb_vhdl.prj"
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'waelderMain'
-ERROR: [VRFC 10-9608] semicolon after last interface declaration is only supported in VHDL 1076-2019 [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:29]
-ERROR: [VRFC 10-9458] unit 'waeldermain' is ignored due to previous errors [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:27]
-INFO: [VRFC 10-8704] VHDL file 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd' is ignored due to errors
-INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
-INFO: [USF-XSim-99] Step results log file:'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim/xvhdl.log'
-ERROR: [USF-XSim-62] 'compile' step failed with error(s). Please check the Tcl console output or 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim/xvhdl.log' file for more information.
-ERROR: [Vivado 12-4473] Detected error while running simulation. Please correct the issue and retry this operation.
-ERROR: [Common 17-39] 'launch_simulation' failed due to earlier errors.
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 24900
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 2133.074 ; gain = 490.508
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:42]
+WARNING: [Synth 8-614] signal 'pc' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'ir' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:155]
+WARNING: [Synth 8-3848] Net data_out in module/entity waelderMain does not have driver. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:32]
+INFO: [Synth 8-256] done synthesizing module 'waelderMain' (1#1) [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:42]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 2236.191 ; gain = 593.625
+---------------------------------------------------------------------------------
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sun Jan 18 12:35:22 2026
+| Host         : Raphael-mobile running 64-bit major release  (build 9200)
+---------------------------------------------------------------------------------------------------------------------------------------------
 
-set_property SOURCE_SET sources_1 [get_filesets sim_1]
-close [ open C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_ALU-tb.vhd w ]
-add_files -fileset sim_1 C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_ALU-tb.vhd
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-update_compile_order -fileset sim_1
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+RTL Linter Report
 
-update_compile_order -fileset sim_1
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+Table of Contents
+-----------------
+1. Summary
 
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+1. Summary
+----------
 
-update_compile_order -fileset sim_1
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
++-----------+----------+--------------+----------+
+| Rule ID   | Severity | # Violations | # Waived |
++-----------+----------+--------------+----------+
+| ASSIGN-5  | WARNING  | 27           | 0        |
+| ASSIGN-6  | WARNING  | 5            | 0        |
+| ASSIGN-9  | WARNING  | 1            | 0        |
+| ASSIGN-10 | WARNING  | 2            | 0        |
++-----------+----------+--------------+----------+
 
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
 
-update_compile_order -fileset sim_1
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'a_reg' are not set. First unset bit index is 0. 
+RTL Name 'a_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 68.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_in_a' are not set. First unset bit index is 0. 
+RTL Name 'alu_in_a', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 86.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_in_b' are not set. First unset bit index is 0. 
+RTL Name 'alu_in_b', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 87.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_reg_a' are not set. First unset bit index is 0. 
+RTL Name 'alu_reg_a', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 84.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_reg_b' are not set. First unset bit index is 0. 
+RTL Name 'alu_reg_b', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 85.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'b_reg' are not set. First unset bit index is 0. 
+RTL Name 'b_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 69.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'c_reg' are not set. First unset bit index is 0. 
+RTL Name 'c_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 70.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'ctrl_alu' are not set. First unset bit index is 0. 
+RTL Name 'ctrl_alu', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 99.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_alu_out' declared and are not set.
+RTL Name 'ctrl_alu_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 48.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ar_out' declared and are not set.
+RTL Name 'ctrl_ar_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 50.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_br_out' declared and are not set.
+RTL Name 'ctrl_br_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 51.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_cr_out' declared and are not set.
+RTL Name 'ctrl_cr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 52.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_dr_out' declared and are not set.
+RTL Name 'ctrl_dr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 53.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_er_out' declared and are not set.
+RTL Name 'ctrl_er_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 54.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_hr_out' declared and are not set.
+RTL Name 'ctrl_hr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 56.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ir_out' declared and are not set.
+RTL Name 'ctrl_ir_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 47.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_lr_out' declared and are not set.
+RTL Name 'ctrl_lr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 55.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_out' declared and are not set.
+RTL Name 'ctrl_pc_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 46.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ram_in' declared and are not set.
+RTL Name 'ctrl_ram_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 60.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ram_out' declared and are not set.
+RTL Name 'ctrl_ram_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 49.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'd_reg' are not set. First unset bit index is 0. 
+RTL Name 'd_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 71.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'e_reg' are not set. First unset bit index is 0. 
+RTL Name 'e_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 72.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'h_reg' are not set. First unset bit index is 0. 
+RTL Name 'h_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 74.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'i_reg' are not set. First unset bit index is 0. 
+RTL Name 'i_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 65.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'ir' are not set. First unset bit index is 0. 
+RTL Name 'ir', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 102.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'l_reg' are not set. First unset bit index is 0. 
+RTL Name 'l_reg', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 73.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'pc' are not set. First unset bit index is 0. 
+RTL Name 'pc', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 102.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'data_bus' was assigned but not read. 
+RTL Name 'data_bus', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 79.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_parity' was assigned but not read. 
+RTL Name 'f_parity', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 94.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_sign' was assigned but not read. 
+RTL Name 'f_sign', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 95.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_zero' was assigned but not read. 
+RTL Name 'f_zero', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 93.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'm_reg' was assigned but not read. 
+RTL Name 'm_reg', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 75.
+WARNING: [Synth 37-126] [ASSIGN-9]Some bits in IO 'data_out' are not set. First unset bit index is 0. 
+RTL Name 'data_out', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 32.
+WARNING: [Synth 37-125] [ASSIGN-10]Some bits in IO 'clk' are not read. First unread bit index is 0. 
+RTL Name 'clk', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 29.
+WARNING: [Synth 37-125] [ASSIGN-10]Some bits in IO 'data_in' are not read. First unread bit index is 0. 
+RTL Name 'data_in', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 31.
+INFO: [Synth 37-85] Total of 35 linter message(s) generated.
+INFO: [Synth 37-45] Linter Run Finished!
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 2236.191 ; gain = 593.625
+INFO: [Common 17-83] Releasing license: Synthesis
+10 Infos, 46 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 2236.191 ; gain = 593.625
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/utils_1/imports/synth_1/waelderMain.dcp with file C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/waelderMain.dcp
+launch_runs synth_1 -jobs 10
+[Sun Jan 18 12:36:32 2026] Launched synth_1...
+Run output will be captured here: C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/runme.log
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2240.535 ; gain = 4.344
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+ERROR: [Synth 8-690] width mismatch in assignment; target has 8 bits, source has 16 bits [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:170]
+WARNING: [Synth 8-614] signal 'pc' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:166]
+ERROR: [Synth 8-285] failed synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2281.070 ; gain = 44.879
+---------------------------------------------------------------------------------
+synthesize failed
+INFO: [Common 17-83] Releasing license: Synthesis
+4 Infos, 1 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2281.070 ; gain = 44.879
+ERROR: [Common 17-39] 'synth_design' failed due to earlier errors.
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2301.363 ; gain = 20.293
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-614] signal 'ctrl_pc_l_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_l' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_pc_h_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_h' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'i_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ir_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'data_bus' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ar_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_br_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_cr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_dr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_er_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_hr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_lr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:223]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:315]
+ERROR: [Synth 8-426] missing choice(s) 32'b00000000000000000000000000000011 in case statement [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:320]
+ERROR: [Synth 8-426] missing choice(s) 32'b00000000000000000000000000000110 to 3'b111 in case statement [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:320]
+ERROR: [Synth 8-285] failed synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2301.363 ; gain = 20.293
+---------------------------------------------------------------------------------
+synthesize failed
+INFO: [Common 17-83] Releasing license: Synthesis
+6 Infos, 22 Warnings, 0 Critical Warnings and 3 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2301.363 ; gain = 20.293
+ERROR: [Common 17-39] 'synth_design' failed due to earlier errors.
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2304.133 ; gain = 2.770
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-614] signal 'ctrl_pc_l_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_l' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_pc_h_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_h' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'i_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ir_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'data_bus' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ar_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_br_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_cr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_dr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_er_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_hr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_lr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:223]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:315]
+ERROR: [Synth 8-426] missing choice(s) 32'b00000000000000000000000000000011 in case statement [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:320]
+ERROR: [Synth 8-426] missing choice(s) 32'b00000000000000000000000000000110 to 3'b111 in case statement [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:320]
+ERROR: [Synth 8-285] failed synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2304.133 ; gain = 2.770
+---------------------------------------------------------------------------------
+synthesize failed
+INFO: [Common 17-83] Releasing license: Synthesis
+6 Infos, 22 Warnings, 0 Critical Warnings and 3 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2304.133 ; gain = 2.770
+ERROR: [Common 17-39] 'synth_design' failed due to earlier errors.
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2304.445 ; gain = 0.312
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-614] signal 'ctrl_pc_l_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_l' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_pc_h_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_h' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'i_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ir_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'data_bus' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ar_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_br_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_cr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_dr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_er_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_hr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_lr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:223]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:315]
+ERROR: [Synth 8-426] missing choice(s) 32'b00000000000000000000000000000111 in case statement [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:339]
+ERROR: [Synth 8-285] failed synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2305.062 ; gain = 0.930
+---------------------------------------------------------------------------------
+synthesize failed
+INFO: [Common 17-83] Releasing license: Synthesis
+6 Infos, 22 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2305.062 ; gain = 0.930
+ERROR: [Common 17-39] 'synth_design' failed due to earlier errors.
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+Command: synth_design -top waelderMain -part xc7s50csga324-1 -lint
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7s50'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2314.719 ; gain = 9.656
+---------------------------------------------------------------------------------
+Clean up Linter database...
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-614] signal 'ctrl_pc_l_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_l' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_pc_h_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_h' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'i_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ir_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'data_bus' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ar_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_br_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_cr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_dr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_er_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_hr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_lr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:223]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:315]
+WARNING: [Synth 8-3848] Net data_out in module/entity waelderMain does not have driver. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:35]
+INFO: [Synth 8-256] done synthesizing module 'waelderMain' (1#1) [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2314.719 ; gain = 9.656
+---------------------------------------------------------------------------------
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sun Jan 18 13:29:08 2026
+| Host         : Raphael-mobile running 64-bit major release  (build 9200)
+---------------------------------------------------------------------------------------------------------------------------------------------
 
-set_property top waelderMain_tb [get_filesets sim_1]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_ALU-tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+RTL Linter Report
 
-export_ip_user_files -of_objects  [get_files C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_ALU-tb.vhd] -no_script -reset -force -quiet
-remove_files  -fileset sim_1 C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_ALU-tb.vhd
-update_compile_order -fileset sim_1
-launch_simulation
-Command: launch_simulation 
-INFO: [Vivado 12-12493] Simulation top is 'waelderMain_tb'
-INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-INFO: [SIM-utils-51] Simulation object is 'sim_1'
-INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
-INFO: [SIM-utils-54] Inspecting design source files for 'waelderMain_tb' in fileset 'sim_1'...
-INFO: [USF-XSim-97] Finding global include files...
-INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
-INFO: [USF-XSim-2] XSim::Compile design
-INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-"xvhdl --incr --relax -prj waelderMain_tb_vhdl.prj"
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'waelderMain'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'waelderMain_tb'
-INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
-INFO: [USF-XSim-3] XSim::Elaborate design
-INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot waelderMain_tb_behav xil_defaultlib.waelderMain_tb -log elaborate.log"
-Vivado Simulator v2025.1.0
-Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
-Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot waelderMain_tb_behav xil_defaultlib.waelderMain_tb -log elaborate.log 
-Using 2 slave threads.
-Starting static elaboration
-ERROR: [VRFC 10-718] formal port <alu_reg_a> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:29]
-ERROR: [VRFC 10-718] formal port <alu_reg_b> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:30]
-ERROR: [VRFC 10-718] formal port <alu_result> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:31]
-ERROR: [VRFC 10-718] formal port <ctrl_alu> does not exist in entity <waelderMain>.  Please compare the definition of block <waelderMain> to its component declaration and its instantion to detect the mismatch. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd:32]
-ERROR: [XSIM 43-3321] Static elaboration of top level VHDL design unit waeldermain_tb in library work failed.
-INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
-INFO: [USF-XSim-99] Step results log file:'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim/elaborate.log'
-ERROR: [USF-XSim-62] 'elaborate' step failed with error(s). Please check the Tcl console output or 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim/elaborate.log' file for more information.
-ERROR: [Vivado 12-4473] Detected error while running simulation. Please correct the issue and retry this operation.
-ERROR: [Common 17-39] 'launch_simulation' failed due to earlier errors.
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+Table of Contents
+-----------------
+1. Summary
 
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
+1. Summary
+----------
 
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-launch_simulation
-Command: launch_simulation 
-INFO: [Vivado 12-12493] Simulation top is 'waelderMain_tb'
-INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-INFO: [SIM-utils-51] Simulation object is 'sim_1'
-INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/2025.1/Vivado/tps/boost_1_72_0'
-INFO: [SIM-utils-54] Inspecting design source files for 'waelderMain_tb' in fileset 'sim_1'...
-INFO: [USF-XSim-97] Finding global include files...
-INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
-INFO: [USF-XSim-2] XSim::Compile design
-INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-"xvhdl --incr --relax -prj waelderMain_tb_vhdl.prj"
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'waelderMain'
-INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
-INFO: [USF-XSim-3] XSim::Elaborate design
-INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot waelderMain_tb_behav xil_defaultlib.waelderMain_tb -log elaborate.log"
-Vivado Simulator v2025.1.0
-Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
-Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
-Running: C:/Xilinx/2025.1/Vivado/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot waelderMain_tb_behav xil_defaultlib.waelderMain_tb -log elaborate.log 
-Using 2 slave threads.
-Starting static elaboration
-Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling package std.standard
-Compiling package std.textio
-Compiling package ieee.std_logic_1164
-Compiling package ieee.std_logic_arith
-Compiling package ieee.std_logic_unsigned
-Compiling package ieee.numeric_std
-Compiling architecture behavioral of entity xil_defaultlib.waelderMain [waeldermain_default]
-Compiling architecture behavioral of entity xil_defaultlib.waeldermain_tb
-Built simulation snapshot waelderMain_tb_behav
-run_program: Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 1698.641 ; gain = 0.000
-INFO: [USF-XSim-69] 'elaborate' step finished in '6' seconds
-INFO: [USF-XSim-4] XSim::Simulate design
-INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim'
-INFO: [USF-XSim-98] *** Running xsim
-   with args "waelderMain_tb_behav -key {Behavioral:sim_1:Functional:waelderMain_tb} -tclbatch {waelderMain_tb.tcl} -log {simulate.log}"
-INFO: [USF-XSim-8] Loading simulator feature
-Time resolution is 1 ps
-source waelderMain_tb.tcl
-# set curr_wave [current_wave_config]
-# if { [string length $curr_wave] == 0 } {
-#   if { [llength [get_objects]] > 0} {
-#     add_wave /
-#     set_property needs_save false [current_wave_config]
-#   } else {
-#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
-#   }
-# }
-# run 1000ns
-Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-Time: 0 ps  Iteration: 0  Process: /waelderMain_tb/uut/line__152  File: C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd
-xsim: Time (s): cpu = 00:00:08 ; elapsed = 00:00:05 . Memory (MB): peak = 1730.527 ; gain = 31.887
-INFO: [USF-XSim-96] XSim completed. Design snapshot 'waelderMain_tb_behav' loaded.
-INFO: [USF-XSim-97] XSim simulation ran for 1000ns
-launch_simulation: Time (s): cpu = 00:00:09 ; elapsed = 00:00:12 . Memory (MB): peak = 1730.527 ; gain = 31.887
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-ERROR: [Common 17-180] Spawn failed: Der Vorgang wurde erfolgreich beendet.
++-----------+------------------+--------------+----------+
+| Rule ID   | Severity         | # Violations | # Waived |
++-----------+------------------+--------------+----------+
+| ASSIGN-5  | WARNING          | 43           | 0        |
+| ASSIGN-6  | WARNING          | 5            | 0        |
+| ASSIGN-9  | WARNING          | 1            | 0        |
+| ASSIGN-10 | WARNING          | 1            | 0        |
+| INFER-4   | CRITICAL WARNING | 1            | 0        |
++-----------+------------------+--------------+----------+
 
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sim_1\new\waelderMain_tb.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
-WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.srcs\sources_1\new\waelderMain.vhd:]
+
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_in_a' are not set. First unset bit index is 0. 
+RTL Name 'alu_in_a', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 120.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_in_b' are not set. First unset bit index is 0. 
+RTL Name 'alu_in_b', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 121.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_reg_a' are not set. First unset bit index is 0. 
+RTL Name 'alu_reg_a', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 118.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'alu_reg_b' are not set. First unset bit index is 0. 
+RTL Name 'alu_reg_b', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 119.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'ctrl_alu' are not set. First unset bit index is 0. 
+RTL Name 'ctrl_alu', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 133.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_alu_out' declared and are not set.
+RTL Name 'ctrl_alu_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 53.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ar_in' declared and are not set.
+RTL Name 'ctrl_ar_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 71.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ar_out' declared and are not set.
+RTL Name 'ctrl_ar_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 55.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_br_in' declared and are not set.
+RTL Name 'ctrl_br_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 72.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_br_out' declared and are not set.
+RTL Name 'ctrl_br_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 56.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_cr_in' declared and are not set.
+RTL Name 'ctrl_cr_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 73.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_cr_out' declared and are not set.
+RTL Name 'ctrl_cr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 57.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_dr_in' declared and are not set.
+RTL Name 'ctrl_dr_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 74.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_dr_out' declared and are not set.
+RTL Name 'ctrl_dr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 58.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_er_in' declared and are not set.
+RTL Name 'ctrl_er_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 75.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_er_out' declared and are not set.
+RTL Name 'ctrl_er_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 59.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_hr_in' declared and are not set.
+RTL Name 'ctrl_hr_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 77.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_hr_out' declared and are not set.
+RTL Name 'ctrl_hr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 61.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ir_in' declared and are not set.
+RTL Name 'ctrl_ir_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 68.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ir_out' declared and are not set.
+RTL Name 'ctrl_ir_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 52.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_lr_in' declared and are not set.
+RTL Name 'ctrl_lr_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 76.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_lr_out' declared and are not set.
+RTL Name 'ctrl_lr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 60.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_mar_h_in' declared and are not set.
+RTL Name 'ctrl_mar_h_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 69.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_mar_l_in' declared and are not set.
+RTL Name 'ctrl_mar_l_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 70.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_mr_in' declared and are not set.
+RTL Name 'ctrl_mr_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 78.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_mr_out' declared and are not set.
+RTL Name 'ctrl_mr_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 62.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_h_in' declared and are not set.
+RTL Name 'ctrl_pc_h_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 67.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_h_out' declared and are not set.
+RTL Name 'ctrl_pc_h_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 51.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_in' declared and are not set.
+RTL Name 'ctrl_pc_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 65.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_inc' declared and are not set.
+RTL Name 'ctrl_pc_inc', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 106.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_l_in' declared and are not set.
+RTL Name 'ctrl_pc_l_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 66.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_l_out' declared and are not set.
+RTL Name 'ctrl_pc_l_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 50.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_pc_out' declared and are not set.
+RTL Name 'ctrl_pc_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 49.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ram_in' declared and are not set.
+RTL Name 'ctrl_ram_in', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 79.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'ctrl_ram_out' declared and are not set.
+RTL Name 'ctrl_ram_out', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 54.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'pc_h' are not set. First unset bit index is 0. 
+RTL Name 'pc_h', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 110.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'pc_l' are not set. First unset bit index is 0. 
+RTL Name 'pc_l', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 111.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'pc_load_h' declared and are not set.
+RTL Name 'pc_load_h', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 112.
+WARNING: [Synth 37-95] [ASSIGN-5]Found scalar variable(s) 'pc_load_l' declared and are not set.
+RTL Name 'pc_load_l', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 113.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'pc_next' are not set. First unset bit index is 0. 
+RTL Name 'pc_next', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 105.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'x' are not set. First unset bit index is 0. 
+RTL Name 'x', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 146.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'y' are not set. First unset bit index is 0. 
+RTL Name 'y', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 147.
+WARNING: [Synth 37-124] [ASSIGN-5]Some bits in 'z' are not set. First unset bit index is 0. 
+RTL Name 'z', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 148.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'current_instr' was assigned but not read. 
+RTL Name 'current_instr', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 143.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_parity' was assigned but not read. 
+RTL Name 'f_parity', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 128.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_sign' was assigned but not read. 
+RTL Name 'f_sign', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 129.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'f_zero' was assigned but not read. 
+RTL Name 'f_zero', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 127.
+WARNING: [Synth 37-93] [ASSIGN-6]Signal 'm_reg' was assigned but not read. 
+RTL Name 'm_reg', Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 95.
+WARNING: [Synth 37-126] [ASSIGN-9]Some bits in IO 'data_out' are not set. First unset bit index is 0. 
+RTL Name 'data_out', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 35.
+WARNING: [Synth 37-125] [ASSIGN-10]Some bits in IO 'data_in' are not read. First unread bit index is 0. 
+RTL Name 'data_in', Hierarchy 'waelderMain', File 'waelderMain.vhd', Line 34.
+CRITICAL WARNING: [Synth 37-113] [INFER-4]Combination loop detected on 'data_bus' at '0' bit. 
+Hierarchy 'waelderMain', File 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd', Line 99.
+INFO: [Synth 37-85] Total of 51 linter message(s) generated.
+INFO: [Synth 37-45] Linter Run Finished!
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 2330.332 ; gain = 25.270
+INFO: [Common 17-83] Releasing license: Synthesis
+9 Infos, 73 Warnings, 1 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2330.332 ; gain = 25.270
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/utils_1/imports/synth_1/waelderMain.dcp with file C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/waelderMain.dcp
+launch_runs synth_1 -jobs 10
+[Sun Jan 18 13:29:13 2026] Launched synth_1...
+Run output will be captured here: C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/runme.log

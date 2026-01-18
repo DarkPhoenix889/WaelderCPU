@@ -8,12 +8,12 @@
   **** SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
   **** IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
   **** SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-  **** Start of session at: Wed Dec 31 12:13:28 2025
+  **** Start of session at: Sun Jan 18 13:29:15 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 
 source waelderMain.tcl -notrace
-create_project: Time (s): cpu = 00:00:22 ; elapsed = 00:00:15 . Memory (MB): peak = 507.773 ; gain = 214.840
+create_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:05 . Memory (MB): peak = 507.645 ; gain = 213.277
 Command: read_checkpoint -auto_incremental -incremental C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/utils_1/imports/synth_1/waelderMain.dcp
 INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/utils_1/imports/synth_1/waelderMain.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
@@ -25,23 +25,38 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 18048
+INFO: [Synth 8-7075] Helper process launched with PID 26940
 ---------------------------------------------------------------------------------
-Starting Synthesize : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 1013.129 ; gain = 495.004
+Starting Synthesize : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1015.684 ; gain = 496.980
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:42]
-WARNING: [Synth 8-614] signal 'pc' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'ir' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:122]
-INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:155]
-INFO: [Synth 8-256] done synthesizing module 'waelderMain' (0#1) [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:42]
-WARNING: [Synth 8-3848] Net data_out in module/entity waelderMain does not have driver. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:32]
+INFO: [Synth 8-638] synthesizing module 'waelderMain' [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-614] signal 'ctrl_pc_l_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_l' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_pc_h_out' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'pc_h' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'i_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'a_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'b_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'c_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'd_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'e_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'h_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'l_reg' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'alu_result' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ir_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'data_bus' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_ar_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_br_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_cr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_dr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_er_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_hr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+WARNING: [Synth 8-614] signal 'ctrl_lr_in' is read in the process but is not in the sensitivity list [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:168]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:223]
+INFO: [Synth 8-226] default block is never used [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:315]
+INFO: [Synth 8-256] done synthesizing module 'waelderMain' (0#1) [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:45]
+WARNING: [Synth 8-3848] Net data_out in module/entity waelderMain does not have driver. [C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.srcs/sources_1/new/waelderMain.vhd:35]
+WARNING: [Synth 8-3330] design waelderMain has an empty top module
 WARNING: [Synth 8-7129] Port data_out[7] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_out[6] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_out[5] in module waelderMain is either unconnected or has no load
@@ -61,32 +76,27 @@ WARNING: [Synth 8-7129] Port data_in[2] in module waelderMain is either unconnec
 WARNING: [Synth 8-7129] Port data_in[1] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_in[0] in module waelderMain is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished Synthesize : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1120.098 ; gain = 601.973
+Finished Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1120.664 ; gain = 601.961
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 1120.098 ; gain = 601.973
+Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1120.664 ; gain = 601.961
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7s50csga324-1
 ---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1120.664 ; gain = 601.961
+---------------------------------------------------------------------------------
 INFO: [Device 21-403] Loading part xc7s50csga324-1
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 1120.098 ; gain = 601.973
 ---------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:20 ; elapsed = 00:00:23 . Memory (MB): peak = 1120.098 ; gain = 601.973
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1120.664 ; gain = 601.961
 ---------------------------------------------------------------------------------
 No constraint files found.
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
 Detailed RTL Component Info : 
-+---Adders : 
-	   2 Input    8 Bit       Adders := 1     
-	   3 Input    8 Bit       Adders := 1     
-+---XORs : 
-	   2 Input      8 Bit         XORs := 1     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -104,6 +114,7 @@ No constraint files found.
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3330] design waelderMain has an empty top module
 WARNING: [Synth 8-7129] Port data_out[7] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_out[6] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_out[5] in module waelderMain is either unconnected or has no load
@@ -123,20 +134,20 @@ WARNING: [Synth 8-7129] Port data_in[2] in module waelderMain is either unconnec
 WARNING: [Synth 8-7129] Port data_in[1] in module waelderMain is either unconnected or has no load
 WARNING: [Synth 8-7129] Port data_in[0] in module waelderMain is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1302.797 ; gain = 784.672
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1252.879 ; gain = 734.176
 ---------------------------------------------------------------------------------
 No constraint files found.
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1302.797 ; gain = 784.672
+Finished Timing Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1277.746 ; gain = 759.043
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1302.797 ; gain = 784.672
+Finished Technology Mapping : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1277.746 ; gain = 759.043
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -154,37 +165,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished IO Insertion : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -197,48 +208,38 @@ Report BlackBoxes:
 +-+--------------+----------+
 
 Report Cell Usage: 
-+------+-------+------+
-|      |Cell   |Count |
-+------+-------+------+
-|1     |CARRY4 |     4|
-|2     |LUT2   |    17|
-|3     |LUT3   |     8|
-|4     |LUT5   |     8|
-|5     |LUT6   |     8|
-|6     |MUXF7  |     8|
-|7     |IBUF   |    19|
-|8     |OBUF   |     8|
-|9     |OBUFT  |     8|
-+------+-------+------+
++------+------+------+
+|      |Cell  |Count |
++------+------+------+
+|1     |OBUFT |     8|
++------+------+------+
 
 Report Instance Areas: 
 +------+---------+-------+------+
 |      |Instance |Module |Cells |
 +------+---------+-------+------+
-|1     |top      |       |    88|
+|1     |top      |       |     8|
 +------+---------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 47 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
-Synthesis Optimization Complete : Time (s): cpu = 00:00:42 ; elapsed = 00:00:48 . Memory (MB): peak = 1518.391 ; gain = 1000.266
+Synthesis finished with 0 errors, 0 critical warnings and 62 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
+Synthesis Optimization Complete : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 1496.934 ; gain = 978.230
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1533.469 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 12 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1512.980 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1643.512 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1622.188 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: 75a75fc9
+Synth Design complete | Checksum: 25fb9464
 INFO: [Common 17-83] Releasing license: Synthesis
-19 Infos, 47 Warnings, 0 Critical Warnings and 0 Errors encountered.
+18 Infos, 62 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:46 ; elapsed = 00:00:55 . Memory (MB): peak = 1643.512 ; gain = 1130.434
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1643.512 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 1622.188 ; gain = 1108.523
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1622.188 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.runs/synth_1/waelderMain.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file waelderMain_utilization_synth.rpt -pb waelderMain_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Wed Dec 31 12:14:46 2025...
+INFO: [Common 17-206] Exiting Vivado at Sun Jan 18 13:29:40 2026...
