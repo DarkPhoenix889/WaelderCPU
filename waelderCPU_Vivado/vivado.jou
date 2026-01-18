@@ -5,13 +5,17 @@
 # SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
 # Start of session at: Mon Jan 12 14:07:42 2026
 # Process ID         : 3260
+# Start of session at: Sun Jan 18 12:33:55 2026
+# Process ID         : 39228
 # Current directory  : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado
 # Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent11192 C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.xpr
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent26352 C:\Users\rapha\OneDrive\Dokumente\Schule\.Diplomarbeit\WaelederCpuGit\WaelderCPU\waelderCPU_Vivado\waelderCPU.xpr
 # Log file           : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/vivado.log
 # Journal file       : C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado\vivado.jou
 # Running On         : Raphael-mobile
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 26100
+# Operating System   : 26200
 # Processor Detail   : 13th Gen Intel(R) Core(TM) i9-13900H
 # CPU Frequency      : 2995 MHz
 # CPU Physical cores : 14
@@ -20,6 +24,9 @@
 # Swap memory        : 10200 MB
 # Total Virtual      : 26981 MB
 # Available Virtual  : 14728 MB
+# Swap memory        : 10737 MB
+# Total Virtual      : 27517 MB
+# Available Virtual  : 12875 MB
 #-----------------------------------------------------------
 start_gui
 open_project C:/Users/rapha/OneDrive/Dokumente/Schule/.Diplomarbeit/WaelederCpuGit/WaelderCPU/waelderCPU_Vivado/waelderCPU.xpr
@@ -55,3 +62,15 @@ update_compile_order -fileset sim_1
 launch_simulation
 launch_simulation
 source waelderMain_tb.tcl
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+reset_run synth_1
+launch_runs synth_1 -jobs 10
+wait_on_run synth_1
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+synth_design -top waelderMain -part xc7s50csga324-1 -lint 
+reset_run synth_1
+launch_runs synth_1 -jobs 10
+wait_on_run synth_1
