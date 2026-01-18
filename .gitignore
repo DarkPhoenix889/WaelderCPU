@@ -51,3 +51,4 @@ Thumbs.db
 # Python / scripts
 __pycache__/
 *.pyc
+waelderCPU_Vivado/dfx_runtime.txt
