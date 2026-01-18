@@ -30,10 +30,11 @@ use IEEE.NUMERIC_STD.ALL;
 entity waelderMain is
     Port (
         clk : in std_logic;
-        reset : in std_logic;
-        data_in : in std_logic_vector(7 downto 0);
-        data_out : out std_logic_vector (7 downto 0)
-        
+        reset : in std_logic
+----------------------------------------|
+----------declare in/output ports WIP---|
+----------------------------------------|
+
         --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
         --alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
@@ -157,7 +158,86 @@ architecture Behavioral of waelderMain is
     process (reset)
         begin
             if reset = '1' then
-                -- asynchronous reset - set all flags, registers, etc. to default value (commonly all 0)
+                --output control flags--|
+                ctrl_pc_l_out <= '0';
+                ctrl_pc_h_out <= '0';
+                ctrl_ir_out <= '0';
+                ctrl_alu_out <= '0';
+                ctrl_ram_out <= '0';
+                ctrl_ar_out <= '0';
+                ctrl_br_out <= '0';
+                ctrl_cr_out <= '0';
+                ctrl_dr_out <= '0';
+                ctrl_er_out <= '0';
+                ctrl_lr_out <= '0';
+                ctrl_hr_out <= '0';
+                ctrl_mr_out <= '0';
+
+                --input control flags--|
+                ctrl_pc_l_in <= '0';
+                ctrl_pc_h_in <= '0';
+                ctrl_ir_in <= '0';
+                ctrl_mar_h_in <= '0';
+                ctrl_mar_l_in <= '0';
+                ctrl_ar_in <= '0';
+                ctrl_br_in <= '0';
+                ctrl_cr_in <= '0';
+                ctrl_dr_in <= '0';
+                ctrl_er_in <= '0';
+                ctrl_lr_in <= '0';
+                ctrl_hr_in <= '0';
+                ctrl_mr_in <= '0';
+                ctrl_ram_in <= '0';
+
+                --instruction register--|
+                i_reg <= (others => '0');
+
+                --general purpose register--|
+                a_reg <= (others => '0');
+                b_reg <= (others => '0');
+                c_reg <= (others => '0');
+                d_reg <= (others => '0');
+                e_reg <= (others => '0');
+                l_reg <= (others => '0');
+                h_reg <= (others => '0');
+                m_reg <= (others => '0');
+
+                --bus declaration--|
+                data_bus <= (others => '0');
+
+                --program counter--|
+                pc <= (others => '0');
+                pc_next <= (others => '0');
+                ctrl_pc_inc <= '0';
+
+                pc_h <= (others => '0');
+                pc_l <= (others => '0');
+                pc_load_h <= '0';
+                pc_load_l <= '0';
+
+                --alu--|
+                alu_reg_a <= (others => '0');
+                alu_reg_b <= (others => '0');
+                alu_in_a <= (others => '0');
+                alu_in_b <= (others => '0');
+
+                alu_result <= (others => '0');
+
+                f_overflow <= '0';
+                f_zero <= '0';
+                f_parity <= '0';
+                f_sign <= '0';
+                f_comp <= '0';
+
+                ctrl_alu <= (others => '0');
+
+
+                --control unit--|
+                current_instr <= NOP;
+
+                x <= (others => '0');
+                y <= (others => '0');
+                z <= (others => '0');
             end if;
     end process;
 
@@ -212,6 +292,7 @@ architecture Behavioral of waelderMain is
         end if;
     end process;
 
+    
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         variable tmp_res : signed (8 downto 0);
