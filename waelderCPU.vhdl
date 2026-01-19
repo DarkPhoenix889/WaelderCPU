@@ -124,7 +124,7 @@ architecture Behavioral of waelderMain is
     --alu flags (f_ for flag)
     signal f_overflow : std_logic;    --overflow - if number is bigger than 127
     signal f_zero : std_logic;    --zero flag - if alu is 0
-    signal f_parity : std_logic;  --parity flag - if alu has even parity
+    --signal f_parity : std_logic;  --parity flag - if alu has even parity
     signal f_sign : std_logic;  --sign flag - if value is negative
     signal f_comp : std_logic; --compare flag for ifs
 
@@ -225,7 +225,7 @@ architecture Behavioral of waelderMain is
 
                 f_overflow <= '0';
                 f_zero <= '0';
-                f_parity <= '0';
+                --f_parity <= '0';
                 f_sign <= '0';
                 f_comp <= '0';
 
@@ -349,7 +349,7 @@ architecture Behavioral of waelderMain is
     
     f_sign <= tmp_res(8);
 
-    f_parity <= tmp_res(0);  --parity is odd if LSB equals '1'
+    --f_parity <= tmp_res(0);  --parity flag
 
     end process;
 
