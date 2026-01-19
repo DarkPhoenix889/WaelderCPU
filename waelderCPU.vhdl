@@ -145,7 +145,22 @@ architecture Behavioral of waelderMain is
     signal x : std_logic_vector(1 downto 0); -- type indicator
     signal y : std_logic_vector(2 downto 0); -- variable / register
     signal z : std_logic_vector(2 downto 0); -- secondary indicator
-    
+
+
+    --CU-----------------------------------------------|
+    type t_state_t is (
+        S_RESET,
+        S_FETCH_1,
+        S_FETCH_2,
+        S_DECODE,
+        S_EXEC_1,
+        S_EXEC_2,
+        S_EXEC_3
+    );
+
+    signal state : t_state_t;
+    signal next_state : t_state_t;
+
     begin
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -443,6 +458,29 @@ architecture Behavioral of waelderMain is
                 current_instr <= NOP;
         end case;
     end process;
+
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state <= S_RESET;
+        elsif rising_edge(clk) then
+            state <= next_state;
+        end if;
+    end process;
+
+
+    process(state, current_instr)
+    begin
+        -- Default control signals to avoid latches
+        ctrl_pc_l_out <= '0';
+        ctrl_pc_h_out <= '0';
+        ctrl_pc_inc   <= '0';
+
+        ctrl_ir_in    <= '0';
+        ctrl_ram_out  <= '0';
+        ctrl_mar_l_in <= '0';
+        ctrl_mar_h_in <= '0';
+
 
 
 
