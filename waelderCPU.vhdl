@@ -81,7 +81,7 @@ architecture Behavioral of waelderMain is
 
     -- register deeclaration --
     ------------------instruction register-------------------------------|
-    signal i_reg : std_logic_vector (7 downto 0); 
+    signal i_reg : std_logic_vector (7 downto 0);
     
     ----------------------general purpose register-----------------------|
     signal a_reg : std_logic_vector (7 downto 0);      --reg a
@@ -378,24 +378,16 @@ architecture Behavioral of waelderMain is
     --▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
-    process(reset)
+    process(clk)
     begin
-        if reset = '1' then
-            pc <= (others => '0'); -- set pc to 0 on reset
-        end if;
-        if ctrl_pc_l_in = '1' then
-            pc(7 downto 0) <= data_bus;
-        elsif ctrl_pc_h_in = '1' then
-            pc(15 downto 8) <= data_bus;
-        elsif ctrl_pc_inc = '1' then
-            pc <= std_logic_vector(unsigned(pc) + 1);
+        if rising_edge(clk) then
+            if ctrl_pc_inc = '1' then
+                pc <= std_logic_vector(to_unsigned(to_integer(unsigned(pc)) + 1));
+            end if;
         end if;
     end process;
 
-    
-
-    --control unit
-    
+      
 
     --Instruction Decoder------------------------------------------------|
     process(i_reg)
@@ -465,7 +457,7 @@ architecture Behavioral of waelderMain is
         end if; 
     end process;
 
-
+    --Control Unit-------------------------------------------------------|
     process(state, current_instr)
     begin
         -- Default control signals to avoid latches
@@ -501,10 +493,9 @@ architecture Behavioral of waelderMain is
 
         -- ALU
         ctrl_alu_out <= '0';
-        ctrl_alu     <= "000"; -- ADD default
 
         case state is
-            when S_RESET =>
+            when S_RESET => 
             next_state <= S_FETCH_1;
 
 
@@ -527,9 +518,16 @@ architecture Behavioral of waelderMain is
                 case current_instr is
                     when NOP =>
                         next_state <= S_FETCH_1;
-                    when HLT =>
-                        next_state <= S_EXEC_1; --loop forever, dont know why but we have it (wip i guess)
-                    
+
+                    when RST =>
+                        next_state <= S_RESET;
+
+                    when INR =>
+                        ctrl_alu <= "000"; --ADD
+                        
+
+                        next_state <= S_EXEC_2;
+
                     when others =>
                         next_state <= S_FETCH_1;
                 end case;
