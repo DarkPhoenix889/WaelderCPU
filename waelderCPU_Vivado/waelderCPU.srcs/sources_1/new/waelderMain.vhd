@@ -30,10 +30,13 @@ use IEEE.NUMERIC_STD.ALL;
 entity waelderMain is
     Port (
         clk : in std_logic;
-        reset : in std_logic
+        reset : in std_logic;
 ----------------------------------------|
 ----------declare in/output ports WIP---|
 ----------------------------------------|
+
+        --for pc testing purposes only--
+        --ctrl_pc_inc : in std_logic
 
         --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
@@ -81,7 +84,7 @@ architecture Behavioral of waelderMain is
 
     -- register deeclaration --
     ------------------instruction register-------------------------------|
-    signal i_reg : std_logic_vector (7 downto 0); 
+    signal i_reg : std_logic_vector (7 downto 0);
     
     ----------------------general purpose register-----------------------|
     signal a_reg : std_logic_vector (7 downto 0);      --reg a
@@ -102,7 +105,7 @@ architecture Behavioral of waelderMain is
     --------------------------program counter----------------------------|
     signal pc : std_logic_vector (15 downto 0);
     signal pc_next   : std_logic_vector(15 downto 0);
-    signal ctrl_pc_inc : std_logic;
+    --signal ctrl_pc_inc : std_logic;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
 
     -- pc high and low byte
@@ -145,7 +148,22 @@ architecture Behavioral of waelderMain is
     signal x : std_logic_vector(1 downto 0); -- type indicator
     signal y : std_logic_vector(2 downto 0); -- variable / register
     signal z : std_logic_vector(2 downto 0); -- secondary indicator
-    
+
+
+    --CU-----------------------------------------------|
+    type t_state_t is (
+        S_RESET,
+        S_FETCH_1,
+        S_FETCH_2,
+        S_DECODE,
+        S_EXEC_1,
+        S_EXEC_2,
+        S_EXEC_3
+    );
+
+    signal state : t_state_t;
+    signal next_state : t_state_t;
+
     begin
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -186,7 +204,7 @@ architecture Behavioral of waelderMain is
                 ctrl_er_in <= '0';
                 ctrl_lr_in <= '0';
                 ctrl_hr_in <= '0';
-                ctrl_mr_in <= '0';
+                -- ctrl_mr_in <= '0'; register m is just wiring of h and l and cannot be directly written to
                 ctrl_ram_in <= '0';
 
                 --instruction register--|
@@ -227,7 +245,7 @@ architecture Behavioral of waelderMain is
                 f_zero <= '0';
                 f_parity <= '0';
                 f_sign <= '0';
-                f_comp <= '0';
+                f_comp <= '0';  
 
                 ctrl_alu <= (others => '0');
 
@@ -292,7 +310,7 @@ architecture Behavioral of waelderMain is
         end if;
     end process;
 
-    
+
     ---------------------------------ALU----------------------------------|
     process(alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         variable tmp_res : signed (8 downto 0);
@@ -349,47 +367,42 @@ architecture Behavioral of waelderMain is
     
     f_sign <= tmp_res(8);
 
-    f_parity <= tmp_res(0);  --parity is odd if LSB equals '1'
+    f_parity <= not (tmp_res(0) xor tmp_res(1) xor tmp_res(2) xor tmp_res(3) xor
+                 tmp_res(4) xor tmp_res(5) xor tmp_res(6) xor tmp_res(7)); --need to ask raph about 9th bit, wip
+
+
+    -- f_parity <= tmp_res(0);  --parity is odd if LSB equals '1' -> old version
 
     end process;
 
     
 
 
-
+    --▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
-    process(clk, reset)
+    process(clk)
     begin
-        if reset = '1' then
-            pc <= (others => '0'); -- set pc to 0 on reset
-        elsif rising_edge(clk) then
-            if ctrl_pc_l_in = '1' then
-                pc(7 downto 0) <= data_bus;
-            elsif ctrl_pc_h_in = '1' then
-                pc(15 downto 8) <= data_bus;
-            elsif ctrl_pc_inc = '1' then
-                pc <= std_logic_vector(unsigned(pc) + 1);
+        if rising_edge(clk) then
+            if ctrl_pc_inc = '1' then
+                pc <= std_logic_vector(to_unsigned((to_integer(unsigned(pc)) + 1), 16));
             end if;
         end if;
     end process;
 
-    
+      
 
-    --control unit
-    
-    ---------------------------------------------------------------------|
-    -- Instruction Decoder
-    ---------------------------------------------------------------------|
-    process(x, y, z)
+    --Instruction Decoder------------------------------------------------|
+    process(i_reg)
     begin
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
+        x <= i_reg(7 downto 6);
+        y <= i_reg(5 downto 3);
+        z <= i_reg(2 downto 0);
 
         case x is
-            --------------------------------------------------------------
-            -- Type 00: No Variables
-            --------------------------------------------------------------
+            -- Type 00: No Variables-------------------------------------|
             when "00" =>
                 case z is
                     when "000" =>
@@ -406,9 +419,7 @@ architecture Behavioral of waelderMain is
                     when others => --current_instr stays the same
                 end case;
 
-            --------------------------------------------------------------
-            -- Type 01: Ops with Vars
-            --------------------------------------------------------------
+            -- Type 01: Ops with Vars------------------------------------|
             when "01" =>
                 case z is
                     when "000"  => current_instr <= INR;
@@ -421,15 +432,11 @@ architecture Behavioral of waelderMain is
                     when others => --current_instr stays the same
                 end case;
 
-            --------------------------------------------------------------
-            -- Type 10: Move OP 
-            --------------------------------------------------------------
+            -- Type 10: Move OP------------------------------------------|
             when "10" =>
                 current_instr <= MOV;
 
-            --------------------------------------------------------------
-            -- Type 11: Conditionals + ALU 
-            --------------------------------------------------------------
+            -- Type 11: Conditionals + ALU-------------------------------|
             when "11" =>
                 case z is
                     when "000" | "001" => current_instr <= ALU;
@@ -443,6 +450,100 @@ architecture Behavioral of waelderMain is
                 current_instr <= NOP;
         end case;
     end process;
+
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state <= S_RESET;
+        elsif rising_edge(clk) then
+            state <= next_state;
+        end if; 
+    end process;
+
+    --Control Unit-------------------------------------------------------|
+    process(state, current_instr)
+    begin
+        -- Default control signals to avoid latches
+        -- PC
+        ctrl_pc_l_out   <= '0';
+        ctrl_pc_h_out   <= '0';
+        ctrl_pc_l_in    <= '0';
+        ctrl_pc_h_in    <= '0';
+        ctrl_pc_inc     <= '0';
+
+        -- IR / MAR / RAM
+        ctrl_ir_in      <= '0';
+        ctrl_ram_out    <= '0';
+        ctrl_mar_l_in   <= '0';
+        ctrl_mar_h_in   <= '0';
+
+        -- Registers
+        ctrl_ar_in <= '0';
+        ctrl_br_in <= '0';
+        ctrl_cr_in <= '0';
+        ctrl_dr_in <= '0';
+        ctrl_er_in <= '0';
+        ctrl_hr_in <= '0';
+        ctrl_lr_in <= '0';
+
+        ctrl_ar_out <= '0';
+        ctrl_br_out <= '0';
+        ctrl_cr_out <= '0';
+        ctrl_dr_out <= '0';
+        ctrl_er_out <= '0';
+        ctrl_hr_out <= '0';
+        ctrl_lr_out <= '0';
+
+        -- ALU
+        ctrl_alu_out <= '0';
+
+        case state is
+            when S_RESET => 
+            next_state <= S_FETCH_1;
+
+
+            when S_FETCH_1 =>
+                ctrl_pc_l_out <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
+                ctrl_mar_l_in <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
+                next_state <= S_FETCH_2;
+            
+            when S_FETCH_2 =>
+                ctrl_ram_out <= '1';
+                ctrl_ir_in   <= '1';
+                ctrl_pc_inc  <= '1';
+                next_state <= S_DECODE;
+
+            when S_DECODE =>
+                next_state <= S_EXEC_1;
+
+            
+            when S_EXEC_1 =>
+                case current_instr is
+                    when NOP =>
+                        next_state <= S_FETCH_1;
+
+                    when RST =>
+                        next_state <= S_RESET;
+
+                    when INR =>
+                        ctrl_alu <= "000"; --ADD
+                        
+
+                        next_state <= S_EXEC_2;
+
+                    when others =>
+                        next_state <= S_FETCH_1;
+                end case;
+
+            when S_EXEC_2 =>
+                next_state <= S_FETCH_1;
+
+
+
+
+        end case;
+    end process;
+
 
 
 
