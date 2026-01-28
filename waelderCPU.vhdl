@@ -248,7 +248,6 @@ architecture Behavioral of waelderMain is
 
 
                 --control unit--|
-                current_instr <= NOP;
 
                 x <= (others => '0');
                 y <= (others => '0');
@@ -378,11 +377,18 @@ architecture Behavioral of waelderMain is
     --▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
+    pc <= pc_h & pc_l;
     process(clk)
     begin
         if rising_edge(clk) then
             if ctrl_pc_inc = '1' then
-                pc <= std_logic_vector(to_unsigned(to_integer(unsigned(pc)) + 1));
+                if pc_l = "11111111" then
+                    pc_h <= std_logic_vector(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
+                    pc_l <= "00000000";
+                else
+                    pc_l <= std_logic_vector(to_unsigned((to_integer(unsigned(pc_l)) + 1), 8));
+                end if;
+                --pc <= std_logic_vector(to_unsigned((to_integer(unsigned(pc)) + 1), 16));
             end if;
         end if;
     end process;

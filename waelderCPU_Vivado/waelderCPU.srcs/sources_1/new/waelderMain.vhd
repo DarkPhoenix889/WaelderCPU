@@ -36,7 +36,7 @@ entity waelderMain is
 ----------------------------------------|
 
         --for pc testing purposes only--
-        --ctrl_pc_inc : in std_logic
+        ctrl_pc_inc : in std_logic
 
         --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
@@ -226,7 +226,7 @@ architecture Behavioral of waelderMain is
                 --program counter--|
                 pc <= (others => '0');
                 pc_next <= (others => '0');
-                ctrl_pc_inc <= '0';
+                --ctrl_pc_inc <= '0';
 
                 pc_h <= (others => '0');
                 pc_l <= (others => '0');
@@ -251,7 +251,7 @@ architecture Behavioral of waelderMain is
 
 
                 --control unit--|
-                current_instr <= NOP;
+                --current_instr <= NOP;
 
                 x <= (others => '0');
                 y <= (others => '0');
@@ -381,11 +381,18 @@ architecture Behavioral of waelderMain is
     --▇▅▆▇▆▅▅█
         
     --------------------------program counter----------------------------|
+    pc <= pc_h & pc_l;
     process(clk)
     begin
         if rising_edge(clk) then
             if ctrl_pc_inc = '1' then
-                pc <= std_logic_vector(to_unsigned((to_integer(unsigned(pc)) + 1), 16));
+                if pc_l = "11111111" then
+                    pc_h <= std_logic_vector(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
+                    pc_l <= "00000000";
+                else
+                    pc_l <= std_logic_vector(to_unsigned((to_integer(unsigned(pc_l)) + 1), 8));
+                end if;
+                --pc <= std_logic_vector(to_unsigned((to_integer(unsigned(pc)) + 1), 16));
             end if;
         end if;
     end process;
@@ -469,7 +476,7 @@ architecture Behavioral of waelderMain is
         ctrl_pc_h_out   <= '0';
         ctrl_pc_l_in    <= '0';
         ctrl_pc_h_in    <= '0';
-        ctrl_pc_inc     <= '0';
+        --ctrl_pc_inc     <= '0';
 
         -- IR / MAR / RAM
         ctrl_ir_in      <= '0';
@@ -510,7 +517,7 @@ architecture Behavioral of waelderMain is
             when S_FETCH_2 =>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in   <= '1';
-                ctrl_pc_inc  <= '1';
+                --ctrl_pc_inc  <= '1';
                 next_state <= S_DECODE;
 
             when S_DECODE =>
@@ -537,6 +544,10 @@ architecture Behavioral of waelderMain is
 
             when S_EXEC_2 =>
                 next_state <= S_FETCH_1;
+                
+                
+            when others =>
+                next_state <= next_state;
 
 
 
