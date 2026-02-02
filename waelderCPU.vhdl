@@ -91,16 +91,11 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     --------------------------program counter----------------------------|
     SIGNAL pc : STD_LOGIC_VECTOR (15 DOWNTO 0);
-    SIGNAL pc_next : STD_LOGIC_VECTOR(15 DOWNTO 0);
     SIGNAL ctrl_pc_inc : STD_LOGIC;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
-
-
     -- pc high and low byte
     SIGNAL pc_h : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL pc_l : STD_LOGIC_VECTOR (7 DOWNTO 0);
-    SIGNAL pc_load_h : STD_LOGIC;
-    SIGNAL pc_load_l : STD_LOGIC;
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -149,140 +144,74 @@ ARCHITECTURE Behavioral OF waelderMain IS
 BEGIN
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
+
+    --alu inputs
     alu_in_a <= signed(alu_reg_a);
     alu_in_b <= signed(alu_reg_b);
 
-    -----------------------------async reset-----------------------------|
-    PROCESS (reset)
+    --pc --
+    pc <= pc_h & pc_l;
+
+  
+    ------------------------------data bus-------------------------------|
+    PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
+        ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
     BEGIN
         IF reset = '1' THEN
-            --output control flags--|
-            ctrl_pc_l_out <= '0';
-            ctrl_pc_h_out <= '0';
-            ctrl_ir_out <= '0';
-            ctrl_alu_out <= '0';
-            ctrl_ram_out <= '0';
-            ctrl_ar_out <= '0';
-            ctrl_br_out <= '0';
-            ctrl_cr_out <= '0';
-            ctrl_dr_out <= '0';
-            ctrl_er_out <= '0';
-            ctrl_lr_out <= '0';
-            ctrl_hr_out <= '0';
-            ctrl_mr_out <= '0';
+            data_bus <= (OTHERS => '0');
 
-            --input control flags--|
-            ctrl_pc_l_in <= '0';
-            ctrl_pc_h_in <= '0';
-            ctrl_ir_in <= '0';
-            ctrl_mar_h_in <= '0';
-            ctrl_mar_l_in <= '0';
-            ctrl_ar_in <= '0';
-            ctrl_br_in <= '0';
-            ctrl_cr_in <= '0';
-            ctrl_dr_in <= '0';
-            ctrl_er_in <= '0';
-            ctrl_lr_in <= '0';
-            ctrl_hr_in <= '0';
-            ctrl_mr_in <= '0';
-            ctrl_ram_in <= '0';
-
-            --instruction register--|
             i_reg <= (OTHERS => '0');
-
-            --general purpose register--|
             a_reg <= (OTHERS => '0');
             b_reg <= (OTHERS => '0');
             c_reg <= (OTHERS => '0');
             d_reg <= (OTHERS => '0');
             e_reg <= (OTHERS => '0');
-            l_reg <= (OTHERS => '0');
             h_reg <= (OTHERS => '0');
-            m_reg <= (OTHERS => '0');
-
-            --bus declaration--|
-            data_bus <= (OTHERS => '0');
-
-            --program counter--|
-            pc <= (OTHERS => '0');
-            pc_next <= (OTHERS => '0');
-            ctrl_pc_inc <= '0';
-
-            pc_h <= (OTHERS => '0');
-            pc_l <= (OTHERS => '0');
-            pc_load_h <= '0';
-            pc_load_l <= '0';
-
-            --alu--|
-            alu_reg_a <= (OTHERS => '0');
-            alu_reg_b <= (OTHERS => '0');
-            alu_in_a <= (OTHERS => '0');
-            alu_in_b <= (OTHERS => '0');
-
-            alu_result <= (OTHERS => '0');
-
-            f_overflow <= '0';
-            f_zero <= '0';
-            f_parity <= '0';
-            f_sign <= '0';
-            f_comp <= '0';
-
-            ctrl_alu <= (OTHERS => '0');
-            --control unit--|
-            current_instr <= NOP;
-
-            x <= (OTHERS => '0');
-            y <= (OTHERS => '0');
-            z <= (OTHERS => '0');
-        END IF;
-    END PROCESS;
-    ------------------------------data bus-------------------------------|
-    PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
-        ctrl_lr_out, ctrl_hr_out, ctrl_alu_out)
-    BEGIN
-        IF ctrl_pc_l_out = '1' THEN
-            data_bus <= pc_l;
-        ELSIF ctrl_pc_h_out = '1' THEN
-            data_bus <= pc_h;
-        ELSIF ctrl_ir_out = '1' THEN
-            data_bus <= i_reg;
-        ELSIF ctrl_ar_out = '1' THEN
-            data_bus <= a_reg;
-        ELSIF ctrl_br_out = '1' THEN
-            data_bus <= b_reg;
-        ELSIF ctrl_cr_out = '1' THEN
-            data_bus <= c_reg;
-        ELSIF ctrl_dr_out = '1' THEN
-            data_bus <= d_reg;
-        ELSIF ctrl_er_out = '1' THEN
-            data_bus <= e_reg;
-        ELSIF ctrl_hr_out = '1' THEN
-            data_bus <= h_reg;
-        ELSIF ctrl_lr_out = '1' THEN
-            data_bus <= l_reg;
-        ELSIF ctrl_alu_out = '1' THEN
-            data_bus <= alu_result;
+            l_reg <= (OTHERS => '0');
         ELSE
-            --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
-            data_bus <= (OTHERS => '0');
-        END IF;
-
-        IF ctrl_ir_in = '1' THEN
-            i_reg <= data_bus;
-        ELSIF ctrl_ar_in = '1' THEN
-            a_reg <= data_bus;
-        ELSIF ctrl_br_in = '1' THEN
-            b_reg <= data_bus;
-        ELSIF ctrl_cr_in = '1' THEN
-            c_reg <= data_bus;
-        ELSIF ctrl_dr_in = '1' THEN
-            d_reg <= data_bus;
-        ELSIF ctrl_er_in = '1' THEN
-            e_reg <= data_bus;
-        ELSIF ctrl_hr_in = '1' THEN
-            h_reg <= data_bus;
-        ELSIF ctrl_lr_in = '1' THEN
-            l_reg <= data_bus;
+            IF ctrl_pc_l_out = '1' THEN
+                data_bus <= pc_l;
+            ELSIF ctrl_pc_h_out = '1' THEN
+                data_bus <= pc_h;
+            ELSIF ctrl_ir_out = '1' THEN
+                data_bus <= i_reg;
+            ELSIF ctrl_ar_out = '1' THEN
+                data_bus <= a_reg;
+            ELSIF ctrl_br_out = '1' THEN
+                data_bus <= b_reg;
+            ELSIF ctrl_cr_out = '1' THEN
+                data_bus <= c_reg;
+            ELSIF ctrl_dr_out = '1' THEN
+                data_bus <= d_reg;
+            ELSIF ctrl_er_out = '1' THEN
+                data_bus <= e_reg;
+            ELSIF ctrl_hr_out = '1' THEN
+                data_bus <= h_reg;
+            ELSIF ctrl_lr_out = '1' THEN
+                data_bus <= l_reg;
+            ELSIF ctrl_alu_out = '1' THEN
+                data_bus <= alu_result;
+                --elsif
+                --mem(mar) when ctrl_ram_out = '1' else | memory is implemented later on
+            ELSIF rising_edge(clk) THEN
+                IF ctrl_ir_in = '1' THEN
+                    i_reg <= data_bus;
+                ELSIF ctrl_ar_in = '1' THEN
+                    a_reg <= data_bus;
+                ELSIF ctrl_br_in = '1' THEN
+                    b_reg <= data_bus;
+                ELSIF ctrl_cr_in = '1' THEN
+                    c_reg <= data_bus;
+                ELSIF ctrl_dr_in = '1' THEN
+                    d_reg <= data_bus;
+                ELSIF ctrl_er_in = '1' THEN
+                    e_reg <= data_bus;
+                ELSIF ctrl_hr_in = '1' THEN
+                    h_reg <= data_bus;
+                ELSIF ctrl_lr_in = '1' THEN
+                    l_reg <= data_bus;
+                END IF;
+            END IF;
         END IF;
     END PROCESS;
     ---------------------------------ALU----------------------------------|
@@ -341,7 +270,9 @@ BEGIN
 
         f_sign <= tmp_res(8);
 
-        f_parity <= tmp_res(0); --parity is odd if LSB equals '1'
+        f_parity <= NOT (tmp_res(0) XOR tmp_res(1) XOR tmp_res(2) XOR tmp_res(3) XOR
+            tmp_res(4) XOR tmp_res(5) XOR tmp_res(6) XOR tmp_res(7)); --need to ask raph about 9th bit, wip
+        -- f_parity <= tmp_res(0);  --parity is odd if LSB equals '1' -> old version
 
     END PROCESS;
     --▇▅▆▇▆▅▅█
@@ -350,35 +281,32 @@ BEGIN
     PROCESS (clk, reset)
     BEGIN
         IF reset = '1' THEN
-            pc <= (OTHERS => '0'); -- set pc to 0 on reset
+            pc_l <= (OTHERS => '0');
+            pc_h <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
-            IF ctrl_pc_l_in = '1' THEN
-                pc(7 DOWNTO 0) <= data_bus;
-            ELSIF ctrl_pc_h_in = '1' THEN
-                pc(15 DOWNTO 8) <= data_bus;
-            ELSIF ctrl_pc_inc = '1' THEN
-                pc <= STD_LOGIC_VECTOR(unsigned(pc) + 1);
+            IF ctrl_pc_inc = '1' THEN
+                IF pc_l = "11111111" THEN
+                    pc_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
+                    pc_l <= "00000000";
+                ELSE
+                    pc_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_l)) + 1), 8));
+                END IF;
+                --pc <= std_logic_vector(to_unsigned((to_integer(unsigned(pc)) + 1), 16));
             END IF;
         END IF;
     END PROCESS;
 
-    --control unit
-
-    ---------------------------------------------------------------------|
-    -- Instruction Decoder
-    ---------------------------------------------------------------------|
-    PROCESS (x, y, z)
+    --Instruction Decoder------------------------------------------------|
+    PROCESS (i_reg)
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        x <= i_reg(7 downto 6);
-        y <= i_reg(5 downto 3);
-        z <= i_reg(2 downto 0);
+        x <= i_reg(7 DOWNTO 6);
+        y <= i_reg(5 DOWNTO 3);
+        z <= i_reg(2 DOWNTO 0);
 
         CASE x IS
-                --------------------------------------------------------------
-                -- Type 00: No Variables
-                --------------------------------------------------------------
+                -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
                 CASE z IS
                     WHEN "000" =>
@@ -399,9 +327,7 @@ BEGIN
                     WHEN OTHERS => --current_instr stays the same
                 END CASE;
 
-                --------------------------------------------------------------
-                -- Type 01: Ops with Vars
-                --------------------------------------------------------------
+                -- Type 01: Ops with Vars------------------------------------|
             WHEN "01" =>
                 CASE z IS
                     WHEN "000" => current_instr <= INR;
@@ -414,15 +340,11 @@ BEGIN
                     WHEN OTHERS => --current_instr stays the same
                 END CASE;
 
-                --------------------------------------------------------------
-                -- Type 10: Move OP 
-                --------------------------------------------------------------
+                -- Type 10: Move OP------------------------------------------|
             WHEN "10" =>
                 current_instr <= MOV;
 
-                --------------------------------------------------------------
-                -- Type 11: Conditionals + ALU 
-                --------------------------------------------------------------
+                -- Type 11: Conditionals + ALU-------------------------------|
             WHEN "11" =>
                 CASE z IS
                     WHEN "000" | "001" => current_instr <= ALU;
@@ -445,15 +367,86 @@ BEGIN
             state <= next_state;
         END IF;
     END PROCESS;
+
+    --Control Unit-------------------------------------------------------|
     PROCESS (state, current_instr)
     BEGIN
         -- Default control signals to avoid latches
+        -- PC
         ctrl_pc_l_out <= '0';
         ctrl_pc_h_out <= '0';
+        ctrl_pc_l_in <= '0';
+        ctrl_pc_h_in <= '0';
         ctrl_pc_inc <= '0';
 
+        -- IR / MAR / RAM
         ctrl_ir_in <= '0';
         ctrl_ram_out <= '0';
         ctrl_mar_l_in <= '0';
         ctrl_mar_h_in <= '0';
-    END Behavioral;
+
+        -- Registers
+        ctrl_ar_in <= '0';
+        ctrl_br_in <= '0';
+        ctrl_cr_in <= '0';
+        ctrl_dr_in <= '0';
+        ctrl_er_in <= '0';
+        ctrl_hr_in <= '0';
+        ctrl_lr_in <= '0';
+
+        ctrl_ar_out <= '0';
+        ctrl_br_out <= '0';
+        ctrl_cr_out <= '0';
+        ctrl_dr_out <= '0';
+        ctrl_er_out <= '0';
+        ctrl_hr_out <= '0';
+        ctrl_lr_out <= '0';
+
+        -- ALU
+        ctrl_alu_out <= '0';
+
+        CASE state IS
+            WHEN S_RESET =>
+                next_state <= S_FETCH_1;
+            WHEN S_FETCH_1 =>
+                ctrl_pc_l_out <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
+                ctrl_mar_l_in <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
+                next_state <= S_FETCH_2;
+            
+            WHEN S_FETCH_2 =>
+                ctrl_pc_h_out <= '1';
+                ctrl_mar_h_in <= '1';
+                next_state <= S_FETCH_3;
+
+            WHEN S_FETCH_3 =>
+                ctrl_ram_out <= '1';
+                ctrl_ir_in <= '1';
+                ctrl_pc_inc <= '1';
+                next_state <= S_DECODE;
+
+            WHEN S_DECODE =>
+                next_state <= S_EXEC_1;
+                
+            WHEN S_EXEC_1 =>
+                CASE current_instr IS
+                    WHEN NOP =>
+                        next_state <= S_FETCH_1;
+
+                    WHEN RST =>
+                        next_state <= S_RESET;
+
+                    WHEN INR =>
+                        ctrl_alu <= "000"; --ADD
+                        next_state <= S_EXEC_2;
+
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
+
+            WHEN S_EXEC_2 =>
+                next_state <= S_FETCH_1;
+            WHEN others =>
+            
+        END CASE;
+    END PROCESS;
+END Behavioral;
