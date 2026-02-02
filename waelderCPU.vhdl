@@ -281,27 +281,26 @@ architecture Behavioral of waelderMain is
             data_bus <= l_reg;
         elsif ctrl_alu_out = '1' then
             data_bus <= alu_result;
-        else
-        --mem(mar) when ctrl_ram_out = '1' else memory is implemented later on
-        data_bus <= (others => '0');
-        end if;
-
-        if ctrl_ir_in = '1' then
-            i_reg <= data_bus;
-        elsif ctrl_ar_in = '1' then
-            a_reg <= data_bus;
-        elsif ctrl_br_in = '1' then
-            b_reg <= data_bus;
-        elsif ctrl_cr_in = '1' then
-            c_reg <= data_bus;
-        elsif ctrl_dr_in = '1' then
-            d_reg <= data_bus;
-        elsif ctrl_er_in = '1' then
-            e_reg <= data_bus;
-        elsif ctrl_hr_in = '1' then
-            h_reg <= data_bus;
-        elsif ctrl_lr_in = '1' then
-            l_reg <= data_bus;
+        --elsif
+        --mem(mar) when ctrl_ram_out = '1' else | memory is implemented later on
+        elsif rising_edge(clk) then
+            if ctrl_ir_in = '1' then
+                i_reg <= data_bus;
+            elsif ctrl_ar_in = '1' then
+                a_reg <= data_bus;
+            elsif ctrl_br_in = '1' then
+                b_reg <= data_bus;
+            elsif ctrl_cr_in = '1' then
+                c_reg <= data_bus;
+            elsif ctrl_dr_in = '1' then
+                d_reg <= data_bus;
+            elsif ctrl_er_in = '1' then
+                e_reg <= data_bus;
+            elsif ctrl_hr_in = '1' then
+                h_reg <= data_bus;
+            elsif ctrl_lr_in = '1' then
+                l_reg <= data_bus;
+            end if;
         end if;
     end process;
 
