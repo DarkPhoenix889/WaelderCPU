@@ -95,6 +95,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_pc_inc : STD_LOGIC;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
 
+
     -- pc high and low byte
     SIGNAL pc_h : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL pc_l : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -370,6 +371,9 @@ BEGIN
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
+        x <= i_reg(7 downto 6);
+        y <= i_reg(5 downto 3);
+        z <= i_reg(2 downto 0);
 
         CASE x IS
                 --------------------------------------------------------------
