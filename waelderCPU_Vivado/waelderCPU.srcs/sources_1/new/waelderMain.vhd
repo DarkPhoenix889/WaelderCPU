@@ -219,6 +219,7 @@ BEGIN
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
     BEGIN
+    tmp_res := (others => '0');
         CASE ctrl_alu IS
             WHEN "000" => --ADD
                 tmp_res := resize(alu_in_a, 9) + resize(alu_in_b, 9);
@@ -267,6 +268,8 @@ BEGIN
         -- Overflow - only needed for ADD and SUBTRACT
         IF ctrl_alu = "000" OR ctrl_alu = "001" THEN
             f_overflow <= tmp_res(8) XOR tmp_res(7);
+        else
+            f_overflow <= '0';
         END IF;
 
         f_sign <= tmp_res(8);
