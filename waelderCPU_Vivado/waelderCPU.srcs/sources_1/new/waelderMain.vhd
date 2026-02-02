@@ -30,13 +30,10 @@ use IEEE.NUMERIC_STD.ALL;
 entity waelderMain is
     Port (
         clk : in std_logic;
-        reset : in std_logic;
+        reset : in std_logic
 ----------------------------------------|
 ----------declare in/output ports WIP---|
 ----------------------------------------|
-
-        --for pc testing purposes only--
-        ctrl_pc_inc : in std_logic
 
         --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
@@ -104,9 +101,9 @@ architecture Behavioral of waelderMain is
 
     --------------------------program counter----------------------------|
     signal pc : std_logic_vector (15 downto 0);
-    signal pc_next   : std_logic_vector(15 downto 0);
-    --signal ctrl_pc_inc : std_logic;
+    signal ctrl_pc_inc : std_logic;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
+
 
     -- pc high and low byte
     signal pc_h : std_logic_vector (7 downto 0);
@@ -225,8 +222,7 @@ architecture Behavioral of waelderMain is
 
                 --program counter--|
                 pc <= (others => '0');
-                pc_next <= (others => '0');
-                --ctrl_pc_inc <= '0';
+                ctrl_pc_inc <= '0';
 
                 pc_h <= (others => '0');
                 pc_l <= (others => '0');
@@ -251,7 +247,6 @@ architecture Behavioral of waelderMain is
 
 
                 --control unit--|
-                --current_instr <= NOP;
 
                 x <= (others => '0');
                 y <= (others => '0');
@@ -476,7 +471,7 @@ architecture Behavioral of waelderMain is
         ctrl_pc_h_out   <= '0';
         ctrl_pc_l_in    <= '0';
         ctrl_pc_h_in    <= '0';
-        --ctrl_pc_inc     <= '0';
+        ctrl_pc_inc     <= '0';
 
         -- IR / MAR / RAM
         ctrl_ir_in      <= '0';
@@ -517,7 +512,7 @@ architecture Behavioral of waelderMain is
             when S_FETCH_2 =>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in   <= '1';
-                --ctrl_pc_inc  <= '1';
+                ctrl_pc_inc  <= '1';
                 next_state <= S_DECODE;
 
             when S_DECODE =>
@@ -544,10 +539,10 @@ architecture Behavioral of waelderMain is
 
             when S_EXEC_2 =>
                 next_state <= S_FETCH_1;
+            
                 
-                
-            when others =>
-                next_state <= next_state;
+
+
 
 
 

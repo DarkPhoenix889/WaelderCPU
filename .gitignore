@@ -52,3 +52,4 @@ Thumbs.db
 __pycache__/
 *.pyc
 waelderCPU_Vivado/dfx_runtime.txt
+waelderCPU_Vivado/waelderCPU.cache/wt/project.wpc
