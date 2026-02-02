@@ -101,9 +101,9 @@ architecture Behavioral of waelderMain is
 
     --------------------------program counter----------------------------|
     signal pc : std_logic_vector (15 downto 0);
-    signal pc_next   : std_logic_vector(15 downto 0);
     signal ctrl_pc_inc : std_logic;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
+
 
     -- pc high and low byte
     signal pc_h : std_logic_vector (7 downto 0);
@@ -222,7 +222,6 @@ architecture Behavioral of waelderMain is
 
                 --program counter--|
                 pc <= (others => '0');
-                pc_next <= (others => '0');
                 ctrl_pc_inc <= '0';
 
                 pc_h <= (others => '0');
