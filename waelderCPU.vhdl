@@ -96,8 +96,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- pc high and low byte
     SIGNAL pc_h : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL pc_l : STD_LOGIC_VECTOR (7 DOWNTO 0);
-    SIGNAL pc_load_h : STD_LOGIC;
-    SIGNAL pc_load_l : STD_LOGIC;
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -146,106 +145,30 @@ ARCHITECTURE Behavioral OF waelderMain IS
 BEGIN
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
+
+    --alu inputs
     alu_in_a <= signed(alu_reg_a);
     alu_in_b <= signed(alu_reg_b);
 
-    -- -----------------------------async reset-----------------------------|
-    --NOTE: needs to be implemented when using the signals in order to avoid multiple driven signals 
-    ------------------------------------------------------------------------|
-    -- PROCESS (reset)
-    -- BEGIN
-    --     IF reset = '1' THEN
-    --         --output control flags--|
-    --         ctrl_pc_l_out <= '0';
-    --         ctrl_pc_h_out <= '0';
-    --         ctrl_ir_out <= '0';
-    --         ctrl_alu_out <= '0';
-    --         ctrl_ram_out <= '0';
-    --         ctrl_ar_out <= '0';
-    --         ctrl_br_out <= '0';
-    --         ctrl_cr_out <= '0';
-    --         ctrl_dr_out <= '0';
-    --         ctrl_er_out <= '0';
-    --         ctrl_lr_out <= '0';
-    --         ctrl_hr_out <= '0';
-    --         ctrl_mr_out <= '0';
+    --pc --
+    pc <= pc_h & pc_l;
 
-    --         --input control flags--|
-    --         ctrl_pc_l_in <= '0';
-    --         ctrl_pc_h_in <= '0';
-    --         ctrl_ir_in <= '0';
-    --         ctrl_mar_h_in <= '0';
-    --         ctrl_mar_l_in <= '0';
-    --         ctrl_ar_in <= '0';
-    --         ctrl_br_in <= '0';
-    --         ctrl_cr_in <= '0';
-    --         ctrl_dr_in <= '0';
-    --         ctrl_er_in <= '0';
-    --         ctrl_lr_in <= '0';
-    --         ctrl_hr_in <= '0';
-    --         -- ctrl_mr_in <= '0'; register m is just wiring of h and l and cannot be directly written to
-    --         ctrl_ram_in <= '0';
-
-    --         --instruction register--|
-    --         i_reg <= (OTHERS => '0');
-
-    --         --general purpose register--|
-    --         a_reg <= (OTHERS => '0');
-    --         b_reg <= (OTHERS => '0');
-    --         c_reg <= (OTHERS => '0');
-    --         d_reg <= (OTHERS => '0');
-    --         e_reg <= (OTHERS => '0');
-    --         l_reg <= (OTHERS => '0');
-    --         h_reg <= (OTHERS => '0');
-    --         m_reg <= (OTHERS => '0');
-
-    --         --bus declaration--|
-    --         data_bus <= (OTHERS => '0');
-
-    --         --program counter--|
-    --         pc <= (OTHERS => '0');
-    --         ctrl_pc_inc <= '0';
-
-    --         pc_h <= (OTHERS => '0');
-    --         pc_l <= (OTHERS => '0');
-    --         pc_load_h <= '0';
-    --         pc_load_l <= '0';
-
-    --         --alu--|
-    --         alu_reg_a <= (OTHERS => '0');
-    --         alu_reg_b <= (OTHERS => '0');
-    --         alu_in_a <= (OTHERS => '0');
-    --         alu_in_b <= (OTHERS => '0');
-
-    --         alu_result <= (OTHERS => '0');
-
-    --         f_overflow <= '0';
-    --         f_zero <= '0';
-    --         f_parity <= '0';
-    --         f_sign <= '0';
-    --         f_comp <= '0';
-
-    --         ctrl_alu <= (OTHERS => '0');
-    --         --control unit--|
-
-    --         x <= (OTHERS => '0');
-    --         y <= (OTHERS => '0');
-    --         z <= (OTHERS => '0');
-    --     END IF;
-    -- END PROCESS;
+  
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
         ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
     BEGIN
         IF reset = '1' THEN
-            i_reg <= (OTHERS => 0);
-            a_reg <= (OTHERS => 0);
-            b_reg <= (OTHERS => 0);
-            c_reg <= (OTHERS => 0);
-            d_reg <= (OTHERS => 0);
-            e_reg <= (OTHERS => 0);
-            h_reg <= (OTHERS => 0);
-            l_reg <= (OTHERS => 0);
+            data_bus <= (OTHERS => '0');
+
+            i_reg <= (OTHERS => '0');
+            a_reg <= (OTHERS => '0');
+            b_reg <= (OTHERS => '0');
+            c_reg <= (OTHERS => '0');
+            d_reg <= (OTHERS => '0');
+            e_reg <= (OTHERS => '0');
+            h_reg <= (OTHERS => '0');
+            l_reg <= (OTHERS => '0');
         ELSE
             IF ctrl_pc_l_out = '1' THEN
                 data_bus <= pc_l;
@@ -356,10 +279,12 @@ BEGIN
     --▇▅▆▇▆▅▅█
 
     --------------------------program counter----------------------------|
-    pc <= pc_h & pc_l;
-    PROCESS (clk)
+    PROCESS (clk, reset)
     BEGIN
-        IF rising_edge(clk) THEN
+        IF reset = '1' THEN
+            pc_l <= (OTHERS => '0');
+            pc_h <= (OTHERS => '0');
+        ELSIF rising_edge(clk) THEN
             IF ctrl_pc_inc = '1' THEN
                 IF pc_l = "11111111" THEN
                     pc_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
@@ -515,6 +440,8 @@ BEGIN
 
             WHEN S_EXEC_2 =>
                 next_state <= S_FETCH_1;
+            WHEN others =>
+            
         END CASE;
     END PROCESS;
 END Behavioral;
