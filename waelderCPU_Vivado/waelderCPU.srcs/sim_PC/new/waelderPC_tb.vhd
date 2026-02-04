@@ -55,6 +55,14 @@ begin
         wait for 20 ns;
         reset <= '0';
         wait for 20ns;
+        
+        for i in 0 to 3000 loop
+            ctrl_pc_inc <= '1';
+            wait for 20ns;
+            ctrl_pc_inc <= '0';
+            wait for 20ns;
+        end loop;
+        
         --inc pc
         ctrl_pc_inc <= '1';
         wait for 20ns;

@@ -152,8 +152,6 @@ BEGIN
 
     --pc --
     pc <= pc_h & pc_l;
-
-  
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
         ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
@@ -406,6 +404,9 @@ BEGIN
         -- ALU
         ctrl_alu_out <= '0';
 
+        --░░░░░░▐▓▓▌▒▒▌░░▐▓▓▌▒▒▌░
+        --░░░░░░▐▓▓▌▒▒▌░░▐▓▓▌▒▒▌░
+        
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -440,8 +441,8 @@ BEGIN
 
             WHEN S_EXEC_2 =>
                 next_state <= S_FETCH_1;
-            WHEN others =>
-            
+            WHEN OTHERS =>
+
         END CASE;
     END PROCESS;
 END Behavioral;
