@@ -26,10 +26,14 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY waelderMain IS
     PORT (
         clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC
+        reset : IN STD_LOGIC;
         ----------------------------------------|
         ----------declare in/output ports WIP---|
         ----------------------------------------|
+        
+        --for pc testing purposes only--
+        ctrl_pc_inc : in std_logic
+
 
         --for alu testing purposes only--
         --alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
@@ -91,7 +95,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     --------------------------program counter----------------------------|
     SIGNAL pc : STD_LOGIC_VECTOR (15 DOWNTO 0);
-    SIGNAL ctrl_pc_inc : STD_LOGIC;
+    --SIGNAL ctrl_pc_inc : STD_LOGIC;
     -- ctrl_pc_in & ctrl_pc_out bereits definiert
     -- pc high and low byte
     SIGNAL pc_h : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -219,7 +223,6 @@ BEGIN
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
     BEGIN
-    tmp_res := (others => '0');
         CASE ctrl_alu IS
             WHEN "000" => --ADD
                 tmp_res := resize(alu_in_a, 9) + resize(alu_in_b, 9);
@@ -268,8 +271,6 @@ BEGIN
         -- Overflow - only needed for ADD and SUBTRACT
         IF ctrl_alu = "000" OR ctrl_alu = "001" THEN
             f_overflow <= tmp_res(8) XOR tmp_res(7);
-        else
-            f_overflow <= '0';
         END IF;
 
         f_sign <= tmp_res(8);
@@ -381,7 +382,7 @@ BEGIN
         ctrl_pc_h_out <= '0';
         ctrl_pc_l_in <= '0';
         ctrl_pc_h_in <= '0';
-        ctrl_pc_inc <= '0';
+        --ctrl_pc_inc <= '0';
 
         -- IR / MAR / RAM
         ctrl_ir_in <= '0';
@@ -420,7 +421,7 @@ BEGIN
             WHEN S_FETCH_2 =>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in <= '1';
-                ctrl_pc_inc <= '1';
+                --ctrl_pc_inc <= '1';
                 next_state <= S_DECODE;
 
             WHEN S_DECODE =>
