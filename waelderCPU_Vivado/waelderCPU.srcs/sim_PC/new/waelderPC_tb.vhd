@@ -1,7 +1,6 @@
 --for PC testing purposes only
 --In order to test the PC and only the PC, the ctrl_pc_inc has
 --to be declared as a port as followed and the signals have to be removed (commented):
---for PC testing purposes only--
 --ctrl_pc_inc : in std_logic
 --
 
