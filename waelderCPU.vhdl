@@ -147,6 +147,71 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL state : t_state_t;
     SIGNAL next_state : t_state_t;
 
+    --CU procedure-----------------------------------------------|
+    PROCEDURE REG_IN (
+        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+    ) IS
+    BEGIN
+
+        CASE reg IS
+            WHEN "000" =>
+                ctrl_ar_in <= '1';
+            WHEN "001" =>
+                ctrl_br_in <= '1';
+            WHEN "010" =>
+                ctrl_cr_in <= '1';
+            WHEN "011" =>
+                ctrl_dr_in <= '1';
+            WHEN "100" =>
+                ctrl_er_in <= '1';
+            WHEN "101" =>
+                ctrl_hr_in <= '1';
+            WHEN "110" =>
+                ctrl_lr_in <= '1';
+            WHEN OTHERS =>
+                --do nothing
+        END CASE;
+
+    END PROCEDURE REG_IN;
+
+    PROCEDURE REG_OUT (
+        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+    ) IS
+    BEGIN
+        CASE reg IS
+            WHEN "000" =>
+                ctrl_ar_out <= '1';
+            WHEN "001" =>
+                ctrl_br_out <= '1';
+            WHEN "010" =>
+                ctrl_cr_out <= '1';
+            WHEN "011" =>
+                ctrl_dr_out <= '1';
+            WHEN "100" =>
+                ctrl_er_out <= '1';
+            WHEN "101" =>
+                ctrl_hr_out <= '1';
+            WHEN "110" =>
+                ctrl_lr_out <= '1';
+            WHEN OTHERS =>
+                --do nothing
+        END CASE;
+    END PROCEDURE REG_OUT;
+
+    PROCEDURE CU_INR (
+        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    ) IS
+    BEGIN
+        reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) + 1), 8));
+    END PROCEDURE CU_INR;
+
+    PROCEDURE CU_DCR (
+        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    ) IS
+    BEGIN
+        reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) - 1), 8));
+    END PROCEDURE CU_DCR;
+
 BEGIN
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -158,7 +223,10 @@ BEGIN
     --pc --
     pc <= pc_h & pc_l;
 
-  
+    --IR--
+    x <= i_reg(7 DOWNTO 6);
+    y <= i_reg(5 DOWNTO 3);
+    z <= i_reg(2 DOWNTO 0);
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
         ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
@@ -418,7 +486,7 @@ BEGIN
                 ctrl_pc_l_out <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
                 ctrl_mar_l_in <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
                 next_state <= S_FETCH_2;
-            
+
             WHEN S_FETCH_2 =>
                 ctrl_pc_h_out <= '1';
                 ctrl_mar_h_in <= '1';
@@ -432,7 +500,7 @@ BEGIN
 
             WHEN S_DECODE =>
                 next_state <= S_EXEC_1;
-                
+
             WHEN S_EXEC_1 =>
                 CASE current_instr IS
                     WHEN NOP =>
@@ -442,20 +510,83 @@ BEGIN
                         next_state <= S_RESET;
 
                     WHEN INR =>
-                        ctrl_alu <= "000"; --ADD
-                        ctrl_alu_reg_a_in <= '1';
-                        
+                        CU_INR(
+                        reg =>
+                        CASE y IS
+                            WHEN "000" => a_reg;
+                            WHEN "001" => b_reg;
+                            WHEN "010" => c_reg;
+                            WHEN "011" => d_reg;
+                            WHEN "100" => e_reg;
+                            WHEN "101" => h_reg;
+                            WHEN "110" => l_reg;
+                            WHEN OTHERS => a_reg; --default case
+                        END CASE
+                        );
 
-                        next_state <= S_EXEC_2;
+                        next_state <= S_FETCH_1;
+
+                    WHEN DCR =>
+                        CU_DCR(
+                        reg =>
+                        CASE y IS
+                            WHEN "000" => a_reg;
+                            WHEN "001" => b_reg;
+                            WHEN "010" => c_reg;
+                            WHEN "011" => d_reg;
+                            WHEN "100" => e_reg;
+                            WHEN "101" => h_reg;
+                            WHEN "110" => l_reg;
+                            WHEN OTHERS => --dont do anything
+                        END CASE
+                        );
+
+                        next_state <= S_FETCH_1;
+
+                    WHEN CAL =>
+
+                    WHEN RET =>
+
+                    WHEN CCC =>
+
+                    WHEN RCC =>
+
+                    WHEN JMP =>
+
+                    WHEN JCC =>
+
+                    WHEN PUSH =>
+
+                    WHEN LOAD =>
+
+                    WHEN ALU =>
+
+                    WHEN RLC =>
+
+                    WHEN RRC =>
+
+                    WHEN LDR =>
+
+                    WHEN INP =>
+
+                    WHEN instr_OUT =>
+
+                    WHEN MOV =>
+                        REG_OUT(y);
+                        REG_IN(z);
+
+                        next_state <= S_FETCH_1;
 
                     WHEN OTHERS =>
                         next_state <= S_FETCH_1;
                 END CASE;
 
             WHEN S_EXEC_2 =>
+            WHEN OTHERS =>
                 next_state <= S_FETCH_1;
-            WHEN others =>
-            
         END CASE;
-    END PROCESS;
+        WHEN OTHERS =>
+
+    END CASE;
+END PROCESS;
 END Behavioral;
