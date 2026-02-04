@@ -132,10 +132,16 @@ ARCHITECTURE Behavioral OF waelderMain IS
         S_RESET,
         S_FETCH_1,
         S_FETCH_2,
+        S_FETCH_3,
         S_DECODE,
         S_EXEC_1,
         S_EXEC_2,
-        S_EXEC_3
+        S_EXEC_3,
+        S_EXEC_4,
+        S_EXEC_5,
+        S_EXEC_6,
+        S_EXEC_7,
+        S_EXEC_8
     );
 
     SIGNAL state : t_state_t;
@@ -437,6 +443,9 @@ BEGIN
 
                     WHEN INR =>
                         ctrl_alu <= "000"; --ADD
+                        ctrl_alu_reg_a_in <= '1';
+                        
+
                         next_state <= S_EXEC_2;
 
                     WHEN OTHERS =>
