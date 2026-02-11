@@ -390,8 +390,6 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-
-
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
     BEGIN
@@ -400,8 +398,6 @@ BEGIN
         x <= i_reg(7 DOWNTO 6);
         y <= i_reg(5 DOWNTO 3);
         z <= i_reg(2 DOWNTO 0);
-
-
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -502,14 +498,12 @@ BEGIN
         -- ALU
         ctrl_alu_out <= '0';
 
-        Variable alu_S1_1 : STD_LOGIC;
-        Variable alu_S1_2 : STD_LOGIC_vector(1 DOWNTO 0);
-        Variable alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+        VARIABLE alu_S1_1 : STD_LOGIC;
+        VARIABLE alu_S1_2 : STD_LOGIC_VECTOR(1 DOWNTO 0);
+        VARIABLE alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
-        Variable alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-        Variable alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-
-
+        VARIABLE alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+        VARIABLE alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -615,37 +609,38 @@ BEGIN
                 END CASE;
 
             WHEN S_EXEC_2 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            ctrl_ram_out <= '1';
-                            ctrl_pc_h_in <= '1';
+                CASE current_instr IS
+                    WHEN JMP =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_h_in <= '1';
 
-                            next_state <= S_EXEC_3;
-                        WHEN OTHERS =>
-                            --do nothing
-                    END CASE;            WHEN OTHERS =>
+                        next_state <= S_EXEC_3;
+                    WHEN OTHERS =>
+                        --do nothing
+                END CASE;
+            WHEN OTHERS =>
                 next_state <= S_FETCH_1;
-            
+
             WHEN S_EXEC_3 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
+                CASE current_instr IS
+                    WHEN JMP =>
+                        MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
+
+                        next_state <= S_FETCH_1;
+                        
+                    WHEN S_EXEC_4 =>
+                        CASE current_instr IS
+                            WHEN JMP =>
+                                ctrl_ram_out <= '1';
+                                ctrl_pc_l_in <= '1';
 
                                 next_state <= S_FETCH_1;
-                        WHEN OTHERS =>
-                            --do nothing
-            WHEN S_EXEC_4 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            ctrl_ram_out <= '1';
-                            ctrl_pc_l_in <= '1';
-
-                            next_state <= S_FETCH_1;
-                        WHEN OTHERS =>
-                                      --do nothing
+                            WHEN OTHERS =>
+                                --do nothing
+                        END CASE;
+                    WHEN OTHERS =>
+                        --do nothing
+                END CASE;
         END CASE;
-        WHEN OTHERS =>
-
-    END CASE;
-END PROCESS;
+    END PROCESS;
 END Behavioral;
