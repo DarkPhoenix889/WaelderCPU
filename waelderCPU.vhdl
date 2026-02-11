@@ -39,6 +39,15 @@ ENTITY waelderMain IS
     );
 END waelderMain;
 
+COMPONENT waelderRAM is
+    PORT (
+        clk : in STD_LOGIC;
+        we : in std_logic;
+        addr : in std_logic_vector(15 downto 0);
+        di : in std_logic_vector(7 downto 0);
+        do : out std_logic_vector(7 downto 0)
+    )
+
 ARCHITECTURE Behavioral OF waelderMain IS
 
     -- flag declaration --
@@ -132,6 +141,11 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
     SIGNAL y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
     SIGNAL z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
+    ---------RAM---------------------------------------|
+    signal ram_data_out : std_logic_vector(7 downto 0); --signal between RAM and DataBus
+
+
     --CU-----------------------------------------------|
     TYPE t_state_t IS (
         S_RESET,
@@ -231,6 +245,16 @@ ARCHITECTURE Behavioral OF waelderMain IS
     END PROCEDURE MAR_INR;
 
 BEGIN
+    U_RAM : waelderRAM
+        PORT MAP(
+            clk => clk,
+            we => ctrl_ram_in,
+            addr => mar,
+            di => data_bus,
+            do => ram_data_out
+        );
+
+
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
 
@@ -286,8 +310,10 @@ BEGIN
                 data_bus <= l_reg;
             ELSIF ctrl_alu_out = '1' THEN
                 data_bus <= alu_result;
-                --elsif
-                --mem(mar) when ctrl_ram_out = '1' else | memory is implemented later on
+            elsif ctrl_ram_out = '1' then
+                data_bus <= ram_data_out;
+
+                
             ELSIF rising_edge(clk) THEN
                 IF ctrl_ir_in = '1' THEN
                     i_reg <= data_bus;
