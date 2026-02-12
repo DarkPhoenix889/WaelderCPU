@@ -40,7 +40,6 @@ ENTITY waelderMain IS
 END waelderMain;
 
 
-
 ARCHITECTURE Behavioral OF waelderMain IS
 COMPONENT waelderRAM is
     PORT (
@@ -50,9 +49,7 @@ COMPONENT waelderRAM is
         di : in std_logic_vector(7 downto 0);
         do : out std_logic_vector(7 downto 0)
     );
-end COMPONENT;
-
-
+end component;
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
