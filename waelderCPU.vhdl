@@ -39,6 +39,15 @@ ENTITY waelderMain IS
     );
 END waelderMain;
 
+COMPONENT waelderRAM is
+    PORT (
+        clk : in STD_LOGIC;
+        we : in std_logic;
+        addr : in std_logic_vector(15 downto 0);
+        di : in std_logic_vector(7 downto 0);
+        do : out std_logic_vector(7 downto 0)
+    )
+
 ARCHITECTURE Behavioral OF waelderMain IS
 
     -- flag declaration --
@@ -132,6 +141,11 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
     SIGNAL y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
     SIGNAL z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
+    ---------RAM---------------------------------------|
+    signal ram_data_out : std_logic_vector(7 downto 0); --signal between RAM and DataBus
+
+
     --CU-----------------------------------------------|
     TYPE t_state_t IS (
         S_RESET,
@@ -231,6 +245,16 @@ ARCHITECTURE Behavioral OF waelderMain IS
     END PROCEDURE MAR_INR;
 
 BEGIN
+    U_RAM : waelderRAM
+        PORT MAP(
+            clk => clk,
+            we => ctrl_ram_in,
+            addr => mar,
+            di => data_bus,
+            do => ram_data_out
+        );
+
+
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
 
@@ -286,8 +310,10 @@ BEGIN
                 data_bus <= l_reg;
             ELSIF ctrl_alu_out = '1' THEN
                 data_bus <= alu_result;
-                --elsif
-                --mem(mar) when ctrl_ram_out = '1' else | memory is implemented later on
+            elsif ctrl_ram_out = '1' then
+                data_bus <= ram_data_out;
+
+                
             ELSIF rising_edge(clk) THEN
                 IF ctrl_ir_in = '1' THEN
                     i_reg <= data_bus;
@@ -390,8 +416,6 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-
-
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
     BEGIN
@@ -400,8 +424,6 @@ BEGIN
         x <= i_reg(7 DOWNTO 6);
         y <= i_reg(5 DOWNTO 3);
         z <= i_reg(2 DOWNTO 0);
-
-
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -502,14 +524,12 @@ BEGIN
         -- ALU
         ctrl_alu_out <= '0';
 
-        Variable alu_S1_1 : STD_LOGIC;
-        Variable alu_S1_2 : STD_LOGIC_vector(1 DOWNTO 0);
-        Variable alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+        VARIABLE alu_S1_1 : STD_LOGIC;
+        VARIABLE alu_S1_2 : STD_LOGIC_VECTOR(1 DOWNTO 0);
+        VARIABLE alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
-        Variable alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-        Variable alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-
-
+        VARIABLE alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+        VARIABLE alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -615,30 +635,30 @@ BEGIN
                 END CASE;
 
             WHEN S_EXEC_2 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            ctrl_ram_out <= '1';
-                            ctrl_pc_h_in <= '1';
+                CASE current_instr IS
+                    WHEN JMP =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_h_in <= '1';
 
-                            next_state <= S_EXEC_3;
-                        WHEN OTHERS =>
-                            --do nothing
-                    END CASE;            WHEN OTHERS =>
+                        next_state <= S_EXEC_3;
+                    WHEN OTHERS =>
+                        --do nothing
+                END CASE;
+            WHEN OTHERS =>
                 next_state <= S_FETCH_1;
-            
-            WHEN S_EXEC_3 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
 
-                                next_state <= S_FETCH_1;
-                        WHEN OTHERS =>
-                            --do nothing
-            WHEN S_EXEC_4 =>
-                    CASE current_instr IS
-                        WHEN JMP =>
-                            ctrl_ram_out <= '1';
-                            ctrl_pc_l_in <= '1';
+            WHEN S_EXEC_3 =>
+                CASE current_instr IS
+                    WHEN JMP =>
+                        MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
+
+                        next_state <= S_FETCH_1;
+                        
+                    WHEN S_EXEC_4 =>
+                        CASE current_instr IS
+                            WHEN JMP =>
+                                ctrl_ram_out <= '1';
+                                ctrl_pc_l_in <= '1';
 
                             next_state <= S_FETCH_1;
                         WHEN OTHERS =>
