@@ -661,13 +661,16 @@ BEGIN
                                 ctrl_ram_out <= '1';
                                 ctrl_pc_l_in <= '1';
 
-                                next_state <= S_FETCH_1;
-                            WHEN OTHERS =>
-                                --do nothing
-                        END CASE;
-                    WHEN OTHERS =>
-                        --do nothing
-                END CASE;
+                            next_state <= S_FETCH_1;
+                        WHEN OTHERS =>
+                                      --do nothing
+            when S_EXEC_5 =>
+            when S_EXEC_6 =>
+            when S_EXEC_7 =>
+            when S_EXEC_8 =>
         END CASE;
+        WHEN OTHERS =>
+
+    END CASE;
     END PROCESS;
 END Behavioral;
