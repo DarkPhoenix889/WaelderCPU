@@ -38,8 +38,8 @@ ARCHITECTURE behavioural OF waelderRAM IS
     --------------------------------------------------------------------
 
     SIGNAL RAM : ram_type := (
-        0 => "01000000", --testvalue at address 0
-        1 => "01000000", --testvalue at address 1
+        -- 0 => "01000000", --testvalue at address 0
+        -- 1 => "01000000", --testvalue at address 1
         OTHERS => (OTHERS => '0') --set everything else in ram to 0
     );
 
