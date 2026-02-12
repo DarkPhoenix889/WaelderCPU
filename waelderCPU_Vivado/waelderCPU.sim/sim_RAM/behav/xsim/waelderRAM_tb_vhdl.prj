@@ -1,0 +1,7 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../waelderCPU.srcs/sources_1/new/waelderRAM.vhd" \
+"../../../../waelderCPU.srcs/sim_PC/new/waelderRAM_tb.vhd" \
+
+# Do not sort compile order
+nosort
