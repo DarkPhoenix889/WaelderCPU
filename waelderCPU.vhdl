@@ -39,6 +39,8 @@ ENTITY waelderMain IS
     );
 END waelderMain;
 
+
+ARCHITECTURE Behavioral OF waelderMain IS
 COMPONENT waelderRAM is
     PORT (
         clk : in STD_LOGIC;
@@ -46,9 +48,8 @@ COMPONENT waelderRAM is
         addr : in std_logic_vector(15 downto 0);
         di : in std_logic_vector(7 downto 0);
         do : out std_logic_vector(7 downto 0)
-    )
-
-ARCHITECTURE Behavioral OF waelderMain IS
+    );
+end component;
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
@@ -168,7 +169,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     --CU procedure-----------------------------------------------|
     PROCEDURE REG_IN (
-        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0)
     ) IS
     BEGIN
 
@@ -194,7 +195,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     END PROCEDURE REG_IN;
 
     PROCEDURE REG_OUT (
-        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0)
     ) IS
     BEGIN
         CASE reg IS
@@ -218,14 +219,14 @@ ARCHITECTURE Behavioral OF waelderMain IS
     END PROCEDURE REG_OUT;
 
     PROCEDURE CU_INR (
-        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0)
     ) IS
     BEGIN
         reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) + 1), 8));
     END PROCEDURE CU_INR;
 
     PROCEDURE CU_DCR (
-        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0)
     ) IS
     BEGIN
         reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) - 1), 8));
