@@ -643,9 +643,13 @@ BEGIN
                             next_state <= S_FETCH_1;
                         WHEN OTHERS =>
                                       --do nothing
+            when S_EXEC_5 =>
+            when S_EXEC_6 =>
+            when S_EXEC_7 =>
+            when S_EXEC_8 =>
         END CASE;
         WHEN OTHERS =>
 
     END CASE;
-END PROCESS;
+    END PROCESS;
 END Behavioral;
