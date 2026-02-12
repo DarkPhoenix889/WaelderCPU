@@ -26,7 +26,11 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY waelderMain IS
     PORT (
         clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC
+        reset : IN STD_LOGIC;
+
+        led_out : out std_logic_vector(7 downto 0);
+        switch_in : in std_logic_vector(7 downto 0)
+
         ----------------------------------------|
         ----------declare in/output ports WIP---|
         ----------------------------------------|
@@ -86,6 +90,11 @@ end component;
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
+
+
+    --------------------------i/o register-------------------------------|
+    signal io_reg_out : std_logic_vector(7 downto 0) := (others => '0');
+
 
     ----------------------general purpose register-----------------------|
     SIGNAL a_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg a
@@ -398,6 +407,9 @@ BEGIN
 
     END PROCESS;
     --▇▅▆▇▆▅▅█
+
+            
+
 
     --------------------------program counter----------------------------|
     PROCESS (clk, reset)
