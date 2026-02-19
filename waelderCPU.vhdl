@@ -26,11 +26,7 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY waelderMain IS
     PORT (
         clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-
-        led_out : out std_logic_vector(7 downto 0);
-        switch_in : in std_logic_vector(7 downto 0)
-
+        reset : IN STD_LOGIC
         ----------------------------------------|
         ----------declare in/output ports WIP---|
         ----------------------------------------|
@@ -42,18 +38,16 @@ ENTITY waelderMain IS
         --ctrl_alu : in std_logic_vector (2 downto 0)    --alu control register - gets filled by CU with OP-Code
     );
 END waelderMain;
-
-
 ARCHITECTURE Behavioral OF waelderMain IS
-COMPONENT waelderRAM is
-    PORT (
-        clk : in STD_LOGIC;
-        we : in std_logic;
-        addr : in std_logic_vector(15 downto 0);
-        di : in std_logic_vector(7 downto 0);
-        do : out std_logic_vector(7 downto 0)
-    );
-end component;
+    COMPONENT waelderRAM IS
+        PORT (
+            clk : IN STD_LOGIC;
+            we : IN STD_LOGIC;
+            addr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+            di : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            do : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+        );
+    END COMPONENT;
 
     -- flag declaration --
     ------------------output control flags-------------------------------|
@@ -90,11 +84,6 @@ end component;
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
-
-
-    --------------------------i/o register-------------------------------|
-    signal io_reg_out : std_logic_vector(7 downto 0) := (others => '0');
-
 
     ----------------------general purpose register-----------------------|
     SIGNAL a_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg a
@@ -153,9 +142,7 @@ end component;
     SIGNAL z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
 
     ---------RAM---------------------------------------|
-    signal ram_data_out : std_logic_vector(7 downto 0); --signal between RAM and DataBus
-
-
+    SIGNAL ram_data_out : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
     --CU-----------------------------------------------|
     TYPE t_state_t IS (
         S_RESET,
@@ -256,15 +243,13 @@ end component;
 
 BEGIN
     U_RAM : waelderRAM
-        PORT MAP(
-            clk => clk,
-            we => ctrl_ram_in,
-            addr => mar,
-            di => data_bus,
-            do => ram_data_out
-        );
-
-
+    PORT MAP(
+        clk => clk,
+        we => ctrl_ram_in,
+        addr => mar,
+        di => data_bus,
+        do => ram_data_out
+    );
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
 
@@ -320,10 +305,8 @@ BEGIN
                 data_bus <= l_reg;
             ELSIF ctrl_alu_out = '1' THEN
                 data_bus <= alu_result;
-            elsif ctrl_ram_out = '1' then
+            ELSIF ctrl_ram_out = '1' THEN
                 data_bus <= ram_data_out;
-
-                
             ELSIF rising_edge(clk) THEN
                 IF ctrl_ir_in = '1' THEN
                     i_reg <= data_bus;
@@ -407,9 +390,6 @@ BEGIN
 
     END PROCESS;
     --▇▅▆▇▆▅▅█
-
-            
-
 
     --------------------------program counter----------------------------|
     PROCESS (clk, reset)
@@ -502,6 +482,12 @@ BEGIN
 
     --Control Unit-------------------------------------------------------|
     PROCESS (state, current_instr)
+        VARIABLE alu_S1_1 : STD_LOGIC;
+        VARIABLE alu_S1_2 : STD_LOGIC_VECTOR(1 DOWNTO 0);
+        VARIABLE alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+        VARIABLE alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+        VARIABLE alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
     BEGIN
         -- Default control signals to avoid latches
         -- PC
@@ -537,12 +523,6 @@ BEGIN
         -- ALU
         ctrl_alu_out <= '0';
 
-        VARIABLE alu_S1_1 : STD_LOGIC;
-        VARIABLE alu_S1_2 : STD_LOGIC_VECTOR(1 DOWNTO 0);
-        VARIABLE alu_s1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-
-        VARIABLE alu_S2 : STD_LOGIC_VECTOR(2 DOWNTO 0);
-        VARIABLE alu_S3 : STD_LOGIC_VECTOR(2 DOWNTO 0);
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -657,8 +637,6 @@ BEGIN
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
-            WHEN OTHERS =>
-                next_state <= S_FETCH_1;
 
             WHEN S_EXEC_3 =>
                 CASE current_instr IS
@@ -666,23 +644,20 @@ BEGIN
                         MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
 
                         next_state <= S_FETCH_1;
-                        
+
                     WHEN S_EXEC_4 =>
                         CASE current_instr IS
                             WHEN JMP =>
                                 ctrl_ram_out <= '1';
                                 ctrl_pc_l_in <= '1';
 
-                            next_state <= S_FETCH_1;
-                        WHEN OTHERS =>
-                                      --do nothing
-            when S_EXEC_5 =>
-            when S_EXEC_6 =>
-            when S_EXEC_7 =>
-            when S_EXEC_8 =>
+                                next_state <= S_FETCH_1;
+                            WHEN OTHERS =>
+                                --do nothing
+                        END CASE;
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
         END CASE;
-        WHEN OTHERS =>
-
-    END CASE;
     END PROCESS;
 END Behavioral;

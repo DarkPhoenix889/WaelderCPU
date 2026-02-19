@@ -181,6 +181,7 @@
       </Config>
     </FileSet>
     <FileSet Name="sim_RAM" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_RAM" RelGenDir="$PGENDIR/sim_RAM">
+      <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_PC/new/waelderRAM_tb.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
