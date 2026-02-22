@@ -65,6 +65,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_hr_out : STD_LOGIC; --reg h out
     SIGNAL ctrl_mr_out : STD_LOGIC; --reg m out (16bit)
 
+
     ------------------input control flags--------------------------------|
     SIGNAL ctrl_pc_l_in : STD_LOGIC; --pc l(ower) 8bits in
     SIGNAL ctrl_pc_h_in : STD_LOGIC; --pc h(igher) 8 bits in    
@@ -80,6 +81,9 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_hr_in : STD_LOGIC; --reg h in
     SIGNAL ctrl_mr_in : STD_LOGIC; --reg m in (16bit)
     SIGNAL ctrl_ram_in : STD_LOGIC; --ram in
+
+    SIGNAL ctrl_alu_ar_in : STD_LOGIC; --alu reg a in
+    SIGNAL ctrl_alu_br_in : STD_LOGIC; --alu reg b in
 
     -- register deeclaration --
     ------------------instruction register-------------------------------|
@@ -104,6 +108,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL mar : STD_LOGIC_VECTOR (15 DOWNTO 0); --memory address register
     SIGNAL mar_h : STD_LOGIC_VECTOR (7 DOWNTO 0); --mar high byte
     SIGNAL mar_l : STD_LOGIC_VECTOR (7 DOWNTO 0); --mar low byte
+    SIGNAL ctrl_mar_inc : STD_LOGIC; --control signal for incrementing mar
 
     --------------------------program counter----------------------------|
     SIGNAL pc : STD_LOGIC_VECTOR (15 DOWNTO 0);
@@ -112,6 +117,19 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- pc high and low byte
     SIGNAL pc_h : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL pc_l : STD_LOGIC_VECTOR (7 DOWNTO 0);
+
+    -------------------------Stack Pointer-------------------------------|
+    -- Stack Pointer Signals
+    SIGNAL sp_h : STD_LOGIC_VECTOR (7 DOWNTO 0) := (OTHERS => '1'); -- Starts at FF
+    SIGNAL sp_l : STD_LOGIC_VECTOR (7 DOWNTO 0) := (OTHERS => '1'); -- Starts at FF
+    SIGNAL sp   : STD_LOGIC_VECTOR (15 DOWNTO 0);
+    -- Control Flags for SP
+    SIGNAL ctrl_sp_h_out : STD_LOGIC;
+    SIGNAL ctrl_sp_l_out : STD_LOGIC;
+    SIGNAL ctrl_sp_dec   : STD_LOGIC; -- Decrement for PUSH
+    SIGNAL ctrl_sp_inc   : STD_LOGIC; -- Increment for POP/RET
+
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -167,6 +185,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL next_state : t_state_t;
 
     --CU procedure-----------------------------------------------|
+    -- since the procedures do not work in practice i decided to just put the code directly in the control unit, but here are the procedures for reference - they would be called in the control unit to set the right control flags for the registers
     PROCEDURE REG_IN (
         SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0)
     ) IS
@@ -244,6 +263,9 @@ ARCHITECTURE Behavioral OF waelderMain IS
         END IF;
     END PROCEDURE MAR_INR;
 
+
+
+
 BEGIN
     U_RAM : waelderRAM
     PORT MAP(
@@ -256,15 +278,22 @@ BEGIN
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
 
-    --alu inputs
+    -- alu inputs --
     alu_in_a <= signed(alu_reg_a);
     alu_in_b <= signed(alu_reg_b);
 
-    --pc --
+    -- pc --
     pc <= pc_h & pc_l;
 
-    --mar --
+    -- mar --
     mar <= mar_h & mar_l;
+
+    x <= i_reg(7 DOWNTO 6);
+    y <= i_reg(5 DOWNTO 3);
+    z <= i_reg(2 DOWNTO 0);
+
+    -- sp --
+    sp <= sp_h & sp_l;
 
 
     ------------------------------data bus-------------------------------|
@@ -411,6 +440,54 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
+
+
+    ---------------------------------MAR---------------------------------|
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            mar_l <= (OTHERS => '0');
+            mar_h <= (OTHERS => '0');
+        ELSIF rising_edge(clk) THEN
+            IF ctrl_mar_inc = '1' THEN
+                IF mar_l = "11111111" THEN
+                    mar_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_h)) + 1), 8));
+                    mar_l <= "00000000";
+                ELSE
+                    mar_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_l)) + 1), 8));
+                END IF;
+            END IF;
+        END IF;
+    END PROCESS;
+
+    --------------------------Stack Pointer------------------------------|
+    PROCESS (clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            sp_h <= (OTHERS => '1'); -- Reset to 0xFF
+            sp_l <= (OTHERS => '1'); -- Reset to 0xFF
+        ELSIF rising_edge(clk) THEN
+            -- Decrement Logic (for PUSH)
+            IF ctrl_sp_dec = '1' THEN
+                IF sp_l = "00000000" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) - 1);
+                    sp_l <= "11111111";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
+                END IF;
+                
+            -- Increment Logic (for POP/RET)
+            ELSIF ctrl_sp_inc = '1' THEN
+                IF sp_l = "11111111" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
+                    sp_l <= "00000000";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
+                END IF;
+            END IF;
+        END IF;
+    END PROCESS;
+
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
     BEGIN
@@ -504,6 +581,7 @@ BEGIN
         ctrl_ram_out <= '0';
         ctrl_mar_l_in <= '0';
         ctrl_mar_h_in <= '0';
+        ctrl_mar_inc <= '0';
 
         -- Registers
         ctrl_ar_in <= '0';
@@ -529,8 +607,8 @@ BEGIN
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
             WHEN S_FETCH_1 =>
-                ctrl_pc_l_out <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
-                ctrl_mar_l_in <= '1'; -- muss noch an 16bit ControlBus ersetzt werden
+                ctrl_pc_l_out <= '1'; 
+                ctrl_mar_l_in <= '1'; 
                 next_state <= S_FETCH_2;
 
             WHEN S_FETCH_2 =>
@@ -590,17 +668,26 @@ BEGIN
                         next_state <= S_FETCH_1;
 
                     WHEN CAL =>
+                        ctrl_pc_inc <= '1';
+
+                        next_state <= S_EXEC_2;
+
 
                     WHEN RET =>
+                        ctrl_lr_out <= '1';
+                        ctrl_pc_l_in <= '1';
+
+                        next_state <= S_EXEC_2;
 
                     WHEN CCC =>
 
                     WHEN RCC =>
 
                     WHEN JMP =>
-                        MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
+                        ctrl_mar_inc <= '1';
 
                         next_state <= S_EXEC_2;
+
                     WHEN JCC =>
 
                     WHEN PUSH =>
@@ -620,8 +707,43 @@ BEGIN
                     WHEN instr_OUT =>
 
                     WHEN MOV =>
-                        REG_OUT(y);
-                        REG_IN(z);
+                        CASE y IS
+                            WHEN "000" =>
+                                ctrl_ar_out <= '1';
+                            WHEN "001" =>
+                                ctrl_br_out <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_out <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_out <= '1';
+                            WHEN "100" =>
+                                ctrl_er_out <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_out <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_out <= '1';
+                            WHEN OTHERS =>
+                                --do nothing
+                        END CASE;
+
+                        CASE z IS
+                            WHEN "000" =>
+                                ctrl_ar_in <= '1';
+                            WHEN "001" =>
+                                ctrl_br_in <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_in <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_in <= '1';
+                            WHEN "100" =>
+                                ctrl_er_in <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_in <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                                --do nothing
+                        END CASE;
 
                         next_state <= S_FETCH_1;
 
@@ -636,6 +758,15 @@ BEGIN
                         ctrl_pc_h_in <= '1';
 
                         next_state <= S_EXEC_3;
+                    WHEN CAL =>
+                        ctrl_pc_inc <= '1';
+
+                        next_state <= S_EXEC_3;
+                    WHEN RET =>
+                        ctrl_hr_out <= '1';
+                        ctrl_pc_h_in <= '1';
+
+                        next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
@@ -643,9 +774,17 @@ BEGIN
             WHEN S_EXEC_3 =>
                 CASE current_instr IS
                     WHEN JMP =>
-                        MAR_INR(mar_h, mar_l); --mar needs to be incremented to point to the next instruction after the jump address
+                        ctrl_mar_inc <= '1';
 
                         next_state <= S_FETCH_1;
+                    WHEN CAL =>
+                        ctrl_pc_l_out <= '1';
+                        ctrl_lr_in <= '1';
+
+                        next_state <= S_EXEC_4;
+                        
+                    WHEN OTHERS =>
+                                --do nothing
 
                 
             WHEN S_EXEC_4 =>
@@ -654,10 +793,37 @@ BEGIN
                         ctrl_ram_out <= '1';
                         ctrl_pc_l_in <= '1';
 
-                        ext_state <= S_FETCH_1;
+                        next_state <= S_FETCH_1;
+                    when CAL =>
+                        ctrl_pc_h_out <= '1';
+                        ctrl_hr_in <= '1';
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_5;
                     WHEN OTHERS =>
                                 --do nothing
                     END CASE;
+            WHEN S_EXEC_5 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_pc_h_in <= '1';
+                        ctrl_ram_out <= '1';
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_6;
+            WHEN S_EXEC_6 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_7;
+            WHEN S_EXEC_7 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_pc_l_in <= '1';
+                        ctrl_ram_out <= '1';
+
+                        next_state <= S_FETCH_1;
             WHEN OTHERS =>
                         next_state <= S_FETCH_1;
                 END CASE;
