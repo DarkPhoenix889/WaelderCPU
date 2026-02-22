@@ -84,6 +84,9 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
+    x <= i_reg(7 DOWNTO 6);
+    y <= i_reg(5 DOWNTO 3);
+    z <= i_reg(2 DOWNTO 0);
 
     ----------------------general purpose register-----------------------|
     SIGNAL a_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg a
@@ -263,10 +266,7 @@ BEGIN
     --mar --
     mar <= mar_h & mar_l;
 
-    --IR--
-    x <= i_reg(7 DOWNTO 6);
-    y <= i_reg(5 DOWNTO 3);
-    z <= i_reg(2 DOWNTO 0);
+
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
         ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
@@ -328,6 +328,8 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
+    
+
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
@@ -645,17 +647,18 @@ BEGIN
 
                         next_state <= S_FETCH_1;
 
-                    WHEN S_EXEC_4 =>
-                        CASE current_instr IS
-                            WHEN JMP =>
-                                ctrl_ram_out <= '1';
-                                ctrl_pc_l_in <= '1';
+                
+            WHEN S_EXEC_4 =>
+                CASE current_instr IS
+                    WHEN JMP =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_l_in <= '1';
 
-                                next_state <= S_FETCH_1;
-                            WHEN OTHERS =>
-                                --do nothing
-                        END CASE;
+                        ext_state <= S_FETCH_1;
                     WHEN OTHERS =>
+                                --do nothing
+                    END CASE;
+            WHEN OTHERS =>
                         next_state <= S_FETCH_1;
                 END CASE;
         END CASE;
