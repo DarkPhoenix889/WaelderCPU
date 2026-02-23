@@ -604,10 +604,23 @@ BEGIN
 
         -- IR / MAR / RAM
         ctrl_ir_in <= '0';
+        ctrl_ir_out <= '0';
         ctrl_ram_out <= '0';
+        ctrl_ram_in <= '0';
         ctrl_mar_l_in <= '0';
         ctrl_mar_h_in <= '0';
         ctrl_mar_inc <= '0';
+        ctrl_io_out_in <= '0';
+
+        -- CU Register
+        ctrl_cur_in <= '0';
+        ctrl_cur_out <= '0';
+
+        -- SP
+        ctrl_sp_l_out <= '0';
+        ctrl_sp_h_out <= '0';
+        ctrl_sp_inc <= '0';
+        ctrl_sp_dec <= '0';
 
         -- Registers
         ctrl_ar_in <= '0';
@@ -626,9 +639,27 @@ BEGIN
         ctrl_hr_out <= '0';
         ctrl_lr_out <= '0';
 
+        ctrl_ar_inc <= '0';
+        ctrl_br_inc <= '0';
+        ctrl_cr_inc <= '0';
+        ctrl_dr_inc <= '0';
+        ctrl_er_inc <= '0';
+        ctrl_hr_inc <= '0';
+        ctrl_lr_inc <= '0';
+
+        ctrl_ar_dec <= '0';
+        ctrl_br_dec <= '0';
+        ctrl_cr_dec <= '0';
+        ctrl_dr_dec <= '0';
+        ctrl_er_dec <= '0';
+        ctrl_hr_dec <= '0';
+        ctrl_lr_dec <= '0';
+
         -- ALU
         ctrl_alu_out <= '0';
-        ctrl_alu <= "111";
+        ctrl_alu_ar_in <= '0';
+        ctrl_alu_br_in <= '0';
+
 
         CASE state IS
             WHEN S_RESET =>
