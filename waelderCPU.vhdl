@@ -92,6 +92,10 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_alu_ar_in : STD_LOGIC; --alu reg a in
     SIGNAL ctrl_alu_br_in : STD_LOGIC; --alu reg b in
 
+    SIGNAL ctrl_cur_in : STD_LOGIC; -- Control Unit Register in
+    SIGNAL ctrl_cur_out : STD_LOGIC; -- Control Unit Register out
+    
+
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -132,6 +136,15 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_sp_l_out : STD_LOGIC;
     SIGNAL ctrl_sp_dec : STD_LOGIC; -- Decrement for PUSH
     SIGNAL ctrl_sp_inc : STD_LOGIC; -- Increment for POP/RET
+
+    --------------------------CU Register--------------------------------|
+    SIGNAL cui_reg : STD_LOGIC (7 DOWNTO 0); -- CU input register
+    SIGNAL cuo_reg : STD_LOGIC (7 DOWNTO 0); -- CU output register
+    -- we need 2 different registers for number creation, beacause you
+    -- can only assign a value to a signal once per process
+    -- cuo_reg is for the LDR instruction, cui_reg is for the ALU instruction
+
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -314,6 +327,11 @@ BEGIN
         IF ctrl_ir_in = '1' THEN
             i_reg <= data_bus;
         END IF;
+
+        -- CU Register IN
+        IF ctrl_cur_in = '1' THEN
+            cui_reg <= data_bus;
+        END IF;
         
     END IF;
 END PROCESS;
@@ -449,9 +467,9 @@ END PROCESS;
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        x <= i_reg(7 DOWNTO 6);
-        y <= i_reg(5 DOWNTO 3);
-        z <= i_reg(2 DOWNTO 0);
+        -- x <= i_reg(7 DOWNTO 6);
+        -- y <= i_reg(5 DOWNTO 3);
+        -- z <= i_reg(2 DOWNTO 0);
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -494,7 +512,7 @@ END PROCESS;
                 -- Type 11: Conditionals + ALU-------------------------------|
             WHEN "11" =>
                 CASE z IS
-                    WHEN "000" | "001" => current_instr <= ALU;
+                    WHEN "000" => current_instr <= ALU;
                     WHEN "100" => current_instr <= CCC;
                     WHEN "101" => current_instr <= RCC;
                     WHEN "110" => current_instr <= JCC;
@@ -632,10 +650,9 @@ END PROCESS;
                     WHEN LOAD =>
 
                     WHEN ALU =>
+                        ctrl_mar_inc <= '1';
 
-                    WHEN RLC =>
-
-                    WHEN RRC =>
+                        next_state <= S_EXEC_2;
 
                     WHEN LDR =>
 
@@ -704,6 +721,10 @@ END PROCESS;
                         ctrl_pc_h_in <= '1';
 
                         next_state <= S_FETCH_1;
+
+                    WHEN ALU =>
+                        ctrl_ram_out <= '1';
+                        ctrl_cu_r_in <= '1';
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
