@@ -26,7 +26,9 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY waelderMain IS
     PORT (
         clk : IN STD_LOGIC;
-        reset : IN STD_LOGIC
+        reset : IN STD_LOGIC;
+
+        led_out : out std_logic_vector(7 downto 0)
         ----------------------------------------|
         ----------declare in/output ports WIP---|
         ----------------------------------------|
@@ -95,6 +97,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_cur_in : STD_LOGIC; -- Control Unit Register in
     SIGNAL ctrl_cur_out : STD_LOGIC; -- Control Unit Register out
     
+    signal ctrl_io_out_in : std_logic;
 
     -- register deeclaration --
     ------------------instruction register-------------------------------|
@@ -109,10 +112,17 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL l_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg l
     SIGNAL h_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg h
     SIGNAL m_reg : STD_LOGIC_VECTOR (15 DOWNTO 0); --reg m (16bit reg - consists out of reg h(-igh) + l(-ow))
+
+
+    -----------------------------io/register-----------------------------|
+    signal io_reg_out : std_logic_vector(7 downto 0);
+    --signal io_reg_in : std_logic_vector(7 downto 0); --only in theory for input pins
+
+
     --------------------------bus declaration----------------------------|
     SIGNAL data_bus : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
-    --------------------------MAR----------------------------|
+    --------------------------------MAR----------------------------------|
     SIGNAL mar : STD_LOGIC_VECTOR (15 DOWNTO 0); --memory address register
     SIGNAL mar_h : STD_LOGIC_VECTOR (7 DOWNTO 0); --mar high byte
     SIGNAL mar_l : STD_LOGIC_VECTOR (7 DOWNTO 0); --mar low byte
@@ -224,6 +234,8 @@ BEGIN
     y <= i_reg(5 DOWNTO 3);
     z <= i_reg(2 DOWNTO 0);
 
+    led_out <= io_reg_out;
+
     -- sp --
     sp <= sp_h & sp_l;
     ------------------------------data bus & register logic-------------------------------|
@@ -333,6 +345,10 @@ BEGIN
             cui_reg <= data_bus;
         END IF;
         
+
+        if ctrl_io_out_in = '1' then
+            io_reg_out <= data_bus;
+        end if;
     END IF;
 END PROCESS;
     ---------------------------------ALU----------------------------------|
@@ -659,6 +675,7 @@ END PROCESS;
                     WHEN INP =>
 
                     WHEN instr_OUT =>
+                    
 
                     WHEN MOV =>
                         CASE y IS
