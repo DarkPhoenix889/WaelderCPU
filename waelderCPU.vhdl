@@ -64,8 +64,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_lr_out : STD_LOGIC; --reg l out
     SIGNAL ctrl_hr_out : STD_LOGIC; --reg h out
     SIGNAL ctrl_mr_out : STD_LOGIC; --reg m out (16bit)
-
-
     ------------------input control flags--------------------------------|
     SIGNAL ctrl_pc_l_in : STD_LOGIC; --pc l(ower) 8bits in
     SIGNAL ctrl_pc_h_in : STD_LOGIC; --pc h(igher) 8 bits in    
@@ -122,14 +120,12 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- Stack Pointer Signals
     SIGNAL sp_h : STD_LOGIC_VECTOR (7 DOWNTO 0) := (OTHERS => '1'); -- Starts at FF
     SIGNAL sp_l : STD_LOGIC_VECTOR (7 DOWNTO 0) := (OTHERS => '1'); -- Starts at FF
-    SIGNAL sp   : STD_LOGIC_VECTOR (15 DOWNTO 0);
+    SIGNAL sp : STD_LOGIC_VECTOR (15 DOWNTO 0);
     -- Control Flags for SP
     SIGNAL ctrl_sp_h_out : STD_LOGIC;
     SIGNAL ctrl_sp_l_out : STD_LOGIC;
-    SIGNAL ctrl_sp_dec   : STD_LOGIC; -- Decrement for PUSH
-    SIGNAL ctrl_sp_inc   : STD_LOGIC; -- Increment for POP/RET
-
-
+    SIGNAL ctrl_sp_dec : STD_LOGIC; -- Decrement for PUSH
+    SIGNAL ctrl_sp_inc : STD_LOGIC; -- Increment for POP/RET
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -262,10 +258,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
             mar_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_l)) + 1), 8));
         END IF;
     END PROCEDURE MAR_INR;
-
-
-
-
 BEGIN
     U_RAM : waelderRAM
     PORT MAP(
@@ -294,8 +286,6 @@ BEGIN
 
     -- sp --
     sp <= sp_h & sp_l;
-
-
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
         ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
@@ -311,54 +301,55 @@ BEGIN
             e_reg <= (OTHERS => '0');
             h_reg <= (OTHERS => '0');
             l_reg <= (OTHERS => '0');
-        ELSE
-            IF ctrl_pc_l_out = '1' THEN
-                data_bus <= pc_l;
-            ELSIF ctrl_pc_h_out = '1' THEN
-                data_bus <= pc_h;
-            ELSIF ctrl_ir_out = '1' THEN
-                data_bus <= i_reg;
-            ELSIF ctrl_ar_out = '1' THEN
-                data_bus <= a_reg;
-            ELSIF ctrl_br_out = '1' THEN
-                data_bus <= b_reg;
-            ELSIF ctrl_cr_out = '1' THEN
-                data_bus <= c_reg;
-            ELSIF ctrl_dr_out = '1' THEN
-                data_bus <= d_reg;
-            ELSIF ctrl_er_out = '1' THEN
-                data_bus <= e_reg;
-            ELSIF ctrl_hr_out = '1' THEN
-                data_bus <= h_reg;
-            ELSIF ctrl_lr_out = '1' THEN
-                data_bus <= l_reg;
-            ELSIF ctrl_alu_out = '1' THEN
-                data_bus <= alu_result;
-            ELSIF ctrl_ram_out = '1' THEN
-                data_bus <= ram_data_out;
-            ELSIF rising_edge(clk) THEN
-                IF ctrl_ir_in = '1' THEN
-                    i_reg <= data_bus;
-                ELSIF ctrl_ar_in = '1' THEN
-                    a_reg <= data_bus;
-                ELSIF ctrl_br_in = '1' THEN
-                    b_reg <= data_bus;
-                ELSIF ctrl_cr_in = '1' THEN
-                    c_reg <= data_bus;
-                ELSIF ctrl_dr_in = '1' THEN
-                    d_reg <= data_bus;
-                ELSIF ctrl_er_in = '1' THEN
-                    e_reg <= data_bus;
-                ELSIF ctrl_hr_in = '1' THEN
-                    h_reg <= data_bus;
-                ELSIF ctrl_lr_in = '1' THEN
-                    l_reg <= data_bus;
-                END IF;
+        END IF;
+
+        IF ctrl_pc_l_out = '1' THEN
+            data_bus <= pc_l;
+        ELSIF ctrl_pc_h_out = '1' THEN
+            data_bus <= pc_h;
+        ELSIF ctrl_ir_out = '1' THEN
+            data_bus <= i_reg;
+        ELSIF ctrl_ar_out = '1' THEN
+            data_bus <= a_reg;
+        ELSIF ctrl_br_out = '1' THEN
+            data_bus <= b_reg;
+        ELSIF ctrl_cr_out = '1' THEN
+            data_bus <= c_reg;
+        ELSIF ctrl_dr_out = '1' THEN
+            data_bus <= d_reg;
+        ELSIF ctrl_er_out = '1' THEN
+            data_bus <= e_reg;
+        ELSIF ctrl_hr_out = '1' THEN
+            data_bus <= h_reg;
+        ELSIF ctrl_lr_out = '1' THEN
+            data_bus <= l_reg;
+        ELSIF ctrl_alu_out = '1' THEN
+            data_bus <= alu_result;
+        ELSIF ctrl_ram_out = '1' THEN
+            data_bus <= ram_data_out;
+        END IF;
+
+        IF rising_edge(clk) THEN
+            IF ctrl_ir_in = '1' THEN
+                i_reg <= data_bus;
+            ELSIF ctrl_ar_in = '1' THEN
+                a_reg <= data_bus;
+            ELSIF ctrl_br_in = '1' THEN
+                b_reg <= data_bus;
+            ELSIF ctrl_cr_in = '1' THEN
+                c_reg <= data_bus;
+            ELSIF ctrl_dr_in = '1' THEN
+                d_reg <= data_bus;
+            ELSIF ctrl_er_in = '1' THEN
+                e_reg <= data_bus;
+            ELSIF ctrl_hr_in = '1' THEN
+                h_reg <= data_bus;
+            ELSIF ctrl_lr_in = '1' THEN
+                l_reg <= data_bus;
             END IF;
         END IF;
-    END PROCESS;
-    
 
+    END PROCESS;
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
@@ -440,8 +431,6 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-
-
     ---------------------------------MAR---------------------------------|
     PROCESS (clk, reset)
     BEGIN
@@ -475,8 +464,8 @@ BEGIN
                 ELSE
                     sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
                 END IF;
-                
-            -- Increment Logic (for POP/RET)
+
+                -- Increment Logic (for POP/RET)
             ELSIF ctrl_sp_inc = '1' THEN
                 IF sp_l = "11111111" THEN
                     sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
@@ -607,8 +596,8 @@ BEGIN
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
             WHEN S_FETCH_1 =>
-                ctrl_pc_l_out <= '1'; 
-                ctrl_mar_l_in <= '1'; 
+                ctrl_pc_l_out <= '1';
+                ctrl_mar_l_in <= '1';
                 next_state <= S_FETCH_2;
 
             WHEN S_FETCH_2 =>
@@ -671,8 +660,6 @@ BEGIN
                         ctrl_pc_inc <= '1';
 
                         next_state <= S_EXEC_2;
-
-
                     WHEN RET =>
                         ctrl_lr_out <= '1';
                         ctrl_pc_l_in <= '1';
@@ -782,51 +769,49 @@ BEGIN
                         ctrl_lr_in <= '1';
 
                         next_state <= S_EXEC_4;
-                        
+
                     WHEN OTHERS =>
+                        --do nothing
+                    WHEN S_EXEC_4 =>
+                        CASE current_instr IS
+                            WHEN JMP =>
+                                ctrl_ram_out <= '1';
+                                ctrl_pc_l_in <= '1';
+
+                                next_state <= S_FETCH_1;
+                            WHEN CAL =>
+                                ctrl_pc_h_out <= '1';
+                                ctrl_hr_in <= '1';
+                                ctrl_mar_inc <= '1';
+
+                                next_state <= S_EXEC_5;
+                            WHEN OTHERS =>
                                 --do nothing
+                        END CASE;
+                    WHEN S_EXEC_5 =>
+                        CASE current_instr IS
+                            WHEN CAL =>
+                                ctrl_pc_h_in <= '1';
+                                ctrl_ram_out <= '1';
+                                ctrl_mar_inc <= '1';
 
-                
-            WHEN S_EXEC_4 =>
-                CASE current_instr IS
-                    WHEN JMP =>
-                        ctrl_ram_out <= '1';
-                        ctrl_pc_l_in <= '1';
+                                next_state <= S_EXEC_6;
+                            WHEN S_EXEC_6 =>
+                                CASE current_instr IS
+                                    WHEN CAL =>
+                                        ctrl_mar_inc <= '1';
 
-                        next_state <= S_FETCH_1;
-                    when CAL =>
-                        ctrl_pc_h_out <= '1';
-                        ctrl_hr_in <= '1';
-                        ctrl_mar_inc <= '1';
+                                        next_state <= S_EXEC_7;
+                                    WHEN S_EXEC_7 =>
+                                        CASE current_instr IS
+                                            WHEN CAL =>
+                                                ctrl_pc_l_in <= '1';
+                                                ctrl_ram_out <= '1';
 
-                        next_state <= S_EXEC_5;
-                    WHEN OTHERS =>
-                                --do nothing
-                    END CASE;
-            WHEN S_EXEC_5 =>
-                CASE current_instr IS
-                    WHEN CAL =>
-                        ctrl_pc_h_in <= '1';
-                        ctrl_ram_out <= '1';
-                        ctrl_mar_inc <= '1';
-
-                        next_state <= S_EXEC_6;
-            WHEN S_EXEC_6 =>
-                CASE current_instr IS
-                    WHEN CAL =>
-                        ctrl_mar_inc <= '1';
-
-                        next_state <= S_EXEC_7;
-            WHEN S_EXEC_7 =>
-                CASE current_instr IS
-                    WHEN CAL =>
-                        ctrl_pc_l_in <= '1';
-                        ctrl_ram_out <= '1';
-
-                        next_state <= S_FETCH_1;
-            WHEN OTHERS =>
-                        next_state <= S_FETCH_1;
-                END CASE;
-        END CASE;
-    END PROCESS;
-END Behavioral;
+                                                next_state <= S_FETCH_1;
+                                            WHEN OTHERS =>
+                                                next_state <= S_FETCH_1;
+                                        END CASE;
+                                END CASE;
+                        END PROCESS;
+        END Behavioral;
