@@ -86,9 +86,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
-    x <= i_reg(7 DOWNTO 6);
-    y <= i_reg(5 DOWNTO 3);
-    z <= i_reg(2 DOWNTO 0);
 
     ----------------------general purpose register-----------------------|
     SIGNAL a_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg a
@@ -179,85 +176,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     SIGNAL state : t_state_t;
     SIGNAL next_state : t_state_t;
-
-    --CU procedure-----------------------------------------------|
-    -- since the procedures do not work in practice i decided to just put the code directly in the control unit, but here are the procedures for reference - they would be called in the control unit to set the right control flags for the registers
-    PROCEDURE REG_IN (
-        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0)
-    ) IS
-    BEGIN
-
-        CASE reg IS
-            WHEN "000" =>
-                ctrl_ar_in <= '1';
-            WHEN "001" =>
-                ctrl_br_in <= '1';
-            WHEN "010" =>
-                ctrl_cr_in <= '1';
-            WHEN "011" =>
-                ctrl_dr_in <= '1';
-            WHEN "100" =>
-                ctrl_er_in <= '1';
-            WHEN "101" =>
-                ctrl_hr_in <= '1';
-            WHEN "110" =>
-                ctrl_lr_in <= '1';
-            WHEN OTHERS =>
-                --do nothing
-        END CASE;
-
-    END PROCEDURE REG_IN;
-
-    PROCEDURE REG_OUT (
-        SIGNAL reg : IN STD_LOGIC_VECTOR (2 DOWNTO 0)
-    ) IS
-    BEGIN
-        CASE reg IS
-            WHEN "000" =>
-                ctrl_ar_out <= '1';
-            WHEN "001" =>
-                ctrl_br_out <= '1';
-            WHEN "010" =>
-                ctrl_cr_out <= '1';
-            WHEN "011" =>
-                ctrl_dr_out <= '1';
-            WHEN "100" =>
-                ctrl_er_out <= '1';
-            WHEN "101" =>
-                ctrl_hr_out <= '1';
-            WHEN "110" =>
-                ctrl_lr_out <= '1';
-            WHEN OTHERS =>
-                --do nothing
-        END CASE;
-    END PROCEDURE REG_OUT;
-
-    PROCEDURE CU_INR (
-        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-    ) IS
-    BEGIN
-        reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) + 1), 8));
-    END PROCEDURE CU_INR;
-
-    PROCEDURE CU_DCR (
-        SIGNAL reg : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-    ) IS
-    BEGIN
-        reg <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(reg)) - 1), 8));
-    END PROCEDURE CU_DCR;
-
-    PROCEDURE MAR_INR (
-        SIGNAL mar_h : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-        SIGNAL mar_l : INOUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-    ) IS
-    BEGIN
-        IF mar_l = "11111111" THEN
-            mar_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_h)) + 1), 8));
-            mar_l <= (OTHERS => '0');
-        ELSE
-            mar_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_l)) + 1), 8));
-        END IF;
-    END PROCEDURE MAR_INR;
 BEGIN
     U_RAM : waelderRAM
     PORT MAP(
@@ -286,70 +204,110 @@ BEGIN
 
     -- sp --
     sp <= sp_h & sp_l;
-    ------------------------------data bus-------------------------------|
-    PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, ctrl_cr_out, ctrl_dr_out, ctrl_er_out,
-        ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, clk, reset)
-    BEGIN
-        IF reset = '1' THEN
-            data_bus <= (OTHERS => '0');
+    ------------------------------data bus & register logic-------------------------------|
+PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out, 
+         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out, 
+         ctrl_ram_out, pc_l, pc_h, i_reg, a_reg, b_reg, c_reg, d_reg, e_reg, h_reg, l_reg, 
+         alu_result, ram_data_out)
+BEGIN
+    -- 1. ASYNCHRONOUS BUS MULTIPLEXER (Determines what is on the bus RIGHT NOW)
+    -- Default value to prevent latches
+    data_bus <= (OTHERS => '0'); 
 
-            i_reg <= (OTHERS => '0');
-            a_reg <= (OTHERS => '0');
-            b_reg <= (OTHERS => '0');
-            c_reg <= (OTHERS => '0');
-            d_reg <= (OTHERS => '0');
-            e_reg <= (OTHERS => '0');
-            h_reg <= (OTHERS => '0');
-            l_reg <= (OTHERS => '0');
+    IF ctrl_pc_l_out = '1' THEN
+        data_bus <= pc_l;
+    ELSIF ctrl_pc_h_out = '1' THEN
+        data_bus <= pc_h;
+    ELSIF ctrl_ir_out = '1' THEN
+        data_bus <= i_reg;
+    ELSIF ctrl_ar_out = '1' THEN
+        data_bus <= a_reg;
+    ELSIF ctrl_br_out = '1' THEN
+        data_bus <= b_reg;
+    ELSIF ctrl_cr_out = '1' THEN
+        data_bus <= c_reg;
+    ELSIF ctrl_dr_out = '1' THEN
+        data_bus <= d_reg;
+    ELSIF ctrl_er_out = '1' THEN
+        data_bus <= e_reg;
+    ELSIF ctrl_hr_out = '1' THEN
+        data_bus <= h_reg;
+    ELSIF ctrl_lr_out = '1' THEN
+        data_bus <= l_reg;
+    ELSIF ctrl_alu_out = '1' THEN
+        data_bus <= alu_result;
+    ELSIF ctrl_ram_out = '1' THEN
+        data_bus <= ram_data_out;
+    END IF;
+
+    -- 2. SYNCHRONOUS REGISTER UPDATES (Updates happen on clock edge)
+    IF reset = '1' THEN
+        i_reg <= (OTHERS => '0');
+        a_reg <= (OTHERS => '0');
+        b_reg <= (OTHERS => '0');
+        c_reg <= (OTHERS => '0');
+        d_reg <= (OTHERS => '0');
+        e_reg <= (OTHERS => '0');
+        h_reg <= (OTHERS => '0');
+        l_reg <= (OTHERS => '0');
+    ELSIF rising_edge(clk) THEN
+        
+        -- Register A Logic
+        IF ctrl_ar_in = '1' THEN
+            a_reg <= data_bus;
+        ELSIF ctrl_ar_inc = '1' THEN
+            a_reg <= STD_LOGIC_VECTOR(unsigned(a_reg) + 1);
         END IF;
 
-        IF ctrl_pc_l_out = '1' THEN
-            data_bus <= pc_l;
-        ELSIF ctrl_pc_h_out = '1' THEN
-            data_bus <= pc_h;
-        ELSIF ctrl_ir_out = '1' THEN
-            data_bus <= i_reg;
-        ELSIF ctrl_ar_out = '1' THEN
-            data_bus <= a_reg;
-        ELSIF ctrl_br_out = '1' THEN
-            data_bus <= b_reg;
-        ELSIF ctrl_cr_out = '1' THEN
-            data_bus <= c_reg;
-        ELSIF ctrl_dr_out = '1' THEN
-            data_bus <= d_reg;
-        ELSIF ctrl_er_out = '1' THEN
-            data_bus <= e_reg;
-        ELSIF ctrl_hr_out = '1' THEN
-            data_bus <= h_reg;
-        ELSIF ctrl_lr_out = '1' THEN
-            data_bus <= l_reg;
-        ELSIF ctrl_alu_out = '1' THEN
-            data_bus <= alu_result;
-        ELSIF ctrl_ram_out = '1' THEN
-            data_bus <= ram_data_out;
+        -- Register B Logic
+        IF ctrl_br_in = '1' THEN
+            b_reg <= data_bus;
+        ELSIF ctrl_br_inc = '1' THEN
+            b_reg <= STD_LOGIC_VECTOR(unsigned(b_reg) + 1);
         END IF;
 
-        IF rising_edge(clk) THEN
-            IF ctrl_ir_in = '1' THEN
-                i_reg <= data_bus;
-            ELSIF ctrl_ar_in = '1' THEN
-                a_reg <= data_bus;
-            ELSIF ctrl_br_in = '1' THEN
-                b_reg <= data_bus;
-            ELSIF ctrl_cr_in = '1' THEN
-                c_reg <= data_bus;
-            ELSIF ctrl_dr_in = '1' THEN
-                d_reg <= data_bus;
-            ELSIF ctrl_er_in = '1' THEN
-                e_reg <= data_bus;
-            ELSIF ctrl_hr_in = '1' THEN
-                h_reg <= data_bus;
-            ELSIF ctrl_lr_in = '1' THEN
-                l_reg <= data_bus;
-            END IF;
+        -- Register C Logic
+        IF ctrl_cr_in = '1' THEN
+            c_reg <= data_bus;
+        ELSIF ctrl_cr_inc = '1' THEN
+            c_reg <= STD_LOGIC_VECTOR(unsigned(c_reg) + 1);
         END IF;
 
-    END PROCESS;
+        -- Register D Logic
+        IF ctrl_dr_in = '1' THEN
+            d_reg <= data_bus;
+        ELSIF ctrl_dr_inc = '1' THEN
+            d_reg <= STD_LOGIC_VECTOR(unsigned(d_reg) + 1);
+        END IF;
+
+        -- Register E Logic
+        IF ctrl_er_in = '1' THEN
+            e_reg <= data_bus;
+        ELSIF ctrl_er_inc = '1' THEN
+            e_reg <= STD_LOGIC_VECTOR(unsigned(e_reg) + 1);
+        END IF;
+
+        -- Register H Logic
+        IF ctrl_hr_in = '1' THEN
+            h_reg <= data_bus;
+        ELSIF ctrl_hr_inc = '1' THEN
+            h_reg <= STD_LOGIC_VECTOR(unsigned(h_reg) + 1);
+        END IF;
+
+        -- Register L Logic
+        IF ctrl_lr_in = '1' THEN
+            l_reg <= data_bus;
+        ELSIF ctrl_lr_inc = '1' THEN
+            l_reg <= STD_LOGIC_VECTOR(unsigned(l_reg) + 1);
+        END IF;
+
+        -- Instruction Register (usually doesn't need inc)
+        IF ctrl_ir_in = '1' THEN
+            i_reg <= data_bus;
+        END IF;
+        
+    END IF;
+END PROCESS;
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
@@ -594,6 +552,7 @@ BEGIN
 
         CASE state IS
             WHEN S_RESET =>
+                reset <= '1';
                 next_state <= S_FETCH_1;
             WHEN S_FETCH_1 =>
                 ctrl_pc_l_out <= '1';
@@ -623,36 +582,19 @@ BEGIN
                         next_state <= S_RESET;
 
                     WHEN INR =>
-                        CU_INR(
-                        reg =>
                         CASE y IS
-                            WHEN "000" => a_reg;
-                            WHEN "001" => b_reg;
-                            WHEN "010" => c_reg;
-                            WHEN "011" => d_reg;
-                            WHEN "100" => e_reg;
-                            WHEN "101" => h_reg;
-                            WHEN "110" => l_reg;
-                            WHEN OTHERS => a_reg; --default case
-                        END CASE
-                        );
-
+                            WHEN "000" => ctrl_ar_inc <= '1';
+                            WHEN "001" => ctrl_br_inc <= '1';
+                            WHEN "010" => ctrl_cr_inc <= '1';
+                            WHEN "011" => ctrl_dr_inc <= '1';
+                            WHEN "100" => ctrl_er_inc <= '1';
+                            WHEN "101" => ctrl_hr_inc <= '1';
+                            WHEN "110" => ctrl_lr_inc <= '1';
+                            WHEN OTHERS => 
+                        END CASE;
                         next_state <= S_FETCH_1;
 
                     WHEN DCR =>
-                        CU_DCR(
-                        reg =>
-                        CASE y IS
-                            WHEN "000" => a_reg;
-                            WHEN "001" => b_reg;
-                            WHEN "010" => c_reg;
-                            WHEN "011" => d_reg;
-                            WHEN "100" => e_reg;
-                            WHEN "101" => h_reg;
-                            WHEN "110" => l_reg;
-                            WHEN OTHERS => --dont do anything
-                        END CASE
-                        );
 
                         next_state <= S_FETCH_1;
 
@@ -772,46 +714,54 @@ BEGIN
 
                     WHEN OTHERS =>
                         --do nothing
-                    WHEN S_EXEC_4 =>
-                        CASE current_instr IS
-                            WHEN JMP =>
-                                ctrl_ram_out <= '1';
-                                ctrl_pc_l_in <= '1';
+                END CASE;
+            WHEN S_EXEC_4 =>
+                CASE current_instr IS
+                    WHEN JMP =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_l_in <= '1';
 
-                                next_state <= S_FETCH_1;
-                            WHEN CAL =>
-                                ctrl_pc_h_out <= '1';
-                                ctrl_hr_in <= '1';
-                                ctrl_mar_inc <= '1';
+                        next_state <= S_FETCH_1;
+                    WHEN CAL =>
+                        ctrl_pc_h_out <= '1';
+                        ctrl_hr_in <= '1';
+                        ctrl_mar_inc <= '1';
 
-                                next_state <= S_EXEC_5;
-                            WHEN OTHERS =>
-                                --do nothing
-                        END CASE;
-                    WHEN S_EXEC_5 =>
-                        CASE current_instr IS
-                            WHEN CAL =>
-                                ctrl_pc_h_in <= '1';
-                                ctrl_ram_out <= '1';
-                                ctrl_mar_inc <= '1';
+                        next_state <= S_EXEC_5;
+                    WHEN OTHERS =>
+                        --do nothing
+                END CASE;
+            WHEN S_EXEC_5 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_pc_h_in <= '1';
+                        ctrl_ram_out <= '1';
+                        ctrl_mar_inc <= '1';
 
-                                next_state <= S_EXEC_6;
-                            WHEN S_EXEC_6 =>
-                                CASE current_instr IS
-                                    WHEN CAL =>
-                                        ctrl_mar_inc <= '1';
+                        next_state <= S_EXEC_6;
+                    WHEN OTHERS =>
 
-                                        next_state <= S_EXEC_7;
-                                    WHEN S_EXEC_7 =>
-                                        CASE current_instr IS
-                                            WHEN CAL =>
-                                                ctrl_pc_l_in <= '1';
-                                                ctrl_ram_out <= '1';
+                END CASE;
+            WHEN S_EXEC_6 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_mar_inc <= '1';
 
-                                                next_state <= S_FETCH_1;
-                                            WHEN OTHERS =>
-                                                next_state <= S_FETCH_1;
-                                        END CASE;
-                                END CASE;
-                        END PROCESS;
-        END Behavioral;
+                        next_state <= S_EXEC_7;
+                    WHEN OTHERS =>
+
+                END CASE;
+            WHEN S_EXEC_7 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_pc_l_in <= '1';
+                        ctrl_ram_out <= '1';
+
+                        next_state <= S_FETCH_1;
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
+        END CASE;
+
+        END PROCESS;
+    END Behavioral;
