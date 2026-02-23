@@ -80,6 +80,15 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_mr_in : STD_LOGIC; --reg m in (16bit)
     SIGNAL ctrl_ram_in : STD_LOGIC; --ram in
 
+    SIGNAL ctrl_ar_inc : STD_LOGIC;
+    SIGNAL ctrl_br_inc : STD_LOGIC;
+    SIGNAL ctrl_cr_inc : STD_LOGIC;
+    SIGNAL ctrl_dr_inc : STD_LOGIC;
+    SIGNAL ctrl_er_inc : STD_LOGIC;
+    SIGNAL ctrl_lr_inc : STD_LOGIC;
+    SIGNAL ctrl_hr_inc : STD_LOGIC;
+    SIGNAL ctrl_mr_inc : STD_LOGIC;
+
     SIGNAL ctrl_alu_ar_in : STD_LOGIC; --alu reg a in
     SIGNAL ctrl_alu_br_in : STD_LOGIC; --alu reg b in
 
@@ -552,7 +561,6 @@ END PROCESS;
 
         CASE state IS
             WHEN S_RESET =>
-                reset <= '1';
                 next_state <= S_FETCH_1;
             WHEN S_FETCH_1 =>
                 ctrl_pc_l_out <= '1';
