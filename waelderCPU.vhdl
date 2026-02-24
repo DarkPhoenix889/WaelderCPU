@@ -730,16 +730,13 @@ BEGIN
                         next_state <= S_EXEC_2;
 
                     WHEN CCC =>
-
                     WHEN RCC =>
-
                     WHEN JMP =>
                         ctrl_mar_inc <= '1';
 
                         next_state <= S_EXEC_2;
 
                     WHEN JCC =>
-
                     WHEN PUSH =>
                         ctrl_sp_l_out <= '1';
                         ctrl_mar_l_in <= '1';
@@ -757,11 +754,11 @@ BEGIN
                         next_state <= S_EXEC_2;
 
                     WHEN LDR =>
+                        ctrl_mar_inc <= '1';
 
+                        next_state <= S_EXEC_2;
                     WHEN INP =>
-
                     WHEN instr_OUT =>
-
                     WHEN MOV =>
                         CASE y IS
                             WHEN "000" =>
@@ -839,6 +836,21 @@ BEGIN
                         ctrl_hr_in <= '1';
 
                         next_state <= S_EXEC_3;
+                    WHEN LDR =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_inc <= '1';
+
+                        CASE y IS
+                            WHEN "000" => ctrl_ar_in <= '1';
+                            WHEN "001" => ctrl_br_in <= '1';
+                            WHEN "010" => ctrl_cr_in <= '1';
+                            WHEN "011" => ctrl_dr_in <= '1';
+                            WHEN "100" => ctrl_er_in <= '1';
+                            WHEN "101" => ctrl_hr_in <= '1';
+                            WHEN "110" => ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                        END CASE;
+                        next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
