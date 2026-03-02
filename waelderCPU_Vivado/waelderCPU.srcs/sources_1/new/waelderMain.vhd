@@ -1079,9 +1079,8 @@ BEGIN
                         END CASE;
                         next_state <= S_FETCH_1;
                     WHEN OTHERS =>
-                        next_state <= S_FETCH_1;
-                END CASE;
-            WHEN OTHERS =>
+                       next_state <= S_FETCH_1;
+                END CASE;           WHEN OTHERS =>
                 next_state <= S_FETCH_1;
         END CASE;
 
