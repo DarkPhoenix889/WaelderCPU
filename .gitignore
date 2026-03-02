@@ -22,7 +22,7 @@ xsim.dir/
 .vitis/
 *.hdf
 *.xsa
-*.dcp
+#*.dcp
 *.xml
 *.xci.autogen
 .DS_Store
