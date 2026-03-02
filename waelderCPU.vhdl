@@ -426,6 +426,7 @@ BEGIN
                 tmp_res := "000000000";
 
                 --f_parity <= tmp_res(0);  --parity flag
+            WHEN OTHERS =>
 
         END CASE;
 
@@ -657,6 +658,8 @@ BEGIN
         ctrl_alu_out <= '0';
         ctrl_alu_ar_in <= '0';
         ctrl_alu_br_in <= '0';
+        ctrl_alu <= (OTHERS => '0');
+
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -1068,7 +1071,7 @@ BEGIN
                                 ctrl_cr_in <= '1';
                             WHEN "011" =>
                                 ctrl_dr_in <= '1';
-                            WHEN "100" =>
+                            WHEN "100" =>   
                                 ctrl_er_in <= '1';
                             WHEN "101" =>
                                 ctrl_hr_in <= '1';
