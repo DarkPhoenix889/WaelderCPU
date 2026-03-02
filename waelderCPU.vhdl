@@ -167,11 +167,11 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL alu_result : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu output - dependant what operation is being made
 
     --alu flags (f_ for flag)
-    signal f_overflow : std_logic;    --overflow - if number is bigger than 127
-    signal f_zero : std_logic;    --zero flag - if alu is 0
+    SIGNAL f_overflow : STD_LOGIC; --overflow - if number is bigger than 127
+    SIGNAL f_zero : STD_LOGIC; --zero flag - if alu is 0
     --signal f_parity : std_logic;  --parity flag - if alu has even parity
-    signal f_sign : std_logic;  --sign flag - if value is negative
-    signal f_comp : std_logic; --compare flag for ifs
+    SIGNAL f_sign : STD_LOGIC; --sign flag - if value is negative
+    SIGNAL f_comp : STD_LOGIC; --compare flag for ifs
 
     --alu ctrl bits
     SIGNAL ctrl_alu : STD_LOGIC_VECTOR (2 DOWNTO 0); --alu control register - gets filled by CU with OP-Code
@@ -249,12 +249,12 @@ BEGIN
     sp <= sp_h & sp_l;
 
     ------------------------------data bus-------------------------------|
-    process (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
+    PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
         ctrl_ram_out, pc_l, pc_h, i_reg, a_reg, b_reg, c_reg, d_reg, e_reg, h_reg, l_reg,
         alu_result, ram_data_out, ctrl_io_out_in)
-    begin
-        if ctrl_pc_l_out = '1' then
+    BEGIN
+        IF ctrl_pc_l_out = '1' THEN
             data_bus <= pc_l;
         ELSIF ctrl_pc_h_out = '1' THEN
             data_bus <= pc_h;
@@ -425,7 +425,7 @@ BEGIN
                 --undefined - set everything 0
                 tmp_res := "000000000";
 
-    --f_parity <= tmp_res(0);  --parity flag
+                --f_parity <= tmp_res(0);  --parity flag
 
         END CASE;
 
@@ -445,8 +445,8 @@ BEGIN
 
         f_sign <= tmp_res(8);
 
-        f_parity <= NOT (tmp_res(0) XOR tmp_res(1) XOR tmp_res(2) XOR tmp_res(3) XOR
-            tmp_res(4) XOR tmp_res(5) XOR tmp_res(6) XOR tmp_res(7)); --need to ask raph about 9th bit, wip
+        -- f_parity <= NOT (tmp_res(0) XOR tmp_res(1) XOR tmp_res(2) XOR tmp_res(3) XOR
+        --    tmp_res(4) XOR tmp_res(5) XOR tmp_res(6) XOR tmp_res(7)); --need to ask raph about 9th bit, wip
         -- f_parity <= tmp_res(0);  --parity is odd if LSB equals '1' -> old version
 
     END PROCESS;
@@ -460,19 +460,14 @@ BEGIN
             pc_h <= (OTHERS => '0');
             pc_l <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
-            -- Helper variable to treat H and L as one 16-bit number
-            pc_temp := unsigned(pc_h & pc_l);
-
             IF ctrl_pc_inc = '1' THEN
-                pc_temp := pc_temp + 1;
-            ELSIF ctrl_pc_l_in = '1' THEN -- Loading from bus (e.g. JMP)
-                pc_temp(7 DOWNTO 0) := unsigned(bus_data);
-            ELSIF ctrl_pc_h_in = '1' THEN
-                pc_temp(15 DOWNTO 8) := unsigned(bus_data);
+                IF pc_l = "11111111" THEN
+                    pc_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
+                    pc_l <= "00000000";
+                ELSE
+                    pc_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_l)) + 1), 8));
+                END IF;
             END IF;
-
-            pc_h <= STD_LOGIC_VECTOR(pc_temp(15 DOWNTO 8));
-            pc_l <= STD_LOGIC_VECTOR(pc_temp(7 DOWNTO 0));
         END IF;
     END PROCESS;
 
@@ -484,18 +479,14 @@ BEGIN
             mar_h <= (OTHERS => '0');
             mar_l <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
-            mar_temp := unsigned(mar_h & mar_l);
-
             IF ctrl_mar_inc = '1' THEN
-                mar_temp := mar_temp + 1;
-            ELSIF ctrl_mar_l_in = '1' THEN -- Set address from bus
-                mar_temp(7 DOWNTO 0) := unsigned(bus_data);
-            ELSIF ctrl_mar_h_in = '1' THEN
-                mar_temp(15 DOWNTO 8) := unsigned(bus_data);
+                IF mar_l = "11111111" THEN
+                    mar_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_h)) + 1), 8));
+                    mar_l <= "00000000";
+                ELSE
+                    mar_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_l)) + 1), 8));
+                END IF;
             END IF;
-
-            mar_h <= STD_LOGIC_VECTOR(mar_temp(15 DOWNTO 8));
-            mar_l <= STD_LOGIC_VECTOR(mar_temp(7 DOWNTO 0));
         END IF;
     END PROCESS;
 
@@ -507,16 +498,23 @@ BEGIN
             sp_h <= (OTHERS => '1'); -- 0xFFFF
             sp_l <= (OTHERS => '1');
         ELSIF rising_edge(clk) THEN
-            sp_temp := unsigned(sp_h & sp_l);
-
             IF ctrl_sp_dec = '1' THEN
-                sp_temp := sp_temp - 1;
-            ELSIF ctrl_sp_inc = '1' THEN
-                sp_temp := sp_temp + 1;
+                IF sp_l = "00000000" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) - 1);
+                    sp_l <= "11111111";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
+                END IF;
+            ELSE
+                IF ctrl_sp_inc = '1' THEN
+                    IF sp_l = "11111111" THEN
+                        sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
+                        sp_l <= "00000000";
+                    ELSE
+                        sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
+                    END IF;
+                END IF;
             END IF;
-
-            sp_h <= STD_LOGIC_VECTOR(sp_temp(15 DOWNTO 8));
-            sp_l <= STD_LOGIC_VECTOR(sp_temp(7 DOWNTO 0));
         END IF;
     END PROCESS;
 
@@ -659,8 +657,6 @@ BEGIN
         ctrl_alu_out <= '0';
         ctrl_alu_ar_in <= '0';
         ctrl_alu_br_in <= '0';
-
-
         CASE state IS
             WHEN S_RESET =>
                 next_state <= S_FETCH_1;
@@ -739,8 +735,6 @@ BEGIN
                         next_state <= S_EXEC_2;
 
                     WHEN JCC =>
-                    
-
                     WHEN PUSH =>
                         ctrl_sp_l_out <= '1';
                         ctrl_mar_l_in <= '1';
@@ -770,7 +764,7 @@ BEGIN
                         ctrl_pc_inc <= '1';
 
                         next_state <= S_EXEC_2;
-                    
+
                     WHEN MOV =>
                         CASE y IS
                             WHEN "000" =>
@@ -867,22 +861,22 @@ BEGIN
                     WHEN instr_OUT =>
                         ctrl_io_out_in <= '1';
 
-                        case c is
-                            when "000" =>
+                        CASE c IS
+                            WHEN "000" =>
                                 ctrl_ar_out <= '1';
-                            when "001" =>
+                            WHEN "001" =>
                                 ctrl_br_out <= '1';
-                            when "010" =>
+                            WHEN "010" =>
                                 ctrl_cr_out <= '1';
-                            when "011" =>
+                            WHEN "011" =>
                                 ctrl_dr_out <= '1';
-                            when "100" =>
+                            WHEN "100" =>
                                 ctrl_er_out <= '1';
-                            when "101" =>
+                            WHEN "101" =>
                                 ctrl_hr_out <= '1';
-                            when "110" =>
+                            WHEN "110" =>
                                 ctrl_lr_out <= '1';
-                            when OTHERS =>
+                            WHEN OTHERS =>
                         END CASE;
 
                         next_state <= S_FETCH_1;
