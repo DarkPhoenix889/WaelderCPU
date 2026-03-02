@@ -24,8 +24,6 @@ architecture Behavioral of waelderMain_tb is
         port (
             clk : in std_logic;
             reset : in std_logic;
-            data_in : in std_logic_vector(7 downto 0);
-            data_out : out std_logic_vector (7 downto 0);
             
             alu_reg_a : in std_logic_vector (7 downto 0);    --alu reg 1
             alu_reg_b : in std_logic_vector (7 downto 0);    --alu reg 2
@@ -37,8 +35,6 @@ architecture Behavioral of waelderMain_tb is
     -- Signal declarations
     signal clk : std_logic := '0';
     signal reset : std_logic := '0';
-    signal data_in : std_logic_vector(7 downto 0) := (others => '0');
-    signal data_out : std_logic_vector (7 downto 0) := (others => '0');
     
     signal alu_reg_a : std_logic_vector(7 downto 0) := "00000000";
     signal alu_reg_b : std_logic_vector(7 downto 0) := "00000000";
@@ -55,8 +51,6 @@ begin
         port map (
             clk => clk,
             reset => reset,
-            data_in => data_in,
-            data_out => data_out,
             
             alu_reg_a => alu_reg_a,
             alu_reg_b => alu_reg_b,

@@ -1,42 +1,44 @@
 # WaelderCPU AI Coding Guidelines
 
 ## Project Overview
-WaelderCPU is an 8-bit CPU design implemented in VHDL for Spartan 7 FPGA, targeting Vivado 2025.1. The architecture features a data bus connecting registers (A,B,C,D,E,H,L,M), ALU, program counter, instruction register, and memory interface.
+WaelderCPU is an 8-bit CPU design in VHDL (Vivado 2025.1) for Spartan 7 FPGA. Diploma thesis project by Raphael Schöffmann & Kilian Simma. The CPU features a multiplexed data bus, 8 GPRs, 16-bit program counter, ALU with 5 flags, and a state-machine control unit with partial instruction decoding.
 
-## Architecture Components
-- **Registers**: 8-bit GPRs (A,B,C,D,E) + 16-bit HL pair (M = H & L)
-- **ALU**: Supports ADD/SUB/AND/OR/NOT/XOR/COMPARE with flags (overflow, zero, parity, sign, compare)
-- **Control Unit**: Decodes instructions using x(1:0), y(2:0), z(2:0) fields from 8-bit opcodes
-- **Data Bus**: Multiplexed output from components based on ctrl_*_out signals
+## Architecture: Critical Data Flow
+**CPU Core Loop**: Program Counter (16-bit) → Instruction Register (8-bit) → Control Unit decodes → ALU/Registers execute → Results back to bus
+- **Unified 8-bit Data Bus**: Single-source multiplexer (priority: PC_L > PC_H > IR > A-E > H > L > ALU > 0)
+- **Register File**: A,B,C,D,E (8-bit) + H,L (8-bit, form 16-bit M). M is wired (not stored): `m_reg <= h_reg & l_reg`
+- **16-bit PC**: Split into bytes (PC_L, PC_H) for bus transfers; increments on `ctrl_pc_inc = '1'`
 
-## Key Files
-- `waelderCPU.vhdl` / `waelderMain.vhd`: Main CPU entity and behavioral architecture
-- `waelderMain_tb.vhd`: Testbench for ALU verification
-- `waelderCPU_Vivado/waelderCPU.xpr`: Vivado project file
+## Control Flow: x/y/z Instruction Decode
+Opcodes split as: `x(1:0) | y(2:0) | z(2:0)`. Instruction type determined by x:
+- **00 (x)**: No-var ops (NOP, RST, JMP, CAL, RET, INP, OUT) - type selected by z/y
+- **01 (x)**: Register ops (INR, DCR, RLC, RRC, LDR, PUSH, LOAD) - register via y
+- **10 (x)**: MOV (move between registers)
+- **11 (x)**: ALU ops & conditionals (ALU, CCC, RCC, JCC) - operation via z
 
-## Development Workflow
-1. Edit VHDL files in VS Code
-2. Open `waelderCPU.xpr` in Vivado for synthesis/simulation
-3. Run behavioral simulation using Vivado Simulator
-4. Synthesize for Spartan 7 target
+Instruction list in [waelderMain.vhd](waelderMain.vhd#L133): `instr_t` enum.
 
-## Coding Conventions
-- **Signal Naming**: 
-  - Control flags: `ctrl_*_out` / `ctrl_*_in` (e.g., `ctrl_pc_out`, `ctrl_ar_in`)
-  - ALU flags: `f_*` (e.g., `f_zero`, `f_overflow`)
-  - Registers: `*_reg` (e.g., `a_reg`, `pc`)
-- **Instruction Decoding**: Use x/y/z bit fields to categorize instructions (type 00=no vars, 01=ops with vars, 10=move, 11=conditionals/ALU)
-- **ALU Operations**: 3-bit ctrl_alu ("000"=ADD, "001"=SUB, "010"=AND, etc.)
-- **Bus Logic**: Asynchronous process with priority-based multiplexing (PC > IR > registers > ALU > default '0')
+## ALU: Operations & Flags
+**ctrl_alu 3-bit codes**: "000"=ADD, "001"=SUB, "010"=AND, "011"=OR, "100"=NOT, "101"=XOR, "110"=COMPARE, "111"=undefined
+- **Inputs**: `alu_reg_a`, `alu_reg_b` (8-bit); signed for ADD/SUB, unsigned for logic
+- **Output**: `alu_result` (8-bit) + flags: `f_zero`, `f_overflow`, `f_sign`, `f_parity`, `f_comp` (compare)
+- **Flag Logic** [waelderMain.vhd](waelderMain.vhd#L328): Zero if result=0; overflow (ADD/SUB only) if MSB⊕bit7; parity=LSB
 
-## Testing Patterns
-- ALU testing: Drive `alu_reg_a`, `alu_reg_b`, `ctrl_alu`; observe `alu_result` and flags
-- Clock: 50MHz (20ns period) generated in testbench
-- Reset: Asynchronous active-high reset
+## Control Unit: State Machine (waelderCPU.vhdl variant)
+File `waelderCPU.vhdl` (more complete) uses state machine: RESET → FETCH_1 → FETCH_2 → DECODE → EXEC_1/2/3. File [waelderMain.vhd](waelderMain.vhd) implements instruction decoder only (partial CU).
 
-## Common Patterns
-- Registers load from bus when respective `ctrl_*_in = '1'` on clock edge
-- ALU inputs signed for arithmetic, unsigned for logic ops
-- M register is combinatorial concatenation of H and L registers
-- Instruction register holds current opcode for decoding x/y/z fields</content>
+## Signal Naming Conventions
+- **Control**: `ctrl_*_out` (component→bus), `ctrl_*_in` (bus→component). E.g., `ctrl_ar_out` (A reg drive), `ctrl_ar_in` (load A)
+- **Registers**: `*_reg` (a_reg, i_reg, pc); **Flags**: `f_*` (f_zero, f_overflow); **ALU**: `alu_result`, `alu_reg_a/b`
+
+## Key Behavioral Details
+- **Async reset**: All signals to 0 on `reset='1'` [waelderMain.vhd](waelderMain.vhd#L145)
+- **Register load**: `data_bus` → register when `ctrl_*_in='1'` on rising clock edge [waelderMain.vhd](waelderMain.vhd#L295)
+- **Bus contention**: Combinatorial if-else priority prevents conflicts [waelderMain.vhd](waelderMain.vhd#L267)
+- **PC split**: PC(7:0)=pc_l, PC(15:8)=pc_h; load separately via `ctrl_pc_l_in`/`ctrl_pc_h_in` [waelderMain.vhd](waelderMain.vhd#L349)
+
+## Testing & Verification
+- **Testbench** ([waelderMain_tb.vhd](waelderCPU_Vivado/waelderCPU.srcs/sim_1/new/waelderMain_tb.vhd)): Tests ALU ops sequentially, clk=10ns (100MHz). Format: set inputs → wait 20ns → observe result/flags
+- **Sim Execution**: Vivado Behavioral Simulation (tcl scripts in [waelderCPU.sim/sim_1/behav/xsim/](waelderCPU_Vivado/waelderCPU.sim/sim_1/behav/xsim/))
+- **ALU Testing Only**: Comment out testbench entity port declarations, expose `alu_reg_a/b`, `alu_result`, `ctrl_alu` as ports</content>
 <parameter name="filePath">c:\Users\Kilian\Documents\GitHub\WaelderCPU\.github\copilot-instructions.md
