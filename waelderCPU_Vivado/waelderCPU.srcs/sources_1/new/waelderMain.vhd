@@ -391,22 +391,6 @@ BEGIN
                 io_reg_out <= data_bus;
             END IF;
 
-            IF ctrl_mar_h_in = '1' THEN
-                mar_h <= data_bus;
-            END IF;
-
-            IF ctrl_mar_l_in = '1' THEN
-                mar_l <= data_bus;
-            END IF;
-
-            IF ctrl_pc_h_in = '1' THEN
-                pc_h <= data_bus;
-            END IF;
-
-            IF ctrl_pc_l_in = '1' THEN
-                pc_l <= data_bus;
-            END IF;
-
         END IF;
     END PROCESS;
     ---------------------------------ALU----------------------------------|
@@ -474,18 +458,24 @@ BEGIN
 
     -------------------------- Program Counter ----------------------------
     PROCESS (clk, reset)
-        VARIABLE pc_temp : unsigned(15 DOWNTO 0);
     BEGIN
         IF reset = '1' THEN
             pc_h <= (OTHERS => '0');
             pc_l <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
-            IF ctrl_pc_inc = '1' THEN
+            -- Direktes Laden hat Vorrang vor Inkrementieren
+            IF ctrl_pc_h_in = '1' THEN
+                pc_h <= data_bus;
+            END IF;
+
+            IF ctrl_pc_l_in = '1' THEN
+                pc_l <= data_bus;
+            ELSIF ctrl_pc_inc = '1' THEN
                 IF pc_l = "11111111" THEN
-                    pc_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_h)) + 1), 8));
+                    pc_h <= STD_LOGIC_VECTOR(unsigned(pc_h) + 1);
                     pc_l <= "00000000";
                 ELSE
-                    pc_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(pc_l)) + 1), 8));
+                    pc_l <= STD_LOGIC_VECTOR(unsigned(pc_l) + 1);
                 END IF;
             END IF;
         END IF;
@@ -493,18 +483,24 @@ BEGIN
 
     --------------------------------- MAR ---------------------------------
     PROCESS (clk, reset)
-        VARIABLE mar_temp : unsigned(15 DOWNTO 0);
     BEGIN
         IF reset = '1' THEN
             mar_h <= (OTHERS => '0');
             mar_l <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
-            IF ctrl_mar_inc = '1' THEN
+            -- Direktes Laden hat Vorrang vor Inkrementieren
+            IF ctrl_mar_h_in = '1' THEN
+                mar_h <= data_bus;
+            END IF;
+
+            IF ctrl_mar_l_in = '1' THEN
+                mar_l <= data_bus;
+            ELSIF ctrl_mar_inc = '1' THEN
                 IF mar_l = "11111111" THEN
-                    mar_h <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_h)) + 1), 8));
+                    mar_h <= STD_LOGIC_VECTOR(unsigned(mar_h) + 1);
                     mar_l <= "00000000";
                 ELSE
-                    mar_l <= STD_LOGIC_VECTOR(to_unsigned((to_integer(unsigned(mar_l)) + 1), 8));
+                    mar_l <= STD_LOGIC_VECTOR(unsigned(mar_l) + 1);
                 END IF;
             END IF;
         END IF;
@@ -688,7 +684,8 @@ BEGIN
                 next_state <= S_FETCH_2;
 
             WHEN S_FETCH_2 =>
-
+                ctrl_pc_l_out <= '1';
+                ctrl_mar_l_in <= '1';
                 next_state <= S_FETCH_3;
 
             WHEN S_FETCH_3 =>
@@ -697,7 +694,8 @@ BEGIN
                 next_state <= S_FETCH_4;
 
             WHEN S_FETCH_4 =>
-
+                ctrl_pc_h_out <= '1';
+                ctrl_mar_h_in <= '1';
                 next_state <= S_FETCH_5;
 
             WHEN S_FETCH_5 =>
@@ -706,12 +704,12 @@ BEGIN
                 next_state <= S_FETCH_6;
 
             WHEN S_FETCH_6 =>
-
+                ctrl_ram_out <= '1';
+                ctrl_ir_in <= '1';
                 next_state <= S_DECODE;
 
             WHEN S_DECODE =>
                 ctrl_pc_inc <= '1';
-
                 next_state <= S_EXEC_1;
 
             WHEN S_EXEC_1 =>
@@ -789,7 +787,19 @@ BEGIN
                         next_state <= S_EXEC_2;
 
                     WHEN LDR =>
-                        ctrl_mar_inc <= '1';
+                        ctrl_ram_out <= '1';
+                        
+                        CASE y IS
+                            WHEN "000" => ctrl_ar_in <= '1';
+                            WHEN "001" => ctrl_br_in <= '1';
+                            WHEN "010" => ctrl_cr_in <= '1';
+                            WHEN "011" => ctrl_dr_in <= '1';
+                            WHEN "100" => ctrl_er_in <= '1';
+                            WHEN "101" => ctrl_hr_in <= '1';
+                            WHEN "110" => ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                        END CASE;
+                        
 
                         next_state <= S_EXEC_2;
                     WHEN INP =>
@@ -877,8 +887,6 @@ BEGIN
 
                         next_state <= S_EXEC_3;
                     WHEN LDR =>
-                        ctrl_pc_inc <= '1';
-                        
                         ctrl_ram_out <= '1';
                         
                         CASE y IS
@@ -890,8 +898,7 @@ BEGIN
                             WHEN "101" => ctrl_hr_in <= '1';
                             WHEN "110" => ctrl_lr_in <= '1';
                             WHEN OTHERS =>
-                        END CASE;                        
-
+                        END CASE;
                         next_state <= S_EXEC_3;
 
                     WHEN instr_OUT =>
@@ -974,7 +981,9 @@ BEGIN
 
                         next_state <= S_EXEC_4;
                     WHEN LDR =>
-
+                        ctrl_mar_inc <= '1';
+                        ctrl_pc_inc <= '1';
+                        
                         next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
