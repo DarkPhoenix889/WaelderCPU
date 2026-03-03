@@ -201,6 +201,9 @@ ARCHITECTURE Behavioral OF waelderMain IS
         S_FETCH_1,
         S_FETCH_2,
         S_FETCH_3,
+        S_FETCH_4,
+        S_FETCH_5,
+        S_FETCH_6,
         S_DECODE,
         S_EXEC_1,
         S_EXEC_2,
@@ -386,6 +389,22 @@ BEGIN
 
             IF ctrl_io_out_in = '1' THEN
                 io_reg_out <= data_bus;
+            END IF;
+
+            IF ctrl_mar_h_in = '1' THEN
+                mar_h <= data_bus;
+            END IF;
+
+            IF ctrl_mar_l_in = '1' THEN
+                mar_l <= data_bus;
+            END IF;
+
+            IF ctrl_pc_h_in = '1' THEN
+                pc_h <= data_bus;
+            END IF;
+
+            IF ctrl_pc_l_in = '1' THEN
+                pc_l <= data_bus;
             END IF;
 
         END IF;
@@ -669,17 +688,30 @@ BEGIN
                 next_state <= S_FETCH_2;
 
             WHEN S_FETCH_2 =>
-                ctrl_pc_h_out <= '1';
-                ctrl_mar_h_in <= '1';
+
                 next_state <= S_FETCH_3;
 
             WHEN S_FETCH_3 =>
+                ctrl_pc_h_out <= '1';
+                ctrl_mar_h_in <= '1';
+                next_state <= S_FETCH_4;
+
+            WHEN S_FETCH_4 =>
+
+                next_state <= S_FETCH_5;
+
+            WHEN S_FETCH_5 =>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in <= '1';
-                ctrl_pc_inc <= '1';
+                next_state <= S_FETCH_6;
+
+            WHEN S_FETCH_6 =>
+
                 next_state <= S_DECODE;
 
             WHEN S_DECODE =>
+                ctrl_pc_inc <= '1';
+
                 next_state <= S_EXEC_1;
 
             WHEN S_EXEC_1 =>
@@ -758,7 +790,6 @@ BEGIN
 
                     WHEN LDR =>
                         ctrl_mar_inc <= '1';
-                        ctrl_pc_inc <= '1';
 
                         next_state <= S_EXEC_2;
                     WHEN INP =>
@@ -806,7 +837,7 @@ BEGIN
                             WHEN OTHERS =>
                                 --do nothing
                         END CASE;
-
+                        
                         next_state <= S_FETCH_1;
 
                     WHEN OTHERS =>
@@ -846,9 +877,10 @@ BEGIN
 
                         next_state <= S_EXEC_3;
                     WHEN LDR =>
-                        ctrl_ram_out <= '1';
                         ctrl_pc_inc <= '1';
-
+                        
+                        ctrl_ram_out <= '1';
+                        
                         CASE y IS
                             WHEN "000" => ctrl_ar_in <= '1';
                             WHEN "001" => ctrl_br_in <= '1';
@@ -858,8 +890,9 @@ BEGIN
                             WHEN "101" => ctrl_hr_in <= '1';
                             WHEN "110" => ctrl_lr_in <= '1';
                             WHEN OTHERS =>
-                        END CASE;
-                        next_state <= S_FETCH_1;
+                        END CASE;                        
+
+                        next_state <= S_EXEC_3;
 
                     WHEN instr_OUT =>
                         ctrl_io_out_in <= '1';
@@ -940,6 +973,9 @@ BEGIN
                         ctrl_pc_inc <= '1';
 
                         next_state <= S_EXEC_4;
+                    WHEN LDR =>
+
+                        next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
