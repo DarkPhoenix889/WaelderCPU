@@ -103,8 +103,9 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_cur_in : STD_LOGIC; -- Control Unit Register in
     SIGNAL ctrl_cur_out : STD_LOGIC; -- Control Unit Register out
 
-    SIGNAL ctrl_io_out_in : STD_LOGIC;
-
+    SIGNAL ctrl_io_out : STD_LOGIC;
+    SIGNAL ctrl_io_in : STD_LOGIC;
+) ;
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -119,8 +120,8 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL h_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); --reg h
     SIGNAL m_reg : STD_LOGIC_VECTOR (15 DOWNTO 0); --reg m (16bit reg - consists out of reg h(-igh) + l(-ow))
     -----------------------------io/register-----------------------------|
-    SIGNAL io_reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    --signal io_reg_in : std_logic_vector(7 downto 0); --only in theory for input pins
+    SIGNAL io_reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0); -- connected to LEDS
+    signal io_reg_in : std_logic_vector(7 downto 0); -- Connected to switches
     --------------------------bus declaration----------------------------|
     SIGNAL data_bus : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
@@ -255,7 +256,7 @@ BEGIN
     PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
         ctrl_ram_out, pc_l, pc_h, i_reg, a_reg, b_reg, c_reg, d_reg, e_reg, h_reg, l_reg,
-        alu_result, ram_data_out, ctrl_io_out_in)
+        alu_result, ram_data_out, ctrl_io_out, ctrl_io_in)
     BEGIN
         IF ctrl_pc_l_out = '1' THEN
             data_bus <= pc_l;
@@ -287,6 +288,8 @@ BEGIN
             data_bus <= sp_l;
         ELSIF ctrl_sp_h_out = '1' THEN
             data_bus <= sp_h;
+        ELSIF ctrl_io_in = '1' THEN
+            data_bus <= io_reg_in;
         END IF;
 
         -- 2. SYNCHRONOUS REGISTER UPDATES
@@ -375,7 +378,7 @@ BEGIN
             END IF;
 
             -- IO Register OUT
-            IF ctrl_io_out_in = '1' THEN
+            IF ctrl_io_out = '1' THEN
                 io_reg_out <= data_bus;
             END IF;
 
@@ -387,7 +390,7 @@ BEGIN
                 alu_reg_b <= data_bus;
             END IF;
 
-            IF ctrl_io_out_in = '1' THEN
+            IF ctrl_io_out = '1' THEN
                 io_reg_out <= data_bus;
             END IF;
 
@@ -624,7 +627,7 @@ BEGIN
         ctrl_mar_l_in <= '0';
         ctrl_mar_h_in <= '0';
         ctrl_mar_inc <= '0';
-        ctrl_io_out_in <= '0';
+        ctrl_io_out <= '0';
 
         -- CU Register
         ctrl_cur_in <= '0';
@@ -803,6 +806,29 @@ BEGIN
 
                         next_state <= S_EXEC_2;
                     WHEN INP =>
+
+                        ctrl_io_in <= '1';
+
+                        CASE c IS
+                            WHEN "000" =>
+                                ctrl_ar_in <= '1';
+                            WHEN "001" =>
+                                ctrl_br_in <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_in <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_in <= '1';
+                            WHEN "100" =>
+                                ctrl_er_in <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_in <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                        END CASE;
+
+                        next_state <= S_EXEC_2;
+
                     WHEN instr_OUT =>
                         ctrl_mar_inc <= '1';
                         ctrl_pc_inc <= '1';
@@ -902,7 +928,7 @@ BEGIN
                         next_state <= S_EXEC_3;
 
                     WHEN instr_OUT =>
-                        ctrl_io_out_in <= '1';
+                        ctrl_io_out <= '1';
 
                         CASE c IS
                             WHEN "000" =>
@@ -922,6 +948,8 @@ BEGIN
                             WHEN OTHERS =>
                         END CASE;
 
+                        next_state <= S_FETCH_1;
+                    WHEN INP =>
                         next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
