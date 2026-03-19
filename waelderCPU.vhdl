@@ -105,7 +105,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     SIGNAL ctrl_io_out : STD_LOGIC;
     SIGNAL ctrl_io_in : STD_LOGIC;
-) ;
+    );
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -121,7 +121,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL m_reg : STD_LOGIC_VECTOR (15 DOWNTO 0); --reg m (16bit reg - consists out of reg h(-igh) + l(-ow))
     -----------------------------io/register-----------------------------|
     SIGNAL io_reg_out : STD_LOGIC_VECTOR(7 DOWNTO 0); -- connected to LEDS
-    signal io_reg_in : std_logic_vector(7 downto 0); -- Connected to switches
+    SIGNAL io_reg_in : STD_LOGIC_VECTOR(7 DOWNTO 0); -- Connected to switches
     --------------------------bus declaration----------------------------|
     SIGNAL data_bus : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
@@ -422,11 +422,11 @@ BEGIN
             WHEN "110" => --COMPARE
                 IF (alu_reg_a = alu_reg_b) THEN
                     f_comp <= '1';
+                    tmp_res := "000000000"; -- to set zero flag
                 ELSE
                     f_comp <= '0';
+                    tmp_res := "111111111";
                 END IF;
-                tmp_res := "000000000";
-
             WHEN "111" =>
                 --undefined - set everything 0
                 tmp_res := "000000000";
@@ -452,8 +452,8 @@ BEGIN
 
         f_sign <= tmp_res(8);
 
-        -- f_parity <= NOT (tmp_res(0) XOR tmp_res(1) XOR tmp_res(2) XOR tmp_res(3) XOR
-        --    tmp_res(4) XOR tmp_res(5) XOR tmp_res(6) XOR tmp_res(7)); --need to ask raph about 9th bit, wip
+        f_parity <= NOT (tmp_res(0) XOR tmp_res(1) XOR tmp_res(2) XOR tmp_res(3) XOR
+            tmp_res(4) XOR tmp_res(5) XOR tmp_res(6));
         -- f_parity <= tmp_res(0);  --parity is odd if LSB equals '1' -> old version
 
     END PROCESS;
@@ -791,7 +791,7 @@ BEGIN
 
                     WHEN LDR =>
                         ctrl_ram_out <= '1';
-                        
+
                         CASE y IS
                             WHEN "000" => ctrl_ar_in <= '1';
                             WHEN "001" => ctrl_br_in <= '1';
@@ -802,8 +802,6 @@ BEGIN
                             WHEN "110" => ctrl_lr_in <= '1';
                             WHEN OTHERS =>
                         END CASE;
-                        
-
                         next_state <= S_EXEC_2;
                     WHEN INP =>
 
@@ -873,7 +871,7 @@ BEGIN
                             WHEN OTHERS =>
                                 --do nothing
                         END CASE;
-                        
+
                         next_state <= S_FETCH_1;
 
                     WHEN OTHERS =>
@@ -914,7 +912,7 @@ BEGIN
                         next_state <= S_EXEC_3;
                     WHEN LDR =>
                         ctrl_ram_out <= '1';
-                        
+
                         CASE y IS
                             WHEN "000" => ctrl_ar_in <= '1';
                             WHEN "001" => ctrl_br_in <= '1';
@@ -1011,7 +1009,7 @@ BEGIN
                     WHEN LDR =>
                         ctrl_mar_inc <= '1';
                         ctrl_pc_inc <= '1';
-                        
+
                         next_state <= S_FETCH_1;
                     WHEN OTHERS =>
                         --do nothing
@@ -1113,6 +1111,8 @@ BEGIN
                                 ctrl_hr_in <= '1';
                             WHEN "110" =>
                                 ctrl_lr_in <= '1';
+                            WHEN "111" =>
+                                -- dont write, for compare instruction
                             WHEN OTHERS =>
                                 --do nothing
                         END CASE;
@@ -1144,7 +1144,7 @@ BEGIN
                                 ctrl_cr_in <= '1';
                             WHEN "011" =>
                                 ctrl_dr_in <= '1';
-                            WHEN "100" =>   
+                            WHEN "100" =>
                                 ctrl_er_in <= '1';
                             WHEN "101" =>
                                 ctrl_hr_in <= '1';
