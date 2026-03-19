@@ -687,26 +687,15 @@ BEGIN
                 next_state <= S_FETCH_2;
 
             WHEN S_FETCH_2 =>
-                ctrl_pc_l_out <= '1';
-                ctrl_mar_l_in <= '1';
+                ctrl_pc_h_out <= '1';
+                ctrl_mar_h_in <= '1';
                 next_state <= S_FETCH_3;
 
             WHEN S_FETCH_3 =>
-                ctrl_pc_h_out <= '1';
-                ctrl_mar_h_in <= '1';
+
                 next_state <= S_FETCH_4;
 
-            WHEN S_FETCH_4 =>
-                ctrl_pc_h_out <= '1';
-                ctrl_mar_h_in <= '1';
-                next_state <= S_FETCH_5;
-
-            WHEN S_FETCH_5 =>
-                ctrl_ram_out <= '1';
-                ctrl_ir_in <= '1';
-                next_state <= S_FETCH_6;
-
-            WHEN S_FETCH_6 =>
+            WHEN S_FETCH_4=>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in <= '1';
                 next_state <= S_DECODE;
