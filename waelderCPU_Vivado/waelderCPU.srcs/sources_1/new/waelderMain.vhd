@@ -105,7 +105,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     SIGNAL ctrl_io_out : STD_LOGIC;
     SIGNAL ctrl_io_in : STD_LOGIC;
-    );
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -533,9 +532,9 @@ BEGIN
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        x <= i_reg(7 DOWNTO 6);
-        y <= i_reg(5 DOWNTO 3);
-        z <= i_reg(2 DOWNTO 0);
+        x := i_reg(7 DOWNTO 6);
+        y := i_reg(5 DOWNTO 3);
+        z := i_reg(2 DOWNTO 0);
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
