@@ -186,13 +186,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL current_instr : instr_t; -- Holds the currently decoded instruction
 
     -- Opcode field aliases for readability
-    SIGNAL x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
-    SIGNAL y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
-    SIGNAL z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
-
-    SIGNAL a : STD_LOGIC_VECTOR(1 DOWNTO 0); -- first 2 bits of CU register in
-    SIGNAL b : STD_LOGIC_VECTOR(2 DOWNTO 0); -- middle 3 bits of CU register in
-    SIGNAL c : STD_LOGIC_VECTOR(2 DOWNTO 0); -- last 3 bits of CU register in
 
     ---------RAM---------------------------------------|
     SIGNAL ram_data_out : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
@@ -241,14 +234,6 @@ BEGIN
 
     -- mar --
     mar <= mar_h & mar_l;
-
-    x <= i_reg(7 DOWNTO 6);
-    y <= i_reg(5 DOWNTO 3);
-    z <= i_reg(2 DOWNTO 0);
-
-    a <= cui_reg(7 DOWNTO 6);
-    b <= cui_reg(5 DOWNTO 3);
-    c <= cui_reg(2 DOWNTO 0);
     led_out <= io_reg_out;
 
     -- sp --
@@ -541,12 +526,16 @@ BEGIN
 
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
+    VARIABLE x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
+    VARIABLE y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
+    VARIABLE z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        -- x <= i_reg(7 DOWNTO 6);
-        -- y <= i_reg(5 DOWNTO 3);
-        -- z <= i_reg(2 DOWNTO 0);
+        x <= i_reg(7 DOWNTO 6);
+        y <= i_reg(5 DOWNTO 3);
+        z <= i_reg(2 DOWNTO 0);
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -611,8 +600,21 @@ BEGIN
     END PROCESS;
 
     --Control Unit-------------------------------------------------------|
-    PROCESS (state, current_instr)
+    PROCESS (state, current_instr, i_reg)
+        VARIABLE x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
+        VARIABLE y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
+        VARIABLE z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
+        VARIABLE a : STD_LOGIC_VECTOR(1 DOWNTO 0); -- first 2 bits of CU register in
+        VARIABLE b : STD_LOGIC_VECTOR(2 DOWNTO 0); -- middle 3 bits of CU register in
+        VARIABLE c : STD_LOGIC_VECTOR(2 DOWNTO 0); -- last 3 bits of CU register in
     BEGIN
+        x := i_reg(7 DOWNTO 6);
+        y := i_reg(5 DOWNTO 3);
+        z := i_reg(2 DOWNTO 0);
+        a := cui_reg(7 DOWNTO 6);
+        b := cui_reg(5 DOWNTO 3);
+        c := cui_reg(2 DOWNTO 0);
         -- Default control signals to avoid latches
         -- PC
         ctrl_pc_l_out <= '0';
