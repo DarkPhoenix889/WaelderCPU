@@ -387,7 +387,7 @@ BEGIN
         END IF;
     END PROCESS;
     ---------------------------------ALU----------------------------------|
-    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
+    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu, clk)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
     BEGIN
         CASE ctrl_alu IS
@@ -537,9 +537,9 @@ BEGIN
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        x <= i_reg(7 DOWNTO 6);
-        y <= i_reg(5 DOWNTO 3);
-        z <= i_reg(2 DOWNTO 0);
+        x := i_reg(7 DOWNTO 6);
+        y := i_reg(5 DOWNTO 3);
+        z := i_reg(2 DOWNTO 0);
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -604,7 +604,7 @@ BEGIN
     END PROCESS;
 
     --Control Unit-------------------------------------------------------|
-    PROCESS (state, current_instr, i_reg)
+    PROCESS (state, current_instr)
         VARIABLE x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
         VARIABLE y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
         VARIABLE z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
@@ -967,6 +967,7 @@ BEGIN
                                     next_state <= S_FETCH_1;
                                 end if;
                             when OTHERS =>
+                        END CASE;
                         
                     WHEN OTHERS =>
                         --do nothing
