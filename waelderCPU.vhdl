@@ -101,8 +101,8 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_hr_dec : STD_LOGIC;
     SIGNAL ctrl_mr_dec : STD_LOGIC;
 
-    SIGNAL ctrl_cur_in : STD_LOGIC; -- Control Unit Register in
-    SIGNAL ctrl_cur_out : STD_LOGIC; -- Control Unit Register out
+    SIGNAL ctrl_cu_in : STD_LOGIC; -- Control Unit Register in
+    SIGNAL ctrl_cu_out : STD_LOGIC; -- Control Unit Register out
 
     SIGNAL ctrl_io_out : STD_LOGIC;
     SIGNAL ctrl_io_in : STD_LOGIC;
@@ -151,11 +151,8 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_sp_inc : STD_LOGIC; -- Increment for POP/RET
 
     --------------------------CU Register--------------------------------|
-    SIGNAL cui_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU input register
-    SIGNAL cuo_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU output register
-    -- we need 2 different registers for number creation, beacause you
-    -- can only assign a value to a signal once per process
-    -- cuo_reg is for the LDR instruction, cui_reg is for the ALU instruction
+    SIGNAL cu_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU input register
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -271,8 +268,8 @@ BEGIN
             data_bus <= alu_result;
         ELSIF ctrl_ram_out = '1' THEN
             data_bus <= mdr;
-        ELSIF ctrl_cur_out = '1' THEN
-            data_bus <= cuo_reg;
+        ELSIF ctrl_cu_out = '1' THEN
+            data_bus <= cu_reg;
         ELSIF ctrl_sp_l_out = '1' THEN
             data_bus <= sp_l;
         ELSIF ctrl_sp_h_out = '1' THEN
@@ -282,12 +279,12 @@ BEGIN
         END IF;
     END PROCESS;
 
+
+    ------------------------------register-------------------------------|
     PROCESS (clk, reset)
     BEGIN
-        -- 2. SYNCHRONOUS REGISTER UPDATES
         IF reset = '1' THEN
         -------------------8-Bit-Registers-------------------
-            i_reg <= (OTHERS => '0');
             a_reg <= (OTHERS => '0');
             b_reg <= (OTHERS => '0');
             c_reg <= (OTHERS => '0');
@@ -295,14 +292,19 @@ BEGIN
             e_reg <= (OTHERS => '0');
             h_reg <= (OTHERS => '0');
             l_reg <= (OTHERS => '0');
-
+            i_reg <= (OTHERS => '0');
+            cu_reg <= (OTHERS => '0');
+            io_reg_out <= (OTHERS => '0');
+            alu_reg_a <= (OTHERS => '0');
+            alu_reg_b <= (OTHERS => '0');        
+            --restliche Register identisch
             ------------------16-Bit-Registers-------------------
             pc_h <= (OTHERS => '0');
             pc_l <= (OTHERS => '0');
             mar_h <= (OTHERS => '0');
             mar_l <= (OTHERS => '0');
             sp_h <= (OTHERS => '1'); -- 0xFFFF
-            sp_l <= (OTHERS => '1');
+            sp_l <= (OTHERS => '1'); --0xFFFF
 
 
         ELSIF rising_edge(clk) THEN
@@ -378,8 +380,8 @@ BEGIN
             END IF;
 
             -- CU Register IN
-            IF ctrl_cur_in = '1' THEN
-                cui_reg <= data_bus;
+            IF ctrl_cu_in = '1' THEN
+                cu_reg <= data_bus;
             END IF;
 
             -- IO Register OUT
@@ -604,9 +606,9 @@ BEGIN
         x := i_reg(7 DOWNTO 6);
         y := i_reg(5 DOWNTO 3);
         z := i_reg(2 DOWNTO 0);
-        a := cui_reg(7 DOWNTO 6);
-        b := cui_reg(5 DOWNTO 3);
-        c := cui_reg(2 DOWNTO 0);
+        a := cu_reg(7 DOWNTO 6);
+        b := cu_reg(5 DOWNTO 3);
+        c := cu_reg(2 DOWNTO 0);
         -- Default control signals to avoid latches
         -- PC
         ctrl_pc_l_out <= '0';
@@ -626,8 +628,8 @@ BEGIN
         ctrl_io_out <= '0';
 
         -- CU Register
-        ctrl_cur_in <= '0';
-        ctrl_cur_out <= '0';
+        ctrl_cu_in <= '0';
+        ctrl_cu_out <= '0';
 
         -- SP
         ctrl_sp_l_out <= '0';
@@ -1022,7 +1024,7 @@ BEGIN
                 CASE current_instr IS
                     WHEN instr_OUT =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
 
                         next_state <= S_EXEC_4;
                     WHEN JMP =>
@@ -1038,7 +1040,7 @@ BEGIN
                         next_state <= S_EXEC_4;
                     WHEN ALU =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
                         ctrl_alu <= y;
 
                         next_state <= S_EXEC_4;
@@ -1221,7 +1223,7 @@ BEGIN
                         next_state <= S_EXEC_7;
                     WHEN ALU =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
 
                         next_state <= S_EXEC_7;
                     WHEN LOAD =>
