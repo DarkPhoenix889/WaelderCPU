@@ -180,7 +180,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- Type definition for all supported instructions
     TYPE instr_t IS (
         NOP, RST, INR, DCR, CAL, RET, CCC, RCC, JMP, JCC,
-        PUSH, LOAD, ALU, RLC, RRC, LDR, INP, instr_OUT, MOV
+        PUSH, LOAD, ALU, RLC, RRC, LDR, INP, instr_OUT, MOV, POP, STORE
     );
 
     SIGNAL current_instr : instr_t; -- Holds the currently decoded instruction
@@ -522,7 +522,7 @@ BEGIN
                         sp_l <= "00000000";
                     ELSE
                         sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
-                    END IF;
+                    END IF; 
                 END IF;
             END IF;
         END IF;
@@ -567,8 +567,8 @@ BEGIN
                 CASE z IS
                     WHEN "000" => current_instr <= INR;
                     WHEN "001" => current_instr <= DCR;
-                    WHEN "010" => current_instr <= RLC;
-                    WHEN "011" => current_instr <= RRC;
+                    WHEN "010" => current_instr <= POP;
+                    WHEN "011" => current_instr <= STORE;
                     WHEN "100" => current_instr <= LDR;
                     WHEN "101" => current_instr <= PUSH;
                     WHEN "110" => current_instr <= LOAD;
@@ -1056,17 +1056,7 @@ BEGIN
                         next_state <= S_EXEC_4;
 
                     WHEN PUSH =>
-                        CASE y IS
-                            WHEN "000" => ctrl_ar_out <= '1';
-                            WHEN "001" => ctrl_br_out <= '1';
-                            WHEN "010" => ctrl_cr_out <= '1';
-                            WHEN "011" => ctrl_dr_out <= '1';
-                            WHEN "100" => ctrl_er_out <= '1';
-                            WHEN "101" => ctrl_hr_out <= '1';
-                            WHEN "110" => ctrl_lr_out <= '1';
-                            WHEN OTHERS => NULL;
-                        END CASE;
-                        ctrl_ram_in <= '1';
+                            -- wait for RAM
                         next_state <= S_EXEC_4;
 
                     WHEN LOAD =>
@@ -1160,9 +1150,20 @@ BEGIN
                         next_state <= S_EXEC_5;
 
                     WHEN PUSH =>
-                        ctrl_sp_dec <= '1';
+                        CASE y IS
+                            WHEN "000" => ctrl_ar_out <= '1';
+                            WHEN "001" => ctrl_br_out <= '1';
+                            WHEN "010" => ctrl_cr_out <= '1';
+                            WHEN "011" => ctrl_dr_out <= '1';
+                            WHEN "100" => ctrl_er_out <= '1';
+                            WHEN "101" => ctrl_hr_out <= '1';
+                            WHEN "110" => ctrl_lr_out <= '1';
+                            WHEN OTHERS => NULL;
+                        END CASE;
+                        ctrl_ram_in <= '1';
 
-                        next_state <= S_FETCH_1;
+
+                        next_state <= S_EXEC_5;
                     WHEN LOAD =>
                         ctrl_ram_out <= '1';
                         ctrl_lr_in <= '1';
@@ -1217,6 +1218,11 @@ BEGIN
                         --wait for RAM
 
                         next_state <= S_EXEC_6;
+
+                    WHEN PUSH =>
+                        ctrl_sp_dec <= '1';
+
+                        next_state <= S_FETCH_1;
                     WHEN OTHERS =>
 
                 END CASE;
