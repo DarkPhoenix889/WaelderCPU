@@ -243,7 +243,7 @@ BEGIN
     sp <= sp_h & sp_l;
 
     ------------------------------data bus-------------------------------|
-    PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
+    PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
         ctrl_ram_out, ctrl_io_in)
     BEGIN
@@ -280,9 +280,13 @@ BEGIN
         ELSIF ctrl_io_in = '1' THEN
             data_bus <= io_reg_in;
         END IF;
+    END PROCESS;
 
+    PROCESS (clk, reset)
+    BEGIN
         -- 2. SYNCHRONOUS REGISTER UPDATES
         IF reset = '1' THEN
+        -------------------8-Bit-Registers-------------------
             i_reg <= (OTHERS => '0');
             a_reg <= (OTHERS => '0');
             b_reg <= (OTHERS => '0');
@@ -291,7 +295,19 @@ BEGIN
             e_reg <= (OTHERS => '0');
             h_reg <= (OTHERS => '0');
             l_reg <= (OTHERS => '0');
+
+            ------------------16-Bit-Registers-------------------
+            pc_h <= (OTHERS => '0');
+            pc_l <= (OTHERS => '0');
+            mar_h <= (OTHERS => '0');
+            mar_l <= (OTHERS => '0');
+            sp_h <= (OTHERS => '1'); -- 0xFFFF
+            sp_l <= (OTHERS => '1');
+
+
         ELSIF rising_edge(clk) THEN
+
+            -------------------8-Bit-Registers-------------------
 
             -- Register A Logic
             IF ctrl_ar_in = '1' THEN
@@ -371,19 +387,66 @@ BEGIN
                 io_reg_out <= data_bus;
             END IF;
 
+            --ALU Reg A IN
             IF ctrl_alu_ar_in = '1' THEN
                 alu_reg_a <= data_bus;
             END IF;
 
+            --ALU Reg B in
             IF ctrl_alu_br_in = '1' THEN
                 alu_reg_b <= data_bus;
             END IF;
 
-            IF ctrl_io_out = '1' THEN
-                io_reg_out <= data_bus;
+            ------------------16-Bit-Registers-------------------
+
+            -------------------------- Program Counter ----------------------------
+            IF ctrl_pc_h_in = '1' THEN
+                pc_h <= data_bus;
+            ELSIF ctrl_pc_l_in = '1' THEN
+                pc_l <= data_bus;
+            ELSIF ctrl_pc_inc = '1' THEN
+                IF pc_l = "11111111" THEN
+                    pc_h <= STD_LOGIC_VECTOR(unsigned(pc_h) + 1);
+                    pc_l <= "00000000";
+                ELSE
+                    pc_l <= STD_LOGIC_VECTOR(unsigned(pc_l) + 1);
+                END IF;
             END IF;
 
+
+            --------------------------------- MAR ---------------------------------
+            IF ctrl_mar_h_in = '1' THEN
+                mar_h <= data_bus;
+            ELSIF ctrl_mar_l_in = '1' THEN
+                mar_l <= data_bus;
+            ELSIF ctrl_mar_inc = '1' THEN
+                IF mar_l = "11111111" THEN
+                    mar_h <= STD_LOGIC_VECTOR(unsigned(mar_h) + 1);
+                    mar_l <= "00000000";
+                ELSE
+                    mar_l <= STD_LOGIC_VECTOR(unsigned(mar_l) + 1);
+                END IF;
+            END IF;
+
+
+            -------------------------- Stack Pointer ------------------------------
+            IF ctrl_sp_dec = '1' THEN
+                IF sp_l = "00000000" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) - 1);
+                    sp_l <= "11111111";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
+                END IF;
+            ELSIF ctrl_sp_inc = '1' THEN
+                IF sp_l = "11111111" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
+                    sp_l <= "00000000";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
+                END IF;
+            END IF;
         END IF;
+
     END PROCESS;
 
 
@@ -451,83 +514,7 @@ BEGIN
     END PROCESS;
     --▇▅▆▇▆▅▅█
 
-    -------------------------- Program Counter ----------------------------
-    PROCESS (clk, reset)
-    BEGIN
-        IF reset = '1' THEN
-            pc_h <= (OTHERS => '0');
-            pc_l <= (OTHERS => '0');
-        ELSIF rising_edge(clk) THEN
-            -- Direktes Laden hat Vorrang vor Inkrementieren
-            IF ctrl_pc_h_in = '1' THEN
-                pc_h <= data_bus;
-            END IF;
-
-            IF ctrl_pc_l_in = '1' THEN
-                pc_l <= data_bus;
-            ELSIF ctrl_pc_inc = '1' THEN
-                IF pc_l = "11111111" THEN
-                    pc_h <= STD_LOGIC_VECTOR(unsigned(pc_h) + 1);
-                    pc_l <= "00000000";
-                ELSE
-                    pc_l <= STD_LOGIC_VECTOR(unsigned(pc_l) + 1);
-                END IF;
-            END IF;
-        END IF;
-    END PROCESS;
-
-    --------------------------------- MAR ---------------------------------
-    PROCESS (clk, reset)
-    BEGIN
-        IF reset = '1' THEN
-            mar_h <= (OTHERS => '0');
-            mar_l <= (OTHERS => '0');
-        ELSIF rising_edge(clk) THEN
-            -- Direktes Laden hat Vorrang vor Inkrementieren
-            IF ctrl_mar_h_in = '1' THEN
-                mar_h <= data_bus;
-            END IF;
-
-            IF ctrl_mar_l_in = '1' THEN
-                mar_l <= data_bus;
-            ELSIF ctrl_mar_inc = '1' THEN
-                IF mar_l = "11111111" THEN
-                    mar_h <= STD_LOGIC_VECTOR(unsigned(mar_h) + 1);
-                    mar_l <= "00000000";
-                ELSE
-                    mar_l <= STD_LOGIC_VECTOR(unsigned(mar_l) + 1);
-                END IF;
-            END IF;
-        END IF;
-    END PROCESS;
-
-    -------------------------- Stack Pointer ------------------------------
-    PROCESS (clk, reset)
-        VARIABLE sp_temp : unsigned(15 DOWNTO 0);
-    BEGIN
-        IF reset = '1' THEN
-            sp_h <= (OTHERS => '1'); -- 0xFFFF
-            sp_l <= (OTHERS => '1');
-        ELSIF rising_edge(clk) THEN
-            IF ctrl_sp_dec = '1' THEN
-                IF sp_l = "00000000" THEN
-                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) - 1);
-                    sp_l <= "11111111";
-                ELSE
-                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
-                END IF;
-            ELSE
-                IF ctrl_sp_inc = '1' THEN
-                    IF sp_l = "11111111" THEN
-                        sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
-                        sp_l <= "00000000";
-                    ELSE
-                        sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
-                    END IF;
-                END IF;
-            END IF;
-        END IF;
-    END PROCESS;
+    
 
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
@@ -1021,7 +1008,7 @@ BEGIN
                                 END IF;
                             WHEN OTHERS =>
                         END CASE;
-                    
+
                     WHEN RCC =>
                         ctrl_hr_out <= '1';
                         ctrl_pc_h_in <= '1';
@@ -1097,13 +1084,13 @@ BEGIN
                         ctrl_pc_h_in <= '1';
 
                         next_state <= S_EXEC_4;
-                    
+
                     WHEN RCC =>
                         ctrl_lr_out <= '1';
                         ctrl_pc_l_in <= '1';
-                        
+
                         next_state <= S_FETCH_1;
-                        
+
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
