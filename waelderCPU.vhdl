@@ -101,8 +101,8 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_hr_dec : STD_LOGIC;
     SIGNAL ctrl_mr_dec : STD_LOGIC;
 
-    SIGNAL ctrl_cur_in : STD_LOGIC; -- Control Unit Register in
-    SIGNAL ctrl_cur_out : STD_LOGIC; -- Control Unit Register out
+    SIGNAL ctrl_cu_in : STD_LOGIC; -- Control Unit Register in
+    SIGNAL ctrl_cu_out : STD_LOGIC; -- Control Unit Register out
 
     SIGNAL ctrl_io_out : STD_LOGIC;
     SIGNAL ctrl_io_in : STD_LOGIC;
@@ -151,11 +151,8 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL ctrl_sp_inc : STD_LOGIC; -- Increment for POP/RET
 
     --------------------------CU Register--------------------------------|
-    SIGNAL cui_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU input register
-    SIGNAL cuo_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU output register
-    -- we need 2 different registers for number creation, beacause you
-    -- can only assign a value to a signal once per process
-    -- cuo_reg is for the LDR instruction, cui_reg is for the ALU instruction
+    SIGNAL cu_reg : STD_LOGIC_VECTOR (7 DOWNTO 0); -- CU input register
+
     -- alu declaration --
     -----------------------alu in- and outputs---------------------------|
     SIGNAL alu_reg_a : STD_LOGIC_VECTOR (7 DOWNTO 0); --alu reg 1
@@ -188,7 +185,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     -- Opcode field aliases for readability
 
     ---------RAM---------------------------------------|
-    SIGNAL ram_data_out : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
+    SIGNAL mdr : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
     --CU-----------------------------------------------|
     TYPE t_state_t IS (
         S_RESET,
@@ -221,7 +218,7 @@ BEGIN
         we => ctrl_ram_in,
         addr => mar,
         di => data_bus,
-        do => ram_data_out
+        do => mdr
     );
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -243,10 +240,9 @@ BEGIN
     sp <= sp_h & sp_l;
 
     ------------------------------data bus-------------------------------|
-    PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
+    PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
-        ctrl_ram_out, pc_l, pc_h, i_reg, a_reg, b_reg, c_reg, d_reg, e_reg, h_reg, l_reg,
-        alu_result, ram_data_out, ctrl_io_out, ctrl_io_in)
+        ctrl_ram_out, ctrl_io_in, ctrl_cu_out, ctrl_sp_l_out, ctrl_sp_h_out)
     BEGIN
         IF ctrl_pc_l_out = '1' THEN
             data_bus <= pc_l;
@@ -271,9 +267,9 @@ BEGIN
         ELSIF ctrl_alu_out = '1' THEN
             data_bus <= alu_result;
         ELSIF ctrl_ram_out = '1' THEN
-            data_bus <= ram_data_out;
-        ELSIF ctrl_cur_out = '1' THEN
-            data_bus <= cuo_reg;
+            data_bus <= mdr;
+        ELSIF ctrl_cu_out = '1' THEN
+            data_bus <= cu_reg;
         ELSIF ctrl_sp_l_out = '1' THEN
             data_bus <= sp_l;
         ELSIF ctrl_sp_h_out = '1' THEN
@@ -281,10 +277,12 @@ BEGIN
         ELSIF ctrl_io_in = '1' THEN
             data_bus <= io_reg_in;
         END IF;
-
-        -- 2. SYNCHRONOUS REGISTER UPDATES
+    END PROCESS;
+    ------------------------------register-------------------------------|
+    PROCESS (clk, reset)
+    BEGIN
         IF reset = '1' THEN
-            i_reg <= (OTHERS => '0');
+            -------------------8-Bit-Registers-------------------
             a_reg <= (OTHERS => '0');
             b_reg <= (OTHERS => '0');
             c_reg <= (OTHERS => '0');
@@ -292,7 +290,22 @@ BEGIN
             e_reg <= (OTHERS => '0');
             h_reg <= (OTHERS => '0');
             l_reg <= (OTHERS => '0');
+            i_reg <= (OTHERS => '0');
+            cu_reg <= (OTHERS => '0');
+            io_reg_out <= (OTHERS => '0');
+            alu_reg_a <= (OTHERS => '0');
+            alu_reg_b <= (OTHERS => '0');
+            --restliche Register identisch
+            ------------------16-Bit-Registers-------------------
+            pc_h <= (OTHERS => '0');
+            pc_l <= (OTHERS => '0');
+            mar_h <= (OTHERS => '0');
+            mar_l <= (OTHERS => '0');
+            sp_h <= (OTHERS => '1'); -- 0xFFFF
+            sp_l <= (OTHERS => '1'); --0xFFFF
         ELSIF rising_edge(clk) THEN
+
+            -------------------8-Bit-Registers-------------------
 
             -- Register A Logic
             IF ctrl_ar_in = '1' THEN
@@ -362,9 +375,9 @@ BEGIN
                 i_reg <= data_bus;
             END IF;
 
-            -- CU Register IN
-            IF ctrl_cur_in = '1' THEN
-                cui_reg <= data_bus;
+            -- CU Register
+            IF ctrl_cu_in = '1' THEN
+                cu_reg <= data_bus;
             END IF;
 
             -- IO Register OUT
@@ -372,19 +385,62 @@ BEGIN
                 io_reg_out <= data_bus;
             END IF;
 
+            --ALU Reg A
             IF ctrl_alu_ar_in = '1' THEN
                 alu_reg_a <= data_bus;
             END IF;
 
+            --ALU Reg B
             IF ctrl_alu_br_in = '1' THEN
                 alu_reg_b <= data_bus;
             END IF;
 
-            IF ctrl_io_out = '1' THEN
-                io_reg_out <= data_bus;
-            END IF;
+            ------------------16-Bit-Registers-------------------
 
+            -------------------------- Program Counter ----------------------------
+            IF ctrl_pc_h_in = '1' THEN
+                pc_h <= data_bus;
+            ELSIF ctrl_pc_l_in = '1' THEN
+                pc_l <= data_bus;
+            ELSIF ctrl_pc_inc = '1' THEN
+                IF pc_l = "11111111" THEN
+                    pc_h <= STD_LOGIC_VECTOR(unsigned(pc_h) + 1);
+                    pc_l <= "00000000";
+                ELSE
+                    pc_l <= STD_LOGIC_VECTOR(unsigned(pc_l) + 1);
+                END IF;
+            END IF;
+            --------------------------------- MAR ---------------------------------
+            IF ctrl_mar_h_in = '1' THEN
+                mar_h <= data_bus;
+            ELSIF ctrl_mar_l_in = '1' THEN
+                mar_l <= data_bus;
+            ELSIF ctrl_mar_inc = '1' THEN
+                IF mar_l = "11111111" THEN
+                    mar_h <= STD_LOGIC_VECTOR(unsigned(mar_h) + 1);
+                    mar_l <= "00000000";
+                ELSE
+                    mar_l <= STD_LOGIC_VECTOR(unsigned(mar_l) + 1);
+                END IF;
+            END IF;
+            -------------------------- Stack Pointer ------------------------------
+            IF ctrl_sp_dec = '1' THEN
+                IF sp_l = "00000000" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) - 1);
+                    sp_l <= "11111111";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) - 1);
+                END IF;
+            ELSIF ctrl_sp_inc = '1' THEN
+                IF sp_l = "11111111" THEN
+                    sp_h <= STD_LOGIC_VECTOR(unsigned(sp_h) + 1);
+                    sp_l <= "00000000";
+                ELSE
+                    sp_l <= STD_LOGIC_VECTOR(unsigned(sp_l) + 1);
+                END IF;
+            END IF;
         END IF;
+
     END PROCESS;
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu, clk)
@@ -616,9 +672,9 @@ BEGIN
         x := i_reg(7 DOWNTO 6);
         y := i_reg(5 DOWNTO 3);
         z := i_reg(2 DOWNTO 0);
-        a := cui_reg(7 DOWNTO 6);
-        b := cui_reg(5 DOWNTO 3);
-        c := cui_reg(2 DOWNTO 0);
+        a := cu_reg(7 DOWNTO 6);
+        b := cu_reg(5 DOWNTO 3);
+        c := cu_reg(2 DOWNTO 0);
         -- Default control signals to avoid latches
         -- PC
         ctrl_pc_l_out <= '0';
@@ -638,8 +694,8 @@ BEGIN
         ctrl_io_out <= '0';
 
         -- CU Register
-        ctrl_cur_in <= '0';
-        ctrl_cur_out <= '0';
+        ctrl_cu_in <= '0';
+        ctrl_cu_out <= '0';
 
         -- SP
         ctrl_sp_l_out <= '0';
@@ -1020,7 +1076,7 @@ BEGIN
                                 END IF;
                             WHEN OTHERS =>
                         END CASE;
-                    
+
                     WHEN RCC =>
                         ctrl_hr_out <= '1';
                         ctrl_pc_h_in <= '1';
@@ -1034,7 +1090,7 @@ BEGIN
                 CASE current_instr IS
                     WHEN instr_OUT =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
 
                         next_state <= S_EXEC_4;
                     WHEN JMP =>
@@ -1050,7 +1106,7 @@ BEGIN
                         next_state <= S_EXEC_4;
                     WHEN ALU =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
                         ctrl_alu <= y;
 
                         next_state <= S_EXEC_4;
@@ -1086,13 +1142,13 @@ BEGIN
                         ctrl_pc_h_in <= '1';
 
                         next_state <= S_EXEC_4;
-                    
+
                     WHEN RCC =>
                         ctrl_lr_out <= '1';
                         ctrl_pc_l_in <= '1';
-                        
+
                         next_state <= S_FETCH_1;
-                        
+
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
@@ -1239,7 +1295,7 @@ BEGIN
                         next_state <= S_EXEC_7;
                     WHEN ALU =>
                         ctrl_ram_out <= '1';
-                        ctrl_cur_in <= '1';
+                        ctrl_cu_in <= '1';
 
                         next_state <= S_EXEC_7;
                     WHEN LOAD =>
