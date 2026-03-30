@@ -106,7 +106,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     SIGNAL ctrl_io_out : STD_LOGIC;
     SIGNAL ctrl_io_in : STD_LOGIC;
-    );
     -- register deeclaration --
     ------------------instruction register-------------------------------|
     SIGNAL i_reg : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -171,7 +170,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     --alu flags (f_ for flag)
     SIGNAL f_overflow : STD_LOGIC; --overflow - if number is bigger than 127
     SIGNAL f_zero : STD_LOGIC; --zero flag - if alu is 0
-    signal f_parity : std_logic;  --parity flag - if alu has even parity
+    SIGNAL f_parity : STD_LOGIC; --parity flag - if alu has even parity
     SIGNAL f_sign : STD_LOGIC; --sign flag - if value is negative
     SIGNAL f_comp : STD_LOGIC; --compare flag for ifs
 
@@ -187,13 +186,6 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL current_instr : instr_t; -- Holds the currently decoded instruction
 
     -- Opcode field aliases for readability
-    SIGNAL x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
-    SIGNAL y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
-    SIGNAL z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
-
-    SIGNAL a : STD_LOGIC_VECTOR(1 DOWNTO 0); -- first 2 bits of CU register in
-    SIGNAL b : STD_LOGIC_VECTOR(2 DOWNTO 0); -- middle 3 bits of CU register in
-    SIGNAL c : STD_LOGIC_VECTOR(2 DOWNTO 0); -- last 3 bits of CU register in
 
     ---------RAM---------------------------------------|
     SIGNAL mdr : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
@@ -221,7 +213,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
 
     SIGNAL state : t_state_t;
     SIGNAL next_state : t_state_t;
-    
+
 BEGIN
     U_RAM : waelderRAM
     PORT MAP(
@@ -243,14 +235,6 @@ BEGIN
 
     -- mar --
     mar <= mar_h & mar_l;
-
-    x <= i_reg(7 DOWNTO 6);
-    y <= i_reg(5 DOWNTO 3);
-    z <= i_reg(2 DOWNTO 0);
-
-    a <= cui_reg(7 DOWNTO 6);
-    b <= cui_reg(5 DOWNTO 3);
-    c <= cui_reg(2 DOWNTO 0);
 
     led_out <= io_reg_out;
     io_reg_in <= switch_in;
@@ -404,7 +388,7 @@ BEGIN
 
 
     ---------------------------------ALU----------------------------------|
-    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
+    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu, clk)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
     BEGIN
         CASE ctrl_alu IS
@@ -547,12 +531,16 @@ BEGIN
 
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
+        VARIABLE x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
+        VARIABLE y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
+        VARIABLE z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
     BEGIN
         -- Default value to ensure clean synthesis
         current_instr <= NOP;
-        -- x <= i_reg(7 DOWNTO 6);
-        -- y <= i_reg(5 DOWNTO 3);
-        -- z <= i_reg(2 DOWNTO 0);
+        x := i_reg(7 DOWNTO 6);
+        y := i_reg(5 DOWNTO 3);
+        z := i_reg(2 DOWNTO 0);
         CASE x IS
                 -- Type 00: No Variables-------------------------------------|
             WHEN "00" =>
@@ -618,7 +606,20 @@ BEGIN
 
     --Control Unit-------------------------------------------------------|
     PROCESS (state, current_instr)
+        VARIABLE x : STD_LOGIC_VECTOR(1 DOWNTO 0); -- type indicator
+        VARIABLE y : STD_LOGIC_VECTOR(2 DOWNTO 0); -- variable / register
+        VARIABLE z : STD_LOGIC_VECTOR(2 DOWNTO 0); -- secondary indicator
+
+        VARIABLE a : STD_LOGIC_VECTOR(1 DOWNTO 0); -- first 2 bits of CU register in
+        VARIABLE b : STD_LOGIC_VECTOR(2 DOWNTO 0); -- middle 3 bits of CU register in
+        VARIABLE c : STD_LOGIC_VECTOR(2 DOWNTO 0); -- last 3 bits of CU register in
     BEGIN
+        x := i_reg(7 DOWNTO 6);
+        y := i_reg(5 DOWNTO 3);
+        z := i_reg(2 DOWNTO 0);
+        a := cui_reg(7 DOWNTO 6);
+        b := cui_reg(5 DOWNTO 3);
+        c := cui_reg(2 DOWNTO 0);
         -- Default control signals to avoid latches
         -- PC
         ctrl_pc_l_out <= '0';
@@ -703,7 +704,7 @@ BEGIN
                 -- wait for RAM
                 next_state <= S_FETCH_4;
 
-            WHEN S_FETCH_4=>
+            WHEN S_FETCH_4 =>
                 ctrl_ram_out <= '1';
                 ctrl_ir_in <= '1';
                 next_state <= S_DECODE;
@@ -762,12 +763,68 @@ BEGIN
 
                     WHEN RCC =>
 
+                        CASE y IS
+                            WHEN "000" => -- return if zero
+                                IF f_zero = '1' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "001" => -- return if not zero
+                                IF f_zero = '0' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "010" => -- return if overflow
+                                IF f_overflow = '1' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "011" => -- return if not overflow
+                                IF f_overflow = '0' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "100" => -- return if parity
+                                IF f_parity = '1' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "101" => -- return if not parity
+                                IF f_parity = '0' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "110" => -- return if sign
+                                IF f_sign = '1' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "111" => -- return if not sign
+                                IF f_sign = '0' THEN
+                                    next_state <= S_EXEC_2;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN OTHERS =>
+                        END CASE;
+
                     WHEN JMP =>
                         ctrl_mar_inc <= '1';
 
                         next_state <= S_EXEC_2;
 
                     WHEN JCC =>
+                        ctrl_pc_inc <= '1';
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_2;
                     WHEN PUSH =>
                         ctrl_sp_l_out <= '1';
                         ctrl_mar_l_in <= '1';
@@ -904,6 +961,73 @@ BEGIN
                         next_state <= S_EXEC_3;
                     WHEN INP =>
                         next_state <= S_FETCH_1;
+                    WHEN JCC =>
+                        CASE y IS
+                            WHEN "000" => -- jump if zero
+                                IF f_zero = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "001" => -- jump if not zero
+                                IF f_zero = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "010" => -- jump if overflow
+                                IF f_overflow = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "011" => -- jump if not overflow
+                                IF f_overflow = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "100" => -- jump if parity
+                                IF f_parity = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "101" => -- jump if not parity
+                                IF f_parity = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "110" => -- jump if sign
+                                IF f_sign = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "111" => -- jump if not sign
+                                IF f_sign = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    ctrl_pc_inc <= '1';
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN OTHERS =>
+                        END CASE;
+                    
+                    WHEN RCC =>
+                        ctrl_hr_out <= '1';
+                        ctrl_pc_h_in <= '1';
+
+                        next_state <= S_EXEC_3;
+
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
@@ -966,6 +1090,20 @@ BEGIN
                         END CASE;
 
                         next_state <= S_FETCH_1;
+
+                    WHEN JCC =>
+                        -- wait for RAM already done in S_EXEC_2 / MAR already incremented in ECEC_1
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_h_in <= '1';
+
+                        next_state <= S_EXEC_4;
+                    
+                    WHEN RCC =>
+                        ctrl_lr_out <= '1';
+                        ctrl_pc_l_in <= '1';
+                        
+                        next_state <= S_FETCH_1;
+                        
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
@@ -993,7 +1131,7 @@ BEGIN
                     WHEN CAL =>
                         ctrl_pc_h_out <= '1';
                         ctrl_hr_in <= '1';
-                        
+
                         next_state <= S_EXEC_5;
 
                     WHEN ALU =>
@@ -1031,6 +1169,10 @@ BEGIN
                         ctrl_lr_in <= '1';
 
                         next_state <= S_EXEC_5;
+                    WHEN JCC =>
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_5;
                     WHEN OTHERS =>
                         --do nothing
                 END CASE;
@@ -1043,8 +1185,6 @@ BEGIN
                     WHEN CAL =>
                         ctrl_pc_h_in <= '1';
                         ctrl_ram_out <= '1';
-                        
-
                         next_state <= S_EXEC_6;
                     WHEN ALU =>
                         CASE c IS
@@ -1074,6 +1214,10 @@ BEGIN
                         ctrl_mar_h_in <= '1';
 
                         next_state <= S_EXEC_6;
+                    WHEN JCC =>
+                        --wait for RAM
+
+                        next_state <= S_EXEC_6;
                     WHEN OTHERS =>
 
                 END CASE;
@@ -1098,6 +1242,11 @@ BEGIN
                         ctrl_mar_l_in <= '1';
 
                         next_state <= S_EXEC_7;
+                    WHEN JCC =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_l_in <= '1';
+
+                        next_state <= S_FETCH_1;
                     WHEN OTHERS =>
 
                 END CASE;
