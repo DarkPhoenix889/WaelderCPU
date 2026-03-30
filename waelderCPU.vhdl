@@ -196,7 +196,7 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL c : STD_LOGIC_VECTOR(2 DOWNTO 0); -- last 3 bits of CU register in
 
     ---------RAM---------------------------------------|
-    SIGNAL ram_data_out : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
+    SIGNAL mdr : STD_LOGIC_VECTOR(7 DOWNTO 0); --signal between RAM and DataBus
     --CU-----------------------------------------------|
     TYPE t_state_t IS (
         S_RESET,
@@ -229,7 +229,7 @@ BEGIN
         we => ctrl_ram_in,
         addr => mar,
         di => data_bus,
-        do => ram_data_out
+        do => mdr
     );
     -- m-register --
     m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
@@ -261,8 +261,7 @@ BEGIN
     ------------------------------data bus-------------------------------|
     PROCESS (clk, reset, ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
-        ctrl_ram_out, pc_l, pc_h, i_reg, a_reg, b_reg, c_reg, d_reg, e_reg, h_reg, l_reg,
-        alu_result, ram_data_out, ctrl_io_out, ctrl_io_in)
+        ctrl_ram_out, ctrl_io_in)
     BEGIN
         IF ctrl_pc_l_out = '1' THEN
             data_bus <= pc_l;
@@ -287,7 +286,7 @@ BEGIN
         ELSIF ctrl_alu_out = '1' THEN
             data_bus <= alu_result;
         ELSIF ctrl_ram_out = '1' THEN
-            data_bus <= ram_data_out;
+            data_bus <= mdr;
         ELSIF ctrl_cur_out = '1' THEN
             data_bus <= cuo_reg;
         ELSIF ctrl_sp_l_out = '1' THEN
@@ -402,6 +401,8 @@ BEGIN
 
         END IF;
     END PROCESS;
+
+
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
