@@ -242,7 +242,7 @@ BEGIN
     ------------------------------data bus-------------------------------|
     PROCESS (ctrl_pc_l_out, ctrl_pc_h_out, ctrl_ir_out, ctrl_ar_out, ctrl_br_out,
         ctrl_cr_out, ctrl_dr_out, ctrl_er_out, ctrl_lr_out, ctrl_hr_out, ctrl_alu_out,
-        ctrl_ram_out, ctrl_io_in)
+        ctrl_ram_out, ctrl_io_in, ctrl_cu_out, ctrl_sp_l_out, ctrl_sp_h_out)
     BEGIN
         IF ctrl_pc_l_out = '1' THEN
             data_bus <= pc_l;
@@ -278,13 +278,11 @@ BEGIN
             data_bus <= io_reg_in;
         END IF;
     END PROCESS;
-
-
     ------------------------------register-------------------------------|
     PROCESS (clk, reset)
     BEGIN
         IF reset = '1' THEN
-        -------------------8-Bit-Registers-------------------
+            -------------------8-Bit-Registers-------------------
             a_reg <= (OTHERS => '0');
             b_reg <= (OTHERS => '0');
             c_reg <= (OTHERS => '0');
@@ -296,7 +294,7 @@ BEGIN
             cu_reg <= (OTHERS => '0');
             io_reg_out <= (OTHERS => '0');
             alu_reg_a <= (OTHERS => '0');
-            alu_reg_b <= (OTHERS => '0');        
+            alu_reg_b <= (OTHERS => '0');
             --restliche Register identisch
             ------------------16-Bit-Registers-------------------
             pc_h <= (OTHERS => '0');
@@ -305,8 +303,6 @@ BEGIN
             mar_l <= (OTHERS => '0');
             sp_h <= (OTHERS => '1'); -- 0xFFFF
             sp_l <= (OTHERS => '1'); --0xFFFF
-
-
         ELSIF rising_edge(clk) THEN
 
             -------------------8-Bit-Registers-------------------
@@ -379,7 +375,7 @@ BEGIN
                 i_reg <= data_bus;
             END IF;
 
-            -- CU Register IN
+            -- CU Register
             IF ctrl_cu_in = '1' THEN
                 cu_reg <= data_bus;
             END IF;
@@ -389,12 +385,12 @@ BEGIN
                 io_reg_out <= data_bus;
             END IF;
 
-            --ALU Reg A IN
+            --ALU Reg A
             IF ctrl_alu_ar_in = '1' THEN
                 alu_reg_a <= data_bus;
             END IF;
 
-            --ALU Reg B in
+            --ALU Reg B
             IF ctrl_alu_br_in = '1' THEN
                 alu_reg_b <= data_bus;
             END IF;
@@ -414,8 +410,6 @@ BEGIN
                     pc_l <= STD_LOGIC_VECTOR(unsigned(pc_l) + 1);
                 END IF;
             END IF;
-
-
             --------------------------------- MAR ---------------------------------
             IF ctrl_mar_h_in = '1' THEN
                 mar_h <= data_bus;
@@ -429,8 +423,6 @@ BEGIN
                     mar_l <= STD_LOGIC_VECTOR(unsigned(mar_l) + 1);
                 END IF;
             END IF;
-
-
             -------------------------- Stack Pointer ------------------------------
             IF ctrl_sp_dec = '1' THEN
                 IF sp_l = "00000000" THEN
@@ -450,8 +442,6 @@ BEGIN
         END IF;
 
     END PROCESS;
-
-
     ---------------------------------ALU----------------------------------|
     PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu, clk)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
@@ -515,8 +505,6 @@ BEGIN
 
     END PROCESS;
     --▇▅▆▇▆▅▅█
-
-    
 
     --Instruction Decoder------------------------------------------------|
     PROCESS (i_reg)
