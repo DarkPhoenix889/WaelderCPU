@@ -924,8 +924,7 @@ BEGIN
 
                         next_state <= S_EXEC_3;
                     WHEN LOAD =>
-                        ctrl_ram_out <= '1';
-                        ctrl_hr_in <= '1';
+                        -- wait for RAM
 
                         next_state <= S_EXEC_3;
                     WHEN LDR =>
@@ -1038,8 +1037,9 @@ BEGIN
                         next_state <= S_EXEC_4;
 
                     WHEN LOAD =>
-                        ctrl_mar_inc <= '1';
-                        ctrl_pc_inc <= '1';
+                        ctrl_ram_out <= '1';
+                        ctrl_hr_in <= '1';
+
 
                         next_state <= S_EXEC_4;
                     WHEN LDR =>
@@ -1143,8 +1143,8 @@ BEGIN
 
                         next_state <= S_EXEC_5;
                     WHEN LOAD =>
-                        ctrl_ram_out <= '1';
-                        ctrl_lr_in <= '1';
+                        ctrl_mar_inc <= '1';
+                        ctrl_pc_inc <= '1';
 
                         next_state <= S_EXEC_5;
                     WHEN JCC =>
@@ -1188,8 +1188,7 @@ BEGIN
 
                         next_state <= S_EXEC_6;
                     WHEN LOAD =>
-                        ctrl_hr_out <= '1';
-                        ctrl_mar_h_in <= '1';
+                        -- wait for RAM
 
                         next_state <= S_EXEC_6;
                     WHEN JCC =>
@@ -1221,8 +1220,8 @@ BEGIN
 
                         next_state <= S_EXEC_7;
                     WHEN LOAD =>
-                        ctrl_lr_out <= '1';
-                        ctrl_mar_l_in <= '1';
+                        ctrl_ram_out <= '1';
+                        ctrl_lr_in <= '1';
 
                         next_state <= S_EXEC_7;
                     WHEN JCC =>
@@ -1262,9 +1261,43 @@ BEGIN
 
                         next_state <= S_EXEC_8;
                     WHEN LOAD =>
+                        ctrl_hr_out <= '1';
+                        ctrl_mar_h_in <= '1';
+                        
+                        next_state <= S_EXEC_8;
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
+            WHEN S_EXEC_8 =>
+                CASE current_instr IS
+                    WHEN CAL =>
+                        ctrl_pc_l_in <= '1';
                         ctrl_ram_out <= '1';
 
-                        CASE y IS
+                        next_state <= S_FETCH_1;
+                    WHEN LOAD =>
+                        ctrl_lr_out <= '1';
+                        ctrl_mar_l_in <= '1';
+
+                        next_state <= S_EXEC_9;
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
+            WHEN S_EXEC_9 =>
+                CASE current_instr IS
+                    WHEN LOAD =>
+                        --Wait for RAM
+
+                        next_state <= S_EXEC_10;
+                    WHEN OTHERS =>
+                        next_state <= S_FETCH_1;
+                END CASE;
+            WHEN S_EXEC_10 =>
+                CASE current_instr IS
+                    WHEN LOAD =>
+                        ctrl_ram_out <= '1';
+
+                        CASE y IS -- destination register
                             WHEN "000" =>
                                 ctrl_ar_in <= '1';
                             WHEN "001" =>
@@ -1282,15 +1315,6 @@ BEGIN
                             WHEN OTHERS =>
                                 --do nothing
                         END CASE;
-                        next_state <= S_FETCH_1;
-                    WHEN OTHERS =>
-                        next_state <= S_FETCH_1;
-                END CASE;
-            WHEN S_EXEC_8 =>
-                CASE current_instr IS
-                    WHEN CAL =>
-                        ctrl_pc_l_in <= '1';
-                        ctrl_ram_out <= '1';
 
                         next_state <= S_FETCH_1;
                     WHEN OTHERS =>
