@@ -28,7 +28,7 @@ ENTITY waelderMain IS
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
 
-        led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
         -- switch_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
         ----------------------------------------|
         ----------declare in/output ports WIP---|
@@ -664,7 +664,6 @@ BEGIN
         ctrl_alu_ar_in <= '0';
         ctrl_alu_br_in <= '0';
         -- ctrl_alu <= (OTHERS => '0');
-        ctrl_flag_latch <= '0';
 
         CASE state IS
             WHEN S_RESET =>
@@ -1399,7 +1398,6 @@ BEGIN
                         next_state <= S_EXEC_8;
                     WHEN ALU =>
                         ctrl_alu_out <= '1';
-                        ctrl_flag_latch <= '1';
 
                         CASE c IS
                             WHEN "000" =>
