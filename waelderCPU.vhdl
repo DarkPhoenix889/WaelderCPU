@@ -545,8 +545,8 @@ BEGIN
                 CASE z IS
                     WHEN "000" => current_instr <= INR;
                     WHEN "001" => current_instr <= DCR;
-                    WHEN "010" => current_instr <= POP;
-                    WHEN "011" => current_instr <= STORE;
+                    WHEN "010" => current_instr <= STORE;
+                    WHEN "011" => current_instr <= POP;
                     WHEN "100" => current_instr <= LDR;
                     WHEN "101" => current_instr <= PUSH;
                     WHEN "110" => current_instr <= LOAD;
@@ -737,9 +737,10 @@ BEGIN
                         next_state <= S_EXEC_2;
 
                     WHEN CCC =>
-
+                        ctrl_pc_inc <= '1';
+                        
+                        next_state <= S_EXEC_2;
                     WHEN RCC =>
-
                         CASE y IS
                             WHEN "000" => -- return if zero
                                 IF f_zero = '1' THEN
@@ -826,26 +827,9 @@ BEGIN
 
                         next_state <= S_EXEC_2;
                     WHEN INP =>
+                        ctrl_mar_inc <= '1';
+                        ctrl_pc_inc <= '1';
 
-                        ctrl_io_in <= '1';
-
-                        CASE c IS
-                            WHEN "000" =>
-                                ctrl_ar_in <= '1';
-                            WHEN "001" =>
-                                ctrl_br_in <= '1';
-                            WHEN "010" =>
-                                ctrl_cr_in <= '1';
-                            WHEN "011" =>
-                                ctrl_dr_in <= '1';
-                            WHEN "100" =>
-                                ctrl_er_in <= '1';
-                            WHEN "101" =>
-                                ctrl_hr_in <= '1';
-                            WHEN "110" =>
-                                ctrl_lr_in <= '1';
-                            WHEN OTHERS =>
-                        END CASE;
 
                         next_state <= S_EXEC_2;
 
@@ -895,12 +879,82 @@ BEGIN
                         END CASE;
 
                         next_state <= S_FETCH_1;
+                    WHEN POP =>
+                        ctrl_sp_inc <= '1';
 
+                        next_state <= S_EXEC_2;
+                    WHEN STORE =>
+                        ctrl_mar_inc <= '1';
+                        ctrl_pc_inc <= '1';
+
+                        next_state <= S_EXEC_2;
                     WHEN OTHERS =>
                         next_state <= S_FETCH_1;
                 END CASE;
             WHEN S_EXEC_2 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_pc_inc <= '1';
+                        CASE y IS
+                            WHEN "000" => -- jump if zero
+                                IF f_zero = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "001" => -- jump if not zero
+                                IF f_zero = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "010" => -- jump if overflow
+                                IF f_overflow = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "011" => -- jump if not overflow
+                                IF f_overflow = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "100" => -- jump if parity
+                                IF f_parity = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "101" => -- jump if not parity
+                                IF f_parity = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "110" => -- jump if sign
+                                IF f_sign = '1' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN "111" => -- jump if not sign
+                                IF f_sign = '0' THEN
+                                    next_state <= S_EXEC_3;
+                                ELSE
+                                    next_state <= S_FETCH_1;
+                                END IF;
+                            WHEN OTHERS =>
+                        END CASE;
+                    WHEN STORE =>
+                        -- Wait for RAM
+
+                        next_state <= S_EXEC_3;
+                    WHEN POP =>
+                        ctrl_sp_l_out <= '1';
+                        ctrl_mar_l_in <= '1';
+
+                        next_state <= S_EXEC_3;
                     WHEN JMP =>
                         -- wait for RAM
                         next_state <= S_EXEC_3;
@@ -936,7 +990,8 @@ BEGIN
 
                         next_state <= S_EXEC_3;
                     WHEN INP =>
-                        next_state <= S_FETCH_1;
+                        -- wait for RAM
+                        next_state <= S_EXEC_3;
                     WHEN JCC =>
                         CASE y IS
                             WHEN "000" => -- jump if zero
@@ -1009,6 +1064,27 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_3 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_pc_l_out <= '1';
+                        ctrl_lr_in <= '1';
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_4;
+                    WHEN STORE =>
+                        ctrl_ram_out <= '1';
+                        ctrl_hr_in <= '1';
+                        
+                        next_state <= S_EXEC_4;
+                    WHEN POP =>
+                        ctrl_sp_h_out <= '1';
+                        ctrl_mar_h_in <= '1';
+
+                        next_state <= S_EXEC_4;
+                    WHEN INP =>
+                        ctrl_ram_out <= '1';
+                        ctrl_cu_in <= '1';
+
+                        next_state <= S_EXEC_4;
                     WHEN instr_OUT =>
                         ctrl_ram_out <= '1';
                         ctrl_cu_in <= '1';
@@ -1076,6 +1152,42 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_4 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_pc_h_out <= '1';
+                        ctrl_hr_in <= '1';
+
+                        next_state <= S_EXEC_5;
+                    WHEN STORE =>
+                        ctrl_mar_inc <= '1';
+                        ctrl_pc_inc <= '1';
+
+                        next_state <= S_EXEC_5;
+                    WHEN POP =>
+                        -- auf RAM warten
+
+                        next_state <= S_EXEC_5;
+                    WHEN INP =>
+                        ctrl_io_in <= '1';
+
+                        CASE c IS
+                            WHEN "000" =>
+                                ctrl_ar_in <= '1';
+                            WHEN "001" =>
+                                ctrl_br_in <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_in <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_in <= '1';
+                            WHEN "100" =>
+                                ctrl_er_in <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_in <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                        END CASE;
+
+                        next_state <= S_FETCH_1;
                     WHEN instr_OUT =>
                         ctrl_io_out <= '1';
 
@@ -1156,6 +1268,37 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_5 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_h_in <= '1';
+
+                        next_state <= S_EXEC_6;
+                    WHEN STORE =>
+                        -- Wait for RAM
+
+                        next_state <= S_EXEC_6;
+                    WHEN POP =>
+                        ctrl_ram_out <= '1';
+
+                        case y IS
+                            WHEN "000" =>
+                                ctrl_ar_in <= '1';
+                            WHEN "001" =>
+                                ctrl_br_in <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_in <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_in <= '1';
+                            WHEN "100" =>
+                                ctrl_er_in <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_in <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_in <= '1';
+                            WHEN OTHERS =>
+                        END CASE;
+
+                        next_state <= S_FETCH_1;
                     WHEN JMP =>
                         --wait for RAM
 
@@ -1205,6 +1348,15 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_6 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_mar_inc <= '1';
+
+                        next_state <= S_EXEC_7;
+                    WHEN STORE =>
+                        ctrl_ram_out <= '1';
+                        ctrl_lr_in <= '1';
+
+                        next_state <= S_EXEC_7;
                     WHEN JMP =>
                         ctrl_ram_out <= '1';
                         ctrl_pc_l_in <= '1';
@@ -1234,6 +1386,15 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_7 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        -- Wait for RAM
+
+                        next_state <= S_EXEC_8;
+                    WHEN STORE =>
+                        ctrl_hr_out <= '1';
+                        ctrl_mar_h_in <= '1';
+
+                        next_state <= S_EXEC_8;
                     WHEN ALU =>
                         ctrl_alu_out <= '1';
 
@@ -1258,7 +1419,7 @@ BEGIN
 
                         next_state <= S_FETCH_1;
                     WHEN CAL =>
-
+                        -- Warten auf RAM
                         next_state <= S_EXEC_8;
                     WHEN LOAD =>
                         ctrl_hr_out <= '1';
@@ -1270,6 +1431,16 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_8 =>
                 CASE current_instr IS
+                    WHEN CCC =>
+                        ctrl_ram_out <= '1';
+                        ctrl_pc_l_in <= '1';
+
+                        next_state <= S_FETCH_1;
+                    WHEN STORE =>
+                        ctrl_lr_out <= '1';
+                        ctrl_mar_l_in <= '1';
+
+                        next_state <= S_EXEC_9;
                     WHEN CAL =>
                         ctrl_pc_l_in <= '1';
                         ctrl_ram_out <= '1';
@@ -1285,6 +1456,10 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_9 =>
                 CASE current_instr IS
+                    WHEN STORE =>
+                        -- Wait for RAM
+
+                        next_state <= S_EXEC_10;
                     WHEN LOAD =>
                         --Wait for RAM
 
@@ -1294,6 +1469,29 @@ BEGIN
                 END CASE;
             WHEN S_EXEC_10 =>
                 CASE current_instr IS
+                    WHEN STORE =>
+                        ctrl_ram_in <= '1';
+
+                        CASE y IS -- destination register
+                            WHEN "000" =>
+                                ctrl_ar_out <= '1';
+                            WHEN "001" =>
+                                ctrl_br_out <= '1';
+                            WHEN "010" =>
+                                ctrl_cr_out <= '1';
+                            WHEN "011" =>
+                                ctrl_dr_out <= '1';
+                            WHEN "100" =>
+                                ctrl_er_out <= '1';
+                            WHEN "101" =>
+                                ctrl_hr_out <= '1';
+                            WHEN "110" =>
+                                ctrl_lr_out <= '1';
+                            WHEN OTHERS =>
+                                --do nothing
+                        END CASE;
+
+                        next_state <= S_FETCH_1;
                     WHEN LOAD =>
                         ctrl_ram_out <= '1';
 
