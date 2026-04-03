@@ -171,6 +171,13 @@ ARCHITECTURE Behavioral OF waelderMain IS
     SIGNAL f_sign : STD_LOGIC; --sign flag - if value is negative
     SIGNAL f_comp : STD_LOGIC; --compare flag for ifs
 
+    SIGNAL f_overflow_l : STD_LOGIC; --overflow - if number is bigger than 127
+    SIGNAL f_zero_l : STD_LOGIC; --zero flag - if alu is 0
+    SIGNAL f_parity_l : STD_LOGIC; --parity flag - if alu has even parity
+    SIGNAL f_sign_l : STD_LOGIC; --sign flag - if value is negative
+
+    SIGNAL ctrl_flag_latch : STD_LOGIC; --control signal to latch flags after ALU operation
+
     --alu ctrl bits
     SIGNAL ctrl_alu : STD_LOGIC_VECTOR (2 DOWNTO 0); --alu control register - gets filled by CU with OP-Code
     --instruction decoding-----------------------------------------------|
@@ -443,11 +450,11 @@ BEGIN
 
     END PROCESS;
     ---------------------------------ALU----------------------------------|
-    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu, clk)
+    PROCESS (alu_reg_a, alu_reg_b, alu_in_a, alu_in_b, ctrl_alu)
         VARIABLE tmp_res : signed (8 DOWNTO 0);
     BEGIN
         CASE ctrl_alu IS
-            WHEN "000" => --ADD
+            WHEN "000" => --ADD 
                 tmp_res := resize(alu_in_a, 9) + resize(alu_in_b, 9);
 
             WHEN "001" => --SUBTRACT
@@ -504,6 +511,24 @@ BEGIN
         -- f_parity <= tmp_res(0);  --parity is odd if LSB equals '1' -> old version
 
     END PROCESS;
+
+    PROCESS (clk, reset)
+    BEGIN
+    IF reset = '1' THEN
+        f_zero_l        <= '0';
+        f_sign_l        <= '0';
+        f_overflow_l    <= '0';
+        f_parity_l      <= '0';
+    ELSIF rising_edge(clk) THEN
+        IF ctrl_flag_latch = '1' THEN
+            f_zero_l     <= f_zero;
+            f_sign_l     <= f_sign;
+            f_overflow_l <= f_overflow;
+            f_parity_l   <= f_parity;
+            f_comp_l     <= f_comp;
+        END IF;
+    END IF;
+END PROCESS;
     --▇▅▆▇▆▅▅█
 
     --Instruction Decoder------------------------------------------------|
@@ -663,6 +688,7 @@ BEGIN
         ctrl_alu_ar_in <= '0';
         ctrl_alu_br_in <= '0';
         ctrl_alu <= (OTHERS => '0');
+        ctrl_flag_latch <= '0';
 
         CASE state IS
             WHEN S_RESET =>
@@ -738,54 +764,54 @@ BEGIN
 
                     WHEN CCC =>
                         ctrl_pc_inc <= '1';
-                        
+
                         next_state <= S_EXEC_2;
                     WHEN RCC =>
                         CASE y IS
                             WHEN "000" => -- return if zero
-                                IF f_zero = '1' THEN
+                                IF f_zero_l = '1' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "001" => -- return if not zero
-                                IF f_zero = '0' THEN
+                                IF f_zero_l = '0' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "010" => -- return if overflow
-                                IF f_overflow = '1' THEN
+                                IF f_overflow_l = '1' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "011" => -- return if not overflow
-                                IF f_overflow = '0' THEN
+                                IF f_overflow_l = '0' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "100" => -- return if parity
-                                IF f_parity = '1' THEN
+                                IF f_parity_l = '1' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "101" => -- return if not parity
-                                IF f_parity = '0' THEN
+                                IF f_parity_l = '0' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "110" => -- return if sign
-                                IF f_sign = '1' THEN
+                                IF f_sign_l = '1' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "111" => -- return if not sign
-                                IF f_sign = '0' THEN
+                                IF f_sign_l = '0' THEN
                                     next_state <= S_EXEC_2;
                                 ELSE
                                     next_state <= S_FETCH_1;
@@ -897,49 +923,49 @@ BEGIN
                         ctrl_pc_inc <= '1';
                         CASE y IS
                             WHEN "000" => -- jump if zero
-                                IF f_zero = '1' THEN
+                                IF f_zero_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "001" => -- jump if not zero
-                                IF f_zero = '0' THEN
+                                IF f_zero_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "010" => -- jump if overflow
-                                IF f_overflow = '1' THEN
+                                IF f_overflow_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "011" => -- jump if not overflow
-                                IF f_overflow = '0' THEN
+                                IF f_overflow_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "100" => -- jump if parity
-                                IF f_parity = '1' THEN
+                                IF f_parity_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "101" => -- jump if not parity
-                                IF f_parity = '0' THEN
+                                IF f_parity_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "110" => -- jump if sign
-                                IF f_sign = '1' THEN
+                                IF f_sign_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "111" => -- jump if not sign
-                                IF f_sign = '0' THEN
+                                IF f_sign_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     next_state <= S_FETCH_1;
@@ -995,56 +1021,56 @@ BEGIN
                     WHEN JCC =>
                         CASE y IS
                             WHEN "000" => -- jump if zero
-                                IF f_zero = '1' THEN
+                                IF f_zero_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "001" => -- jump if not zero
-                                IF f_zero = '0' THEN
+                                IF f_zero_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "010" => -- jump if overflow
-                                IF f_overflow = '1' THEN
+                                IF f_overflow_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "011" => -- jump if not overflow
-                                IF f_overflow = '0' THEN
+                                IF f_overflow_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "100" => -- jump if parity
-                                IF f_parity = '1' THEN
+                                IF f_parity_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "101" => -- jump if not parity
-                                IF f_parity = '0' THEN
+                                IF f_parity_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "110" => -- jump if sign
-                                IF f_sign = '1' THEN
+                                IF f_sign_l = '1' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
                                     next_state <= S_FETCH_1;
                                 END IF;
                             WHEN "111" => -- jump if not sign
-                                IF f_sign = '0' THEN
+                                IF f_sign_l = '0' THEN
                                     next_state <= S_EXEC_3;
                                 ELSE
                                     ctrl_pc_inc <= '1';
@@ -1397,6 +1423,7 @@ BEGIN
                         next_state <= S_EXEC_8;
                     WHEN ALU =>
                         ctrl_alu_out <= '1';
+                        ctrl_flag_latch <= '1';
 
                         CASE c IS
                             WHEN "000" =>
