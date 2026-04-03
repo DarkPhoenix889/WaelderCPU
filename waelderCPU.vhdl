@@ -1498,7 +1498,7 @@ BEGIN
                     WHEN LOAD =>
                         ctrl_ram_out <= '1';
 
-                        CASE y IS -- destination register
+                        CASE y IS -- destination register DDD
                             WHEN "000" =>
                                 ctrl_ar_in <= '1';
                             WHEN "001" =>
