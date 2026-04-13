@@ -28,8 +28,8 @@ ENTITY waelderMain IS
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC;
 
-        led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-        --switch_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
+        led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+        switch_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
         ----------------------------------------|
         ----------declare in/output ports WIP---|
         ----------------------------------------|
@@ -237,7 +237,7 @@ BEGIN
     mar <= mar_h & mar_l;
 
     led_out <= io_reg_out;
-    --io_reg_in <= switch_in;
+    io_reg_in <= switch_in;
 
     -- sp --
     sp <= sp_h & sp_l;
