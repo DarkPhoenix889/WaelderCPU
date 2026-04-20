@@ -1,0 +1,89 @@
+; ================================================================
+; Bubble Sort — WälderCPU
+; Sortiert 8 Bytes ab Adresse 0x0100 aufsteigend
+;
+; Register-Belegung:
+;   A  = aktuelles Element arr[i]
+;   B  = nächstes Element  arr[i+1]
+;   C  = swap-flag (0 = kein Swap passiert)
+;   D  = äußerer Schleifenzähler (n-1 Durchläufe)
+;   E  = innerer Index i
+;   H  = temporär für Adress-High-Byte (immer 0x01)
+;   L  = temporär für Adress-Low-Byte
+; ================================================================
+
+; --- Konstanten im RAM ---
+; 0x0100 .. 0x0107  : Daten (8 Bytes, unsortiert)
+; 0x0108            : Länge n = 8
+
+; ================================================================
+; INIT — Startwerte laden
+; ================================================================
+0x0000  LDR  D, 0x07       ; D = n-1 = 7 (äußere Schleife)
+
+OUTER_LOOP:                    ; ---- äußere Schleife ----
+0x0002  LDR  C, 0x00       ; C = 0 (kein Swap bisher)
+0x0004  LDR  E, 0x00       ; E = i = 0 (innerer Index)
+
+INNER_LOOP:                    ; ---- innere Schleife ----
+; Adresse arr[i] berechnen: H=0x01, L=E
+0x0006  LDR  H, 0x01       ; H = 0x01 (High-Byte der Datenadresse)
+0x0008  MOV  L, E          ; L = i
+
+; A = RAM[H:L] = arr[i]
+0x0009  LOAD A, [H:L]      ; A = arr[i]
+
+; Adresse arr[i+1]: L = i+1
+0x000A  INR  Ls             ; L = i+1
+
+; B = RAM[H:L] = arr[i+1]
+0x000B  LOAD B, [H:L]      ; B = arr[i+1]
+
+; Vergleich: A - B, wenn Ergebnis negativ → kein Swap
+0x000C  ALU  SUB, A, B, A   ; A = A - B, setzt f_sign
+0x0010  JCC  sign, NO_SWAP  ; wenn negativ (A<B) → kein Swap
+
+DO_SWAP:
+; arr[i+1] = altes arr[i] → L zeigt noch auf i+1
+0x0013  LOAD A, [H:L]      ; A = arr[i+1] (original)
+0x0014  DCR  L             ; L = i
+0x0015  LOAD B, [H:L]      ; B = arr[i] (original)
+0x0016  STORE A, [H:L]     ; RAM[i] = arr[i+1]
+0x0017  INR  L             ; L = i+1
+0x0018  STORE B, [H:L]     ; RAM[i+1] = arr[i]
+0x0019  LDR  C, 0x01       ; C = 1 (Swap passiert)
+
+NO_SWAP:
+0x001B  INR  E             ; i++
+; Ende innere Schleife? i >= D?
+0x001C  MOV  A, E          ; A = i
+0x001D  MOV  B, D          ; B = n-1-pass 
+0x001E  ALU  SUB, A, B, A   ; A = i - D
+0x0022  JCC  sign, INNER_LOOP ; i < D → weiter
+
+; Ende innere Schleife — war ein Swap da?
+0x0025  MOV  A, C          ; A = swap-flag
+0x0026  ALU  SUB, A, C, A   ; setzt f_zero wenn C=0
+0x002A  JCC  zero, DONE     ; kein Swap → fertig
+
+0x002D  DCR  D             ; D-- (ein Durchlauf weniger nötig)
+0x002E  MOV  A, D
+0x002F  LDR  B, 0x00
+0x0031  ALU  SUB, A, B, A   ; D = 0?
+0x0035  JCC  zero, DONE     ; D=0 → fertig
+0x0038  JMP  OUTER_LOOP    ; nächster Durchlauf
+
+DONE:
+; Erster sortierter Wert auf LEDs ausgeben
+0x003B  LDR  H, 0x01
+0x003D  LDR  L, 0x00
+0x003F  LOAD A, [H:L]      ; kleinster Wert
+0x0040  OUT  A             ; auf LEDs ausgeben
+0x0041  NOP               ; Endlosschleife / halt
+0x0042  JMP  DONE
+
+; ================================================================
+; DATEN — ab Adresse 0x0100
+; ================================================================
+0x0100: 0x47 0x12 0xA3 0x05 0x7F 0x33 0xC1 0x2B
+;       71   18   163   5   127   51   193   43  (dezimal)
