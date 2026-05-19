@@ -28,8 +28,8 @@
             clk : IN STD_LOGIC;
             reset : IN STD_LOGIC;
     
-            led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-            --switch_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
+            led_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+            switch_in : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
             ----------------------------------------|
             ----------declare in/output ports WIP---|
             ----------------------------------------|
@@ -224,8 +224,8 @@
                 cpu_clk_en      <= '0';
             elsif rising_edge(clk) then
                 cpu_clk_en <= '0';  -- default: inactive
-               -- if clk_div_counter = 999_999 then
-                if clk_div_counter = 1 then
+                if clk_div_counter = 999_999 then
+                --if clk_div_counter = 1 then
                     clk_div_counter <= 0;
                     cpu_clk_en      <= '1';  -- one pulse per second
                 else
@@ -244,7 +244,7 @@
             di => data_bus,
             do => mdr
         );
-        -- m-register --
+        -- m-register -- 
         m_reg <= h_reg & l_reg; -- m_reg is no real register just a wiring of both - h and l registers
     
         -- alu inputs --
@@ -258,7 +258,7 @@
         mar <= mar_h & mar_l;
     
         led_out <= io_reg_out;
-  --      io_reg_in <= switch_in;
+        io_reg_in <= switch_in;
         
     
         -- sp --
@@ -912,6 +912,26 @@
     
                             next_state <= S_EXEC_2;
                         WHEN STORE =>
+                            CASE y IS
+                                WHEN "000" =>
+                                    ctrl_ar_out <= '1';
+                                WHEN "001" =>
+                                    ctrl_br_out <= '1';
+                                WHEN "010" =>
+                                    ctrl_cr_out <= '1';
+                                WHEN "011" =>
+                                    ctrl_dr_out <= '1';
+                                WHEN "100" =>
+                                    ctrl_er_out <= '1';
+                                WHEN "101" =>
+                                    ctrl_hr_out <= '1';
+                                WHEN "110" =>
+                                    ctrl_lr_out <= '1';
+                                WHEN OTHERS =>
+                                --do nothing
+                            END CASE;
+
+                            ctrl_cu_in <= '1';
                             ctrl_mar_inc <= '1';
                             ctrl_pc_inc <= '1';
     
@@ -1499,26 +1519,8 @@
                     CASE current_instr IS
                         WHEN STORE =>
                             ctrl_ram_in <= '1';
-    
-                            CASE y IS -- destination register
-                                WHEN "000" =>
-                                    ctrl_ar_out <= '1';
-                                WHEN "001" =>
-                                    ctrl_br_out <= '1';
-                                WHEN "010" =>
-                                    ctrl_cr_out <= '1';
-                                WHEN "011" =>
-                                    ctrl_dr_out <= '1';
-                                WHEN "100" =>
-                                    ctrl_er_out <= '1';
-                                WHEN "101" =>
-                                    ctrl_hr_out <= '1';
-                                WHEN "110" =>
-                                    ctrl_lr_out <= '1';
-                                WHEN OTHERS =>
-                                    --do nothing
-                            END CASE;
-    
+                            ctrl_cu_out <= '1';
+   
                             next_state <= S_FETCH_1;
                         WHEN LOAD =>
                             ctrl_ram_out <= '1';
