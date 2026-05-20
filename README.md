@@ -7,4 +7,4 @@ This GitHub is currently still under Developement but will be updated in the fut
 The end of the diploma thesis is not the end of the project, it is aimed to be expanded in the future.  
 
 Dear Reader, thank you for your valuable time! Please consider visiting this repo after a few weeks in order to see the first release of the "WälderCPU" and a finished readme. But for now, enjoy your life and always keep up your curiosity!  
-Your WälderCPU team from the Heart of the Austrian Bregenzerwald.
+Your WälderCPU team from the Heart of the austrian Bregenzerwald.
